@@ -2,7 +2,12 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "db:generate": "php artisan make:migration",
+        "db:migrate": "php artisan migrate",
+        "db:rollback": "php artisan migrate:rollback",
+        "db:destroy": "php artisan migrate:reset",
+        "db:refresh": "php artisan migrate:refresh"
     },
     "devDependencies": {
         "axios": "^1.1.2",
