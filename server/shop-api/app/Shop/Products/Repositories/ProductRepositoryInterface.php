@@ -12,7 +12,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 
   public function createProduct(array $data): Product;
 
-  public function updateProduct(array $data): bool;
+  public function updateProduct(array $data): Product;
 
   public function findProductById(int $id): Product;
 
@@ -23,4 +23,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
   public function findProductBySlug(array $slug): Product;
 
   public function searchProduct(string $text): Collection;
+
+  public function detachCategories();
+
+  public function syncCategories(array $params);
 }

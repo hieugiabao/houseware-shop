@@ -2,6 +2,7 @@
 
 namespace App\Shop\Products;
 
+use App\Shop\Categories\Category;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
@@ -59,5 +60,10 @@ class Product extends Model
   public function searchProduct(string $term): Collection
   {
     return self::search($term)->get();
+  }
+
+  public function categories()
+  {
+    return $this->belongsToMany(Category::class);
   }
 }

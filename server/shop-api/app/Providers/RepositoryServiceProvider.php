@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Shop\Categories\Repositories\CategoryRepository;
+use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
@@ -20,6 +22,11 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(
       ProductRepositoryInterface::class,
       ProductRepository::class,
+    );
+
+    $this->app->bind(
+      CategoryRepositoryInterface::class,
+      CategoryRepository::class,
     );
   }
 }

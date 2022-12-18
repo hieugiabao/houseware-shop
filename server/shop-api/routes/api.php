@@ -23,7 +23,7 @@ Route::get('/health', function (Request $request) {
 Route::group(['prefix' => 'products'], function ($router) {
     Route::get('/', [ProductController::class, 'getPaginationProducts']);
     Route::post('/', [ProductController::class, 'createProduct']);
-    Route::put('/{id}', [ProductController::class, 'updateProduct']);
+    Route::post('/{id}', [ProductController::class, 'updateProduct']);
     Route::delete('/{id}', [ProductController::class, 'removeProduct']);
 });
 

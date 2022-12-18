@@ -70,5 +70,17 @@ class Handler extends ExceptionHandler
 				401
 			);
 		});
+
+		$this->renderable(function (\Exception $e, Request $request) {
+			return response()->json(
+				[
+					"statusCode" => 500,
+					"message" => $e->getMessage(),
+					"path" => $request->getPathInfo(),
+					"trace" => $e->getTraceAsString(),
+				],
+				500
+			);
+		});
 	}
 }

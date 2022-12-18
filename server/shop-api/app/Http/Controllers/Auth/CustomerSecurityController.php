@@ -61,7 +61,7 @@ class CustomerSecurityController extends Controller
   public function register(RegisterCustomerRequest $request)
   {
     $this->customerRepo->createCustomer($request->all());
-    return response()->json(null, 201);
+    return response()->noContent(201);
   }
 
   /**

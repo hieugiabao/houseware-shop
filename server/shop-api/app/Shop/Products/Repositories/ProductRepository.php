@@ -8,14 +8,17 @@ use App\Shop\Products\Exceptions\ProductUpdateErrorException;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Products\Transformations\ProductTransformable;
+use App\Shop\Tools\UploadableTrait;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Jsdecena\Baserepo\BaseRepository;
 
 class ProductRepository extends BaseRepository implements ProductRepositoryInterface
 {
-  use ProductTransformable;
+  use ProductTransformable, UploadableTrait;
 
   /**
    * @var Product $model
@@ -57,7 +60,24 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   public function createProduct(array $data): Product
   {
     try {
-      return $this->create($data);
+      $collection = collect($data);
+      $slug = (isset($data['name'])) ? Str::slug($data['name']) : '';
+
+      $thumb = (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) ?
+        $this->uploadOne($data['thumb'], 'products') : '';
+
+      $merge = $collection->merge(compact('slug', 'thumb'));
+
+      $product = new Product($merge->all());
+
+      if (isset($data['categories'])) {
+        $this->model->categories()->sync($data['categories']);
+      } else {
+        $this->model->categories()->detach();
+      }
+
+      $product->save();
+      return $product;
     } catch (QueryException $e) {
       throw new ProductCreateErrorException($e->getMessage(), 500, $e);
     }
@@ -68,15 +88,32 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
    *
    * @param array $data
    *
-   * @return bool
+   * @return Product
    * @throws ProductUpdateErrorException
    */
-  public function updateProduct(array $data): bool
+  public function updateProduct(array $data): Product
   {
-    $filtered = collect($data)->all();
 
     try {
-      return $this->model->where('id', $this->model->id)->update($filtered);
+      $product = $this->findProductById($this->model->id);
+      $collection = collect($data)->except('_token');
+      $slug = Str::slug($collection->get('name'));
+
+      if (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) {
+        $thumb = $this->uploadOne($data['thumb'], 'products');
+        $merge = $collection->merge(compact('thumb', 'slug'));
+      } else {
+        $merge = $collection->merge(compact('slug'));
+      }
+
+      if (isset($data['categories'])) {
+        $this->syncCategories($data['categories']);
+      } else {
+        $this->detachCategories();
+      }
+
+      $product->update($merge->all());
+      return $product;
     } catch (QueryException $e) {
       throw new ProductUpdateErrorException($e->getMessage(), 500, $e);
     }
@@ -93,7 +130,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   public function findProductById(int $id): Product
   {
     try {
-      return $this->transformProduct($this->findOneOrFail($id));
+      return $this->findOneOrFail($id);
     } catch (ModelNotFoundException $e) {
       throw new ProductNotFoundException($e->getMessage(), 404, $e);
     }
@@ -152,5 +189,23 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     } else {
       return $this->listProducts();
     }
+  }
+
+  /**
+   * Sync the categories
+   *
+   * @param array $params
+   */
+  public function syncCategories(array $params)
+  {
+    $this->model->categories()->sync($params);
+  }
+
+  /**
+   * Detach the categories
+   */
+  public function detachCategories()
+  {
+    $this->model->categories()->detach();
   }
 }

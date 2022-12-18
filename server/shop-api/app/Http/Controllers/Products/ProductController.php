@@ -69,10 +69,7 @@ class ProductController extends Controller
    */
   public function createProduct(CreateProductRequest $request)
   {
-    $data = $request->except('_token', '_method');
-    $data['slug'] = Str::slug($request->input('name'));
-
-    $product = $this->productRepo->createProduct($data);
+    $product = $this->productRepo->createProduct($request->except('_token', '_method'));
     return response()->json($this->transformProduct($product), 201);
   }
 
@@ -84,19 +81,17 @@ class ProductController extends Controller
    *
    * @return \Illuminate\Http\JsonResponse
    */
-  public function updateProduct(int $id, UpdateProductRequest $request)
+  public function updateProduct(UpdateProductRequest $request, int $id)
   {
-    $product = $this->productRepo->findProductById($id);
-
     $data = $request->except(
       '_token',
       '_method',
-      'default',
     );
+    $product = $this->productRepo->findProductById($id);
 
-    $data['slug'] = Str::slug($request->input('name'));
+    $productRepo = new ProductRepository($product);
 
-    $this->productRepo->updateProduct($data);
+    $product = $productRepo->updateProduct($data);
 
     return response()->json($this->transformProduct($product), 200);
   }
@@ -108,6 +103,6 @@ class ProductController extends Controller
     $productRepo = new ProductRepository($product);
     $productRepo->removeProduct();
 
-    return response()->json($product, 200);
+    return response()->json($this->transformProduct($product), 200);
   }
 }
