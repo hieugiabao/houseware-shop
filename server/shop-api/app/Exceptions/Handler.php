@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use Response;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 
 class Handler extends ExceptionHandler
 {
@@ -55,6 +56,18 @@ class Handler extends ExceptionHandler
 					"trace" => $e->getTraceAsString(),
 				],
 				$e->getStatusCode()
+			);
+		});
+
+		$this->renderable(function (TokenBlacklistedException $e, Request $request) {
+			return response()->json(
+				[
+					"statusCode" => 401,
+					"message" => $e->getMessage(),
+					"path" => $request->getPathInfo(),
+					"trace" => $e->getTraceAsString(),
+				],
+				401
 			);
 		});
 	}

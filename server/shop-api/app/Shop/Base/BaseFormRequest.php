@@ -23,10 +23,14 @@ abstract class BaseFormRequest extends FormRequest
   protected function failedValidation(Validator $validator)
   {
 
-    $errors = (new ValidationException($validator))->errors();
+    $exception = new ValidationException($validator);
+    $errors = $exception->errors();
     throw new HttpResponseException(response()->json(
       [
         'errors' => $errors,
+        'message' => $exception->getMessage(),
+        'trace' => $exception->getTraceAsString(),
+        'path' => $this->path(),
         'statusCode' => 422,
       ],
       JsonResponse::HTTP_UNPROCESSABLE_ENTITY
