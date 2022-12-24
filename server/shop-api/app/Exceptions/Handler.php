@@ -2,12 +2,19 @@
 
 namespace App\Exceptions;
 
+use App\Shop\Base\ApiError;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
+use Illuminate\Validation\UnauthorizedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use Response;
+use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
+use Tymon\JWTAuth\Exceptions\TokenExpiredException;
+use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 
 class Handler extends ExceptionHandler
 {
@@ -47,38 +54,39 @@ class Handler extends ExceptionHandler
 	 */
 	public function register()
 	{
-		$this->renderable(function (HttpException $e, Request $request) {
+
+		$this->renderable(function (TokenBlacklistedException|UnauthorizedException|TokenInvalidException|TokenExpiredException|JWTException|AuthorizationException $e, Request $request) {
 			return response()->json(
-				[
-					"statusCode" => $e->getStatusCode(),
-					"message" => $e->getMessage(),
-					"path" => $request->getPathInfo(),
-					"trace" => $e->getTraceAsString(),
-				],
-				$e->getStatusCode()
+				new ApiError(
+					401,
+					$e->getMessage(),
+					$e->getTraceAsString(),
+					$request->getPathInfo()
+				),
+				401
 			);
 		});
 
-		$this->renderable(function (TokenBlacklistedException $e, Request $request) {
+		$this->renderable(function (HttpException $e, Request $request) {
 			return response()->json(
-				[
-					"statusCode" => 401,
-					"message" => $e->getMessage(),
-					"path" => $request->getPathInfo(),
-					"trace" => $e->getTraceAsString(),
-				],
-				401
+				new ApiError(
+					$e->getStatusCode(),
+					$e->getMessage(),
+					$e->getTraceAsString(),
+					$request->getPathInfo()
+				),
+				$e->getStatusCode()
 			);
 		});
 
 		$this->renderable(function (\Exception $e, Request $request) {
 			return response()->json(
-				[
-					"statusCode" => 500,
-					"message" => $e->getMessage(),
-					"path" => $request->getPathInfo(),
-					"trace" => $e->getTraceAsString(),
-				],
+				new ApiError(
+					500,
+					$e->getMessage(),
+					$e->getTraceAsString(),
+					$request->getPathInfo()
+				),
 				500
 			);
 		});

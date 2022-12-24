@@ -26,13 +26,13 @@ abstract class BaseFormRequest extends FormRequest
     $exception = new ValidationException($validator);
     $errors = $exception->errors();
     throw new HttpResponseException(response()->json(
-      [
-        'errors' => $errors,
-        'message' => $exception->getMessage(),
-        'trace' => $exception->getTraceAsString(),
-        'path' => $this->path(),
-        'statusCode' => 422,
-      ],
+      new ApiError(
+        422,
+        $exception->getMessage(),
+        $exception->getTraceAsString(),
+        $this->getPathInfo(),
+        $errors
+      ),
       JsonResponse::HTTP_UNPROCESSABLE_ENTITY
     ));
   }

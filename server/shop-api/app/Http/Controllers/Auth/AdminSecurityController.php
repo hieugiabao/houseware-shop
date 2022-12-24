@@ -3,47 +3,44 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
-use App\Shop\Customers\Requests\LoginCustomerRequest;
-use App\Shop\Customers\Requests\RegisterCustomerRequest;
+use App\Shop\Employees\Repositories\EmployeeRepositoryInterface;
+use App\Shop\Employees\Requests\EmployeeLoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Validation\UnauthorizedException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
 
-class CustomerSecurityController extends Controller
+class AdminSecurityController extends Controller
 {
-
   /**
-   * @var CustomerRepositoryInterface $customerRepo
+   * @var EmployeeRepositoryInterface $employeeRepo
+   *
    */
-  private $customerRepo;
+  private $employeeRepo;
 
   /**
    * Create a new controller instance.
    *
-   * @param CustomerRepositoryInterface $customerRepository
+   * @param EmployeeRepositoryInterface $employeeRepository
    */
-  public function __construct(CustomerRepositoryInterface $customerRepository)
+  public function __construct(EmployeeRepositoryInterface $employeeRepository)
   {
-    $this->middleware('guest')->except('logout', 'me');
-    $this->customerRepo = $customerRepository;
+    $this->employeeRepo = $employeeRepository;
   }
 
   /**
-   * Login the customer
+   * Login the employee
    *
-   * @param LoginCustomerRequest $request
+   * @param EmployeeLoginRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function login(LoginCustomerRequest $request)
+  public function login(EmployeeLoginRequest $request)
   {
     $details = $request->only('email', 'password');
     $details['status'] = 1;
-    JWTAuth::factory()->setTTL(1);
-    $refresh_token = JWTAuth::attempt($details);
-    JWTAuth::factory()->setTTL(config('jwt.ttl'));
-    $access_token = JWTAuth::attempt($details);
+
+    $refresh_token = auth('employee')->setTTL(1)->attempt($details);
+    $access_token = auth('employee')->setTTL(config('jwt.admin-ttl'))->attempt($details);
 
     if (!$access_token) {
       throw new UnauthorizedException('Invalid credentials', 401);
@@ -53,39 +50,40 @@ class CustomerSecurityController extends Controller
   }
 
   /**
-   * Register a new customer
+   * Get the authenticated Employee.
    *
-   * @param RegisterCustomerRequest $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function register(RegisterCustomerRequest $request)
+  public function me()
   {
-    $this->customerRepo->createCustomer($request->all());
-    return response()->noContent(201);
+    return response()->json(auth('employee')->user());
   }
 
   /**
-   * Log the user out (Invalidate the token).
+   * Log the employee out (Invalidate the token).
    *
    * @return \Illuminate\Http\JsonResponse
    */
   public function logout(Request $request)
   {
-    auth()->logout();
+    auth('employee')->logout();
+
     if ($request->has('refresh_token')) {
       JWTAuth::setToken($request->refresh_token)->invalidate();
     }
-    return response()->json(null, 204);
+    return response()->json(['message' => 'Successfully logged out']);
   }
 
   /**
-   * Refresh a token.
+   * Refresh the access token
    *
+   * @param Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function refresh()
+  public function refresh(Request $request)
   {
-    $access_token = auth()->refresh();
+    JWTAuth::factory()->setTTL(config('jwt.admin-ttl'));
+    $access_token = auth('employee')->refresh();
     $payload_array = JWTAuth::manager()->getJWTProvider()->decode($access_token);
 
     JWTAuth::factory()->setTTL(1);
@@ -95,19 +93,10 @@ class CustomerSecurityController extends Controller
   }
 
   /**
-   * Get the authenticated User.
-   *
-   * @return \Illuminate\Http\JsonResponse
-   */
-  public function me()
-  {
-    return response()->json(auth()->user());
-  }
-
-  /**
    * Get the token array structure.
    *
    * @param  string $token
+   * @param  string $refresh_token
    *
    * @return \Illuminate\Http\JsonResponse
    */
@@ -117,8 +106,8 @@ class CustomerSecurityController extends Controller
       'access_token' => $access_token,
       'refresh_token' => $refresh_token,
       'token_type' => 'bearer',
-      'expires_in' => auth()->factory()->getTTL() * 60,
-      'user' => auth()->user()
+      'expires_in' => config('jwt.admin-ttl') * 60,
+      'employee' => auth('employee')->user()
     ]);
   }
 }
