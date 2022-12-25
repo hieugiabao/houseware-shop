@@ -3,6 +3,7 @@
 namespace App\Shop\Products;
 
 use App\Shop\Categories\Category;
+use App\Shop\ProductAttributes\ProductAttribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Nicolaslopezj\Searchable\SearchableTrait;
@@ -65,5 +66,13 @@ class Product extends Model
   public function categories()
   {
     return $this->belongsToMany(Category::class);
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function attributes()
+  {
+    return $this->hasMany(ProductAttribute::class);
   }
 }

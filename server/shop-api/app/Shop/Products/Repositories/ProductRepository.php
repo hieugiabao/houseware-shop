@@ -2,6 +2,9 @@
 
 namespace App\Shop\Products\Repositories;
 
+use App\Shop\AttributeValues\AttributeValue;
+use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
+use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductNotFoundException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
@@ -26,14 +29,21 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   protected $model;
 
   /**
+   * @var AttributeValueRepositoryInterface
+   */
+  private $attributeValueRepository;
+
+  /**
    * Constructor.
    *
    * @param Product $product
+   * @param AttributeValueRepositoryInterface $attributeValueRepository
    */
-  public function __construct(Product $product)
+  public function __construct(Product $product, AttributeValueRepositoryInterface $attributeValueRepository)
   {
     parent::__construct($product);
     $this->model = $product;
+    $this->attributeValueRepository = $attributeValueRepository;
   }
 
   /**
@@ -96,7 +106,47 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     try {
       $product = $this->findProductById($this->model->id);
-      $collection = collect($data)->except('_token');
+      $productRepo = new ProductRepository($product, $this->attributeValueRepository);
+
+      if (isset($data['attributeValue'])) {
+        $fields = collect($data)->only(['productAttributeQuantity', 'productAttributePrice', 'default', 'attributeValue']);
+
+        $quantity = $fields->get('productAttributeQuantity');
+        $price = $fields->get('productAttributePrice');
+        $default = $fields->get('default');
+
+        if (!$quantity) {
+          throw new ProductUpdateErrorException('The quantity field is required', 400);
+        }
+
+        $attributeValues = $fields->get('attributeValue');
+        $hasDefault = $productRepo->listProductAttributes()->where('default', 1)->count();
+
+        if ($default == 1 && $hasDefault > 0) {
+          $default = 0;
+        }
+
+        $productAttribute = $productRepo->saveProductAttributes(
+          new ProductAttribute(compact('quantity', 'price', 'default'))
+        );
+
+        collect($attributeValues)->each(function ($attributeValueId) use ($productRepo, $productAttribute) {
+          $attribute = $this->attributeValueRepository->find($attributeValueId);
+          return $productRepo->saveCombination($productAttribute, $attribute);
+        });
+
+        return $product;
+      }
+
+      $collection = collect($data)->except(
+        '_token',
+        'categories',
+        '_method',
+        'default',
+        'productAttributeQuantity',
+        'productAttributePrice',
+        'attributeValue'
+      );
       $slug = Str::slug($collection->get('name'));
 
       if (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) {
@@ -207,5 +257,80 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   public function detachCategories()
   {
     $this->model->categories()->detach();
+  }
+
+  /**
+   * Associate the product attribute to the product
+   *
+   * @param ProductAttribute $productAttribute
+   * @return ProductAttribute
+   */
+  public function saveProductAttributes(ProductAttribute $productAttribute): ProductAttribute
+  {
+    $this->model->attributes()->save($productAttribute);
+    return $productAttribute;
+  }
+
+  /**
+   * List all the product attributes associated with the product
+   *
+   * @return Collection
+   */
+  public function listProductAttributes(): Collection
+  {
+    return $this->model->attributes()->get();
+  }
+
+  /**
+   * Delete the attribute from the product
+   *
+   * @param ProductAttribute $productAttribute
+   *
+   * @return bool|null
+   * @throws \Exception
+   */
+  public function removeProductAttribute(ProductAttribute $productAttribute): ?bool
+  {
+    return $productAttribute->delete();
+  }
+
+  /**
+   * @param ProductAttribute $productAttribute
+   * @param AttributeValue ...$attributeValues
+   *
+   * @return Collection
+   */
+  public function saveCombination(ProductAttribute $productAttribute, AttributeValue ...$attributeValues): Collection
+  {
+    return collect($attributeValues)->each(function (AttributeValue $value) use ($productAttribute) {
+      return $productAttribute->attributesValues()->save($value);
+    });
+  }
+
+  /**
+   * @return Collection
+   */
+  public function listCombinations(): Collection
+  {
+    return $this->model->attributes()->map(function (ProductAttribute $productAttribute) {
+      return $productAttribute->attributesValues;
+    });
+  }
+
+  /**
+   * @param ProductAttribute $productAttribute
+   * @return \Illuminate\Database\Eloquent\Collection
+   */
+  public function findProductCombination(ProductAttribute $productAttribute)
+  {
+    $values = $productAttribute->attributesValues()->get();
+
+    return $values->map(function (AttributeValue $attributeValue) {
+      return $attributeValue;
+    })->keyBy(function (AttributeValue $item) {
+      return strtolower($item->attribute->name);
+    })->transform(function (AttributeValue $value) {
+      return $value->value;
+    });
   }
 }
