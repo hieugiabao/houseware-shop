@@ -1,4 +1,4 @@
-import { AppConfig } from '@shop-front/shared/app-config';
+import { AppConfig } from '@shop/shared/app-config';
 
 export const environment: AppConfig = {
   production: false,

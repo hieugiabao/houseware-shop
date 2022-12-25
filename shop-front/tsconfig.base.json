@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shop-front/shared/app-config": ["libs/shared/app-config/src/index.ts"]
+      "@shop/shared/app-config": ["libs/shared/app-config/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
