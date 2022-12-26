@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
+use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
@@ -21,13 +22,21 @@ class ProductController extends Controller
   private $productRepo;
 
   /**
+   * @var AttributeValueRepositoryInterface
+   *
+   */
+  private $attributeValueRepo;
+
+  /**
    * Constructor
    *
    * @param ProductRepositoryInterface $productRepository
+   * @param AttributeValueRepositoryInterface $attributeValueRepository
    */
-  public function __construct(ProductRepositoryInterface $productRepository)
+  public function __construct(ProductRepositoryInterface $productRepository, AttributeValueRepositoryInterface $attributeValueRepository)
   {
     $this->productRepo = $productRepository;
+    $this->attributeValueRepo = $attributeValueRepository;
   }
 
   /**
@@ -89,7 +98,7 @@ class ProductController extends Controller
     );
     $product = $this->productRepo->findProductById($id);
 
-    $productRepo = new ProductRepository($product);
+    $productRepo = new ProductRepository($product, $this->attributeValueRepo);
 
     $product = $productRepo->updateProduct($data);
 
@@ -100,7 +109,7 @@ class ProductController extends Controller
   {
     $product = $this->productRepo->findProductById($id);
 
-    $productRepo = new ProductRepository($product);
+    $productRepo = new ProductRepository($product, $this->attributeValueRepo);
     $productRepo->removeProduct();
 
     return response()->json($this->transformProduct($product), 200);
