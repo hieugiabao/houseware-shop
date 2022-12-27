@@ -7,7 +7,9 @@
     "postinstall": "node ./decorate-angular-cli.js",
     "start": "nx serve",
     "build": "nx build",
-    "test": "nx test"
+    "test": "nx test",
+    "gen:lib": "nx g @nrwl/angular:lib --buildable --style=scss",
+    "gen:app": "nx g @nrwl/angular:application --style=scss"
   },
   "private": true,
   "dependencies": {

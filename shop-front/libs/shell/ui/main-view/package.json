@@ -1,5 +1,5 @@
 {
-  "name": "@shop-front/shell/ui/main-view",
+  "name": "@shop/shell/ui/main-view",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^15.0.0",

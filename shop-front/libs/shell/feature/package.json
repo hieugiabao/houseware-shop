@@ -1,5 +1,5 @@
 {
-  "name": "@shop-front/shell/feature",
+  "name": "@shop/shell/feature",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^15.0.0",

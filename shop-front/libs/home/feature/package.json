@@ -1,5 +1,5 @@
 {
-  "name": "@shop-front/home/feature",
+  "name": "@shop/home/feature",
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "^15.0.0",
