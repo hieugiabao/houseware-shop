@@ -15,12 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shop/shell/ui/main-view": ["libs/shell/ui/main-view/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
       "@shop/home/ui/greeting": ["libs/home/ui/greeting/src/index.ts"],
       "@shop/shared/app-config": ["libs/shared/app-config/src/index.ts"],
       "@shop/shell/feature": ["libs/shell/feature/src/index.ts"],
-      "@shop/shell/ui/layout": ["libs/shell/ui/layout/src/index.ts"]
+      "@shop/shell/ui/layout": ["libs/shell/ui/layout/src/index.ts"],
+      "@shop/shell/ui/main-view": ["libs/shell/ui/main-view/src/index.ts"],
+      "@shop/shell/ui/top-bar": ["libs/shell/ui/top-bar/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

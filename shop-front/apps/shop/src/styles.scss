@@ -26,7 +26,6 @@
 */
 html,
 body {
-  height: 100%;
   font-family: var(--font-family);
 }
 /*
@@ -76,4 +75,10 @@ h6 {
 #root,
 #__next {
   isolation: isolate;
+}
+
+.content-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
