@@ -15,9 +15,31 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@shop/auth/data-access": ["libs/auth/data-access/src/index.ts"],
+      "@shop/auth/interceptor": ["libs/auth/interceptor/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
       "@shop/home/ui/greeting": ["libs/home/ui/greeting/src/index.ts"],
+      "@shop/security/feature": ["libs/security/feature/src/index.ts"],
+      "@shop/security/ui/layout": ["libs/security/ui/layout/src/index.ts"],
+      "@shop/security/ui/login": ["libs/security/ui/login/src/index.ts"],
       "@shop/shared/app-config": ["libs/shared/app-config/src/index.ts"],
+      "@shop/shared/data-access/models": [
+        "libs/shared/data-access/models/src/index.ts"
+      ],
+      "@shop/shared/data-access/shop-api": [
+        "libs/shared/data-access/shop-api/src/index.ts"
+      ],
+      "@shop/shared/services": ["libs/shared/services/src/index.ts"],
+      "@shop/shared/utilities/misc": [
+        "libs/shared/utilities/misc/src/index.ts"
+      ],
+      "@shop/shared/utilities/routing": [
+        "libs/shared/utilities/routing/src/index.ts"
+      ],
+      "@shop/shared/utilities/rx": ["libs/shared/utilities/rx/src/index.ts"],
+      "@shop/shared/utilities/string": [
+        "libs/shared/utilities/string/src/index.ts"
+      ],
       "@shop/shell/feature": ["libs/shell/feature/src/index.ts"],
       "@shop/shell/ui/layout": ["libs/shell/ui/layout/src/index.ts"],
       "@shop/shell/ui/main-view": ["libs/shell/ui/main-view/src/index.ts"],

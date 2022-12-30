@@ -1,0 +1,15 @@
+{
+  "name": "shared-data-access-models",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/shared/data-access/models/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["libs/shared/data-access/models/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:data-access scope:web"]
+}

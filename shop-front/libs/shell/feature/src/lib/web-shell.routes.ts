@@ -13,4 +13,14 @@ export const webShellRoutes: Route[] = [
       },
     ],
   },
+  {
+    path: '',
+    children: [
+      {
+        path: '',
+        loadChildren: async () =>
+          (await import('@shop/security/feature')).SecurityModule,
+      },
+    ],
+  },
 ];
