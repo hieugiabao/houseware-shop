@@ -1,0 +1,60 @@
+name: PHP Laravel Unit Tests CI
+
+on:
+  push:
+    branches:
+      - github-action
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-20.04
+        php-version:
+          - 8.1
+    runs-on: ${{ matrix.os }}
+    services:
+      mysql-db:
+        image: mysql:latest
+        env:
+          MYSQL_USER: shop-test
+          MYSQL_PASSWORD: shop-test
+          MYSQL_DATABASE: shop-test
+          MYSQL_ROOT_PASSWORD: supersecret
+        ports:
+          - 3307:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    name: PHP ${{ matrix.php-version }} Unit Tests on ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, mysqli pdo_mysql gd
+          coverage: none
+
+      - run: cd server/shop-api
+
+      - name: Install Composer dependencies
+        run: cd server/shop-api && composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Run database migrations and seeds
+        run: cd server/shop-api && php artisan migrate --env=testing
+
+      - name: Execute tests
+        run: cd server/shop-api && php artisan test --testsuite=Unit --stop-on-failure --env=testing
