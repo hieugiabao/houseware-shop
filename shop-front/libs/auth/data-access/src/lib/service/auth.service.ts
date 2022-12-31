@@ -94,9 +94,8 @@ export class AuthService {
         .login({ email, password })
         .pipe(this.afterRequestToken()),
       null,
-      (err) => {
-        console.error(err);
-        return 'Error when login';
+      (err: any) => {
+        return err.message;
       }
     );
   }

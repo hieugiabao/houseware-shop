@@ -1,1 +1,64 @@
 <h1 class="text-3xl">Login works</h1>
+<section class="flex flex-col space-y-4">
+  <h5>Sign in</h5>
+  <span
+    *ngIf="loginResponse?.status === 'failure'"
+    class="text-red-500 p-invalid"
+  >
+    <small>{{ loginResponse?.error }}</small>
+  </span>
+  <form
+    [formGroup]="form"
+    class="flex flex-col space-y-4"
+    (ngSubmit)="submit()"
+  >
+    <label for="email" class="flex flex-col">
+      <input
+        [class.p-invalid]="
+          form.get('email')?.touched && !!form.get('email')?.errors
+        "
+        class="w-8/12"
+        type="text"
+        pInputText
+        autocomplete="off"
+        id="email"
+        placeholder="Enter email"
+        formControlName="email"
+      />
+      <small
+        class="p-invalid"
+        *ngIf="form.get('email')?.touched && !!form.get('email')?.errors"
+        >A valid email</small
+      >
+    </label>
+
+    <label for="password" class="flex flex-col">
+      <input
+        type="password"
+        pInputText
+        id="password"
+        [class.p-invalid]="
+          form.get('password')?.touched && !!form.get('password')?.errors
+        "
+        autocomplete
+        class="w-8/12"
+        placeholder="Enter password"
+        formControlName="password"
+      />
+      <small
+        class="p-invalid"
+        *ngIf="form.get('password')?.touched && !!form.get('password')?.errors"
+      >
+        Password is required
+      </small>
+    </label>
+
+    <button
+      pButton
+      type="submit"
+      [disabled]="form.invalid || loginResponse?.status === 'loading'"
+      [label]="loginResponse?.status === 'loading' ? 'Signing in' : 'Sign in'"
+      class="w-8/12"
+    ></button>
+  </form>
+</section>

@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import {
   HttpEvent,
   HttpHandler,
@@ -6,6 +5,11 @@ import {
   HttpRequest,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { AuthService, AuthStateService } from '@shop/auth/data-access';
+import { ApiException } from '@shop/shared/data-access/models';
+import { RedirectService } from '@shop/shared/services';
+import { LuxonUtil } from '@shop/shared/utilities/misc';
 import {
   catchError,
   combineLatest,
@@ -17,10 +21,6 @@ import {
   take,
   throwError,
 } from 'rxjs';
-import { AuthService, AuthStateService } from '@shop/auth/data-access';
-import { RedirectService } from '@shop/shared/services';
-import { LuxonUtil } from '@shop/shared/utilities/misc';
-import { ApiException } from '@shop/shared/data-access/models';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -83,7 +83,9 @@ export class AuthInterceptor implements HttpInterceptor {
 
           return next.handle(cloned).pipe(
             retry({
+              count: 1,
               delay: (err: ApiException) => {
+                console.log('retrying');
                 if (err.status === 401 && !hasRetried) {
                   hasRetried = true;
                   return this.refreshToClonedRequest(req, next) as Observable<

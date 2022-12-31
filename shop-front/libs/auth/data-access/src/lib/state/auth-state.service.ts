@@ -6,9 +6,9 @@ import { CustomerInfomation } from '@shop/shared/data-access/models';
 export interface AuthState {
   refreshToken: string;
   accessToken: string;
-  expiresIn: Date;
+  expiresIn: Date | null;
   tokenType: string;
-  user: CustomerInfomation;
+  user: CustomerInfomation | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -23,13 +23,18 @@ export class AuthStateService extends RxState<AuthState> {
     return !!this.get().accessToken;
   }
 
+  constructor() {
+    super();
+    this.reset();
+  }
+
   reset(): void {
     this.set({
       refreshToken: '',
       accessToken: '',
-      expiresIn: undefined,
+      expiresIn: null,
       tokenType: '',
-      user: undefined,
+      user: null,
     });
   }
 }
