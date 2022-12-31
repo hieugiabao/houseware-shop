@@ -33,8 +33,6 @@ services:
     ports:
       - "3307:3306"
     environment:
-      MYSQL_DATABASE: shop
-      MYSQL_USER: shop
       MYSQL_ROOT_PASSWORD: supersecret
     volumes:
       - ./dbdata:/var/lib/mysql

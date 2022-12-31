@@ -17,3 +17,11 @@ RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
 ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+COPY ./.docker/entrypoint/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+ENV COMPOSER_INSTALL=ENABLE
+ENV NPM_INSTALL=ENABLE
+ENV DB_MIGRATE=ENABLE
+ENV DB_SEED=ENABLE
+ENV SERVE_LARAVEL=ENABLE
