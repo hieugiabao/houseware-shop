@@ -3,7 +3,7 @@ import {
   ApiResponseStatus,
 } from '@shop/shared/data-access/models';
 import { isObservable, map, Observable, of, startWith, throwError } from 'rxjs';
-import { logErrorAndReturn } from '../log-error';
+import { logErrorAndReturn } from './log-error-and-return';
 
 export function handleApiResponse<TData>(
   apiCall: Observable<TData>,

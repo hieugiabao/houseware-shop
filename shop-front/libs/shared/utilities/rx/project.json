@@ -4,6 +4,22 @@
   "sourceRoot": "libs/shared/utilities/rx/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/shared/utilities/rx/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/shared/utilities/rx/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/shared/utilities/rx/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],

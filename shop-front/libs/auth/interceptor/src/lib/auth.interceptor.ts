@@ -6,9 +6,12 @@ import {
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthService, AuthStateService } from '@shop/auth/data-access';
+import {
+  AuthService,
+  AuthStateService,
+  RedirectService,
+} from '@shop/auth/data-access';
 import { ApiException } from '@shop/shared/data-access/models';
-import { RedirectService } from '@shop/shared/services';
 import { LuxonUtil } from '@shop/shared/utilities/misc';
 import {
   catchError,

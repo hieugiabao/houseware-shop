@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -15,6 +14,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@shop/shared/data-access/models": [
+        "libs/shared/data-access/models/src/index.ts"
+      ],
       "@shop/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@shop/auth/interceptor": ["libs/auth/interceptor/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
@@ -23,13 +25,9 @@
       "@shop/security/ui/layout": ["libs/security/ui/layout/src/index.ts"],
       "@shop/security/ui/login": ["libs/security/ui/login/src/index.ts"],
       "@shop/shared/app-config": ["libs/shared/app-config/src/index.ts"],
-      "@shop/shared/data-access/models": [
-        "libs/shared/data-access/models/src/index.ts"
-      ],
       "@shop/shared/data-access/shop-api": [
         "libs/shared/data-access/shop-api/src/index.ts"
       ],
-      "@shop/shared/services": ["libs/shared/services/src/index.ts"],
       "@shop/shared/utilities/misc": [
         "libs/shared/utilities/misc/src/index.ts"
       ],

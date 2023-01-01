@@ -5,7 +5,6 @@ import {
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
 import { CustomerAuthApiService } from '@shop/shared/data-access/shop-api';
-import { LocalStorageService, RedirectService } from '@shop/shared/services';
 import { LuxonUtil } from '@shop/shared/utilities/misc';
 import { handleApiResponse } from '@shop/shared/utilities/rx';
 import {
@@ -21,6 +20,8 @@ import {
   throwError,
 } from 'rxjs';
 import { AuthStateService } from '../state/auth-state.service';
+import { LocalStorageService } from './local-storage.service';
+import { RedirectService } from './redirect.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
