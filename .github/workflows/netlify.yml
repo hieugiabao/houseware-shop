@@ -24,7 +24,7 @@ jobs:
           name: shop-build-artifacts
           workflow: build-and-upload-artifacts.yml
           workflow_conclusion: success
-          path: .
+          path: ./shop-front/dist
 
       - name: Deploy Netlify
         uses: netlify/actions/cli@master
