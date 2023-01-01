@@ -9,7 +9,7 @@
     "build": "nx build",
     "test": "nx test",
     "gen:lib": "nx g @nrwl/angular:lib --buildable --style=scss",
-    "gen:app": "nx g @nrwl/angular:application --style=scss --",
+    "gen:app": "nx g @nrwl/angular:application --style=scss",
     "build:web:prod": "nx build shop --prod",
     "build:web:affected": "nx affected:build"
   },
