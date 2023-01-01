@@ -1,6 +1,5 @@
 name: Netlify Deploy
 on:
-  workflow_dispatch:
   workflow_run:
     workflows:
       - "Build and Upload Artifacts"
@@ -12,6 +11,7 @@ on:
   push:
     branches:
       - test-ci
+  workflow_dispatch:
 
 jobs:
   deploy:
