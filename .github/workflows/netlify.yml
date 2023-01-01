@@ -1,0 +1,35 @@
+name: Netlify Deploy
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - "Build and Upload Artifacts Angular"
+    types:
+      - completed
+    branches:
+      - deploy
+      - test-ci
+  push:
+    branches:
+      - test-ci
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.ACCESS_TOKEN }}
+          name: shop-build-artifacts
+          workflow: build-and-upload-artifacts.yml
+          workflow_conclusion: success
+          path: ./shop-front/dist
+
+      - name: Deploy Netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          args: deploy --dir=./shop-front/dist/apps/shop --prod
