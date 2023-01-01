@@ -11,8 +11,7 @@
     "gen:lib": "nx g @nrwl/angular:lib --buildable --style=scss",
     "gen:app": "nx g @nrwl/angular:application --style=scss",
     "build:web:prod": "nx build shop --prod",
-    "build:web:affected": "nx affected:build",
-    "build:web": "nx build shop"
+    "build:web:affected": "nx affected:build"
   },
   "private": true,
   "dependencies": {
