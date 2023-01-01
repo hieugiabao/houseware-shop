@@ -98,4 +98,4 @@ jobs:
           name: shop-build-artifacts
           path: |
             ./shop-front/dist/apps/shop
-            ./shop/dist/libs
+            ./shop-front/dist/libs
