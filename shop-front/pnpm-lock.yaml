@@ -16,6 +16,7 @@ specifiers:
   '@angular/platform-browser': ~15.0.2
   '@angular/platform-browser-dynamic': ~15.0.2
   '@angular/router': ~15.0.2
+  '@ngneat/svg-icon': ^6.2.0
   '@nrwl/angular': 15.3.0
   '@nrwl/cypress': 15.3.0
   '@nrwl/eslint-plugin-nx': 15.3.0
@@ -64,6 +65,7 @@ dependencies:
   '@angular/platform-browser': 15.0.2_c53tiokkldbnrdbarlei26dgcq
   '@angular/platform-browser-dynamic': 15.0.2_35pdmxna5zlo6jyg6u37zetaoe
   '@angular/router': 15.0.2_ea22usrlx5m3srsxqo5of4y3om
+  '@ngneat/svg-icon': 6.2.0_@angular+common@15.0.2
   '@nrwl/angular': 15.3.0_we4igbok4x4nyqrlmuyyreixbu
   '@rx-angular/state': 1.7.0_lldbsz6lklkhnv5js6kkps5hv4
   luxon: 3.2.0
@@ -3193,6 +3195,15 @@ packages:
 
   /@leichtgewicht/ip-codec/2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
+
+  /@ngneat/svg-icon/6.2.0_@angular+common@15.0.2:
+    resolution: {integrity: sha512-7iHLkyErtt0sMwyi8by1sgAk7WRmPu3wdNuxS9D6CYSP1q8zx3RGZWycx3ADelnTSLeZYGxHVbQfW034KlyhTw==}
+    peerDependencies:
+      '@angular/common': '>= 14.0.0'
+    dependencies:
+      '@angular/common': 15.0.2_pi3oxxive2l5ujgk2dhb7uff6u
+      tslib: 2.4.1
+    dev: false
 
   /@ngtools/webpack/15.0.2_hj2figuqhilcxwoqxbcqlf6q6y:
     resolution: {integrity: sha512-vSIrPjXNRdtkwdYY8x7SzsteZ7HlKfUe/OG7AoUboP6mgAevhp6M/kv2ZMCHLzFFLJ8GO6ZhvCPCmPGIm5C8aA==}
