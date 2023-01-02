@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@shop/auth/data-access';
@@ -25,7 +30,8 @@ export class LoginComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -72,6 +78,7 @@ export class LoginComponent implements OnInit {
     returnUrl: string
   ) {
     this.loginResponse = response;
+    this.changeDetectorRef.detectChanges();
     if (response.status === ApiResponseStatus.Success) {
       this.router.navigate([returnUrl]);
     }
