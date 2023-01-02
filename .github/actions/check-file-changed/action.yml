@@ -1,0 +1,28 @@
+name: Check changed files
+description: Check to see what type of files changed
+outputs:
+  is_angular_changed:
+    description: Is this an Angular related changed?
+    value: ${{ steps.check-angular-source.outputs.any_changed }}
+  # is-laravel-changed:
+  #   description: Is this a Laravel related change?
+  #   value: ${{ steps.check-laravel-source.outputs.any_changed }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Check Angular Source
+      id: check-angular-source
+      uses: tj-actions/changed-files@v10
+      with:
+        files: |
+          shop-front/package.json
+          shop-front/nx.json
+          shop-front/libs/**
+          shop-front/apps/shop/**
+    # - name: Check Laravel Source
+    #   id: check-laravel-source
+    #   uses: tj-actions/changed-files@v10
+    #   with:
+    #     files: |
+    #       server/shop-api/**
