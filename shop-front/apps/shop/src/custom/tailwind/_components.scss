@@ -2,4 +2,12 @@
   .content-spacing {
     @apply px-8 pt-4;
   }
+
+  .p-invalid {
+    @apply text-red-500 border-red-50;
+  }
+
+  input.p-invalid {
+    @apply border-red-500 outline-red-500 border-2;
+  }
 }
