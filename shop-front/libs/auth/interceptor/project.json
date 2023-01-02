@@ -4,6 +4,22 @@
   "sourceRoot": "libs/auth/interceptor/src",
   "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nrwl/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
+      "options": {
+        "project": "libs/auth/interceptor/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/auth/interceptor/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/auth/interceptor/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
