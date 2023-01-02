@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "shop",
   "affected": {
-    "defaultBase": "main"
+    "defaultBase": "deploy"
   },
   "tasksRunnerOptions": {
     "default": {
