@@ -84,7 +84,7 @@ jobs:
           fi
         env:
           NX_BASE: deploy
-          NX_HEAD: main
+          NX_HEAD: HEAD
       - name: Upload Nx Cache
         uses: actions/upload-artifact@v2
         with:
