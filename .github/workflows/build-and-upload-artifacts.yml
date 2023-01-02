@@ -71,8 +71,8 @@ jobs:
           workflow: build-and-upload-artifacts.yml
           path: ./shop-front/node_modules/.cache/nx
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v2
+      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      #   uses: nrwl/nx-set-shas@v2
 
       - name: Build projects
         run: |
@@ -82,6 +82,9 @@ jobs:
           else
             cd shop-front && yarn build:web:affected
           fi
+        env:
+          NX_BASE: deploy
+          NX_HEAD: main
       - name: Upload Nx Cache
         uses: actions/upload-artifact@v2
         with:
