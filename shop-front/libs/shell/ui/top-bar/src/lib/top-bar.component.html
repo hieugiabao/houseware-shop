@@ -2,5 +2,10 @@
   class="fixed top-0 h-[56px] w-full bg-slate-50 flex align-items-stretch justify-between px-4 border-b-[1px]"
 >
   <shop-logo></shop-logo>
-  <shop-user-info></shop-user-info>
+  <div *ngIf="currentUser !== null; else notauth">
+    <shop-user-info></shop-user-info>
+  </div>
+  <ng-template #notauth>
+    <shop-top-bar-option></shop-top-bar-option>
+  </ng-template>
 </div>

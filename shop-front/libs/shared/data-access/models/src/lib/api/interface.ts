@@ -2,15 +2,9 @@ export interface CustomerInfomation {
   id: number;
   name: string;
   email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zip: string;
-  country: string;
-  notes: string;
-  created: string;
-  modified: string;
+  status: number;
+  createdAt: string;
+  updatedAt: string;
 
   [key: string]: unknown;
 }

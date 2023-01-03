@@ -38,15 +38,14 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       email: ['', [Validators.required, ShopValidators.isEmail]],
       password: ['', Validators.required],
-      remember: [false],
+      remember: [''],
     });
   }
 
   submit() {
-    const { email, password } = this.form.value;
-
+    const { email, password, remember } = this.form.value;
     this.authService
-      .login(email, password)
+      .login(email, password, !!remember)
       .pipe(
         withLatestFrom(
           this.route.queryParamMap.pipe(

@@ -81,23 +81,10 @@
         >
           <p-checkbox
             name="remember"
-            [value]="form.get('remember')?.value"
+            value="remember"
             class="p-element ng-touched ng-valid ng-dirty"
+            formControlName="remember"
           >
-            <div class="p-checkbox p-component">
-              <div class="p-hidden-accessiable">
-                formControlName="remember"
-                <input
-                  type="checkbox"
-                  name="remember"
-                  id="remember"
-                  aria-checked="false"
-                />
-              </div>
-              <div class="p-checkbox-box">
-                <span class="p-checkbox-icon"></span>
-              </div>
-            </div>
           </p-checkbox>
           <span class="ml-2 font-semibold">Remember me</span>
         </label>
