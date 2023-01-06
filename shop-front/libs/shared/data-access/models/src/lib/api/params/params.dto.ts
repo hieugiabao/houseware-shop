@@ -9,3 +9,8 @@ export interface RegisterParamsDto {
   name: string;
   passwordConfirmation: string;
 }
+
+export interface PaginateParamsDto {
+  page: number;
+  perPage: number;
+}
