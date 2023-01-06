@@ -13,7 +13,7 @@ import {
 })
 export class ProductCoverComponent {
   @Input() set imageUrl(url: string | undefined) {
-    this.backgroundImage = url && `url(${url})`;
+    this.backgroundImage = url && `url('/assets/images/user.png')`;
   }
   @Input() set rounded(value: boolean | undefined) {
     this.borderRadius = value ? '50%' : 'initial';

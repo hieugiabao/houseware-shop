@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 export class FeaturedProductsComponent implements OnInit {
   productsResponse$!: Observable<ApiResponse<PaginateResultResponse<Product>>>;
   page = 1;
-  perPage = 2;
+  perPage = 9;
 
   constructor(private readonly productsService: ProductsService) {}
 
@@ -32,9 +32,12 @@ export class FeaturedProductsComponent implements OnInit {
   }
 
   paginate(event: any) {
-    // console.log(event);
     this.page = event.page + 1;
     this.perPage = event.rows;
     this.getProducts();
+  }
+
+  getNameCategories(categories: any[]): string[] {
+    return categories.map((category) => category?.name || '');
   }
 }

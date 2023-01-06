@@ -1,4 +1,53 @@
-:host {
-  width: 100px;
-  height: 100px;
+:host ::ng-deep {
+  margin-top: 8px;
+	z-index: 0;
+
+  .p-dropdown {
+    width: 14rem;
+    font-weight: normal;
+  }
+
+	.grid {
+		display: flex !important;
+		flex-wrap: wrap;
+	}
+
+	.p-paginator {
+		border-color: #e0e0e0;
+		border-width: 1px 0;
+	}
+
+	.p-paginator button {
+		border: none !important;
+	}
+
+	.p-paginator-rpp-options {
+		width: 75px;
+	}
+
+	.card {
+		padding: 1.5rem;
+		border-color: #e0e0e0;
+		border-width: 1px;
+		box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+		border-radius: 4px;
+		margin-bottom: 2rem;
+	}
+
+	.p-dataview .p-dataview-header {
+		background-color: #ffffff;
+	}
+}
+
+
+@media screen and (max-width: 576px) {
+	:host ::ng-deep .product-list-item {
+		flex-direction: column;
+		align-items: center;
+
+		img {
+			width: 75%;
+			margin: 2rem 0;
+		}
+	}
 }
