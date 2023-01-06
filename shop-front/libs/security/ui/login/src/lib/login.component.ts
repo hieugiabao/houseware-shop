@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@shop/auth/data-access';
@@ -13,7 +8,7 @@ import {
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
 import { ShopValidators } from '@shop/shared/utilities/misc';
-import { finalize, map, take, tap, withLatestFrom } from 'rxjs';
+import { finalize, map, take, Observable, withLatestFrom, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'shop-login',
@@ -23,15 +18,15 @@ import { finalize, map, take, tap, withLatestFrom } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
   public form!: FormGroup;
-  public loginResponse: ApiResponse<TokenResultResponse> | undefined =
-    undefined;
+  public loginResponse$:
+    | Observable<ApiResponse<TokenResultResponse>>
+    | Observable<never> = EMPTY;
 
   constructor(
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly authService: AuthService,
-    private readonly changeDetectorRef: ChangeDetectorRef
+    private readonly authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -44,7 +39,7 @@ export class LoginComponent implements OnInit {
 
   submit() {
     const { email, password, remember } = this.form.value;
-    this.authService
+    this.loginResponse$ = this.authService
       .login(email, password, !!remember)
       .pipe(
         withLatestFrom(
@@ -58,28 +53,16 @@ export class LoginComponent implements OnInit {
             email,
             password: '',
           });
-          this.form.get('password')?.markAsTouched();
+          this.form.get('password')?.markAsUntouched();
         })
       )
       .pipe(
-        take(2),
-        tap(([response, returnUrl]) => this.handleNext(response, returnUrl))
-      )
-      .subscribe({
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
-  private handleNext(
-    response: ApiResponse<TokenResultResponse>,
-    returnUrl: string
-  ) {
-    this.loginResponse = response;
-    this.changeDetectorRef.detectChanges();
-    if (response.status === ApiResponseStatus.Success) {
-      this.router.navigate([returnUrl]);
-    }
+        map(([response, returnURL]) => {
+          if (response.status === ApiResponseStatus.Success) {
+            this.router.navigate([returnURL]);
+          }
+          return response;
+        })
+      );
   }
 }
