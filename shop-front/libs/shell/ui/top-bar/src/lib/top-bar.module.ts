@@ -7,6 +7,7 @@ import { LogoComponent } from './logo/logo.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ButtonModule,
     BrowserAnimationsModule,
     InputTextModule,
+    RippleModule,
   ],
   declarations: [TopBarComponent, LogoComponent, UserInfoComponent],
   exports: [TopBarComponent],

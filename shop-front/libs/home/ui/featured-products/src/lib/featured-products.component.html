@@ -16,7 +16,7 @@
           </ng-template>
           <ng-template let-product pTemplate="gridItem">
             <shop-product
-              class="card w-[30.5%] inline-block m-4 !rounded-xl"
+              class="card w-[30.5%] inline-block m-4 !rounded-xl max-lg:w-[45%] max-xl::w-[35%]"
               [imageUrl]="product.thumb"
               [title]="product.name"
               [description]="product.description"
