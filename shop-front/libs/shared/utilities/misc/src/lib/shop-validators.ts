@@ -8,6 +8,7 @@ export class ShopValidators {
     if (control?.value === null) {
       return null;
     }
+    if (control.value === '') return null;
 
     return EMAIL_REGEX_WITH_DOMAIN.test(control.value)
       ? null

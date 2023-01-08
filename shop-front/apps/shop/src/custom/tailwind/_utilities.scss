@@ -1,3 +1,6 @@
 @layer utilities {
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+    box-shadow: none !important;
+  }
 
 }

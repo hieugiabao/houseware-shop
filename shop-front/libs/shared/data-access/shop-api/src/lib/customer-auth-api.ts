@@ -9,6 +9,7 @@ import {
 import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
 import { BaseApiService } from './base-api';
 import {
+  CustomerInfomation,
   LoginParamsDto,
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
@@ -48,7 +49,7 @@ export class CustomerAuthApiService extends BaseApiService {
         catchError((response) => {
           if (response instanceof HttpResponseBase) {
             try {
-              return this.process<TokenResultResponse>(response);
+              return this.process<never>(response);
             } catch (e) {
               return throwError(() => e);
             }
@@ -80,7 +81,7 @@ export class CustomerAuthApiService extends BaseApiService {
         catchError((response) => {
           if (response instanceof HttpResponseBase) {
             try {
-              return this.process<void>(response);
+              return this.process<never>(response);
             } catch (e) {
               return throwError(() => e);
             }
@@ -97,9 +98,6 @@ export class CustomerAuthApiService extends BaseApiService {
 
     return this.httpClient
       .request('post', url, {
-        body: JSON.stringify(
-          StringUtil.convertKeysFromCamelCaseToSnakeCase(body)
-        ),
         observe: 'response',
         responseType: 'blob',
         headers: new HttpHeaders({
@@ -115,7 +113,40 @@ export class CustomerAuthApiService extends BaseApiService {
         catchError((response) => {
           if (response instanceof HttpResponseBase) {
             try {
-              return this.process<TokenResultResponse>(response);
+              return this.process<never>(response);
+            } catch (e) {
+              return throwError(() => e);
+            }
+          } else {
+            return throwError(() => response);
+          }
+        })
+      );
+  }
+
+  me(): Observable<CustomerInfomation | null> {
+    let url = this.appConfig.baseURL + '/auth/me';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .get(url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(
+        mergeMap((response) =>
+          this.process<CustomerInfomation | null>(response, 200)
+        )
+      )
+      .pipe(
+        catchError((response) => {
+          if (response instanceof HttpResponseBase) {
+            try {
+              return this.process<never>(response);
             } catch (e) {
               return throwError(() => e);
             }

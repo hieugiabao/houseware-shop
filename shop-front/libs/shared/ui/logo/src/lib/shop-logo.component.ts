@@ -2,7 +2,13 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'shop-logo',
-  template: ` <h1 class="text-2xl">{{ 'Houseware Shop' | uppercase }}</h1> `,
+  template: `
+    <a routerLink="/"
+      ><h1 class="text-2xl no-underline cursor-pointer">
+        {{ 'Houseware Shop' | uppercase }}
+      </h1></a
+    >
+  `,
   styles: [
     `
       :host {
@@ -13,4 +19,4 @@ import { Component } from '@angular/core';
     `,
   ],
 })
-export class LogoComponent {}
+export class ShopLogoComponent {}

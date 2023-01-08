@@ -8,7 +8,7 @@ import {
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
 import { ShopValidators } from '@shop/shared/utilities/misc';
-import { finalize, map, take, tap, withLatestFrom } from 'rxjs';
+import { finalize, map, take, Observable, withLatestFrom, EMPTY } from 'rxjs';
 
 @Component({
   selector: 'shop-login',
@@ -18,8 +18,9 @@ import { finalize, map, take, tap, withLatestFrom } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
   public form!: FormGroup;
-  public loginResponse: ApiResponse<TokenResultResponse> | undefined =
-    undefined;
+  public loginResponse$:
+    | Observable<ApiResponse<TokenResultResponse>>
+    | Observable<never> = EMPTY;
 
   constructor(
     private readonly fb: FormBuilder,
@@ -32,14 +33,14 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       email: ['', [Validators.required, ShopValidators.isEmail]],
       password: ['', Validators.required],
+      remember: [''],
     });
   }
 
   submit() {
-    const { email, password } = this.form.value;
-
-    this.authService
-      .login(email, password)
+    const { email, password, remember } = this.form.value;
+    this.loginResponse$ = this.authService
+      .login(email, password, !!remember)
       .pipe(
         withLatestFrom(
           this.route.queryParamMap.pipe(
@@ -52,27 +53,16 @@ export class LoginComponent implements OnInit {
             email,
             password: '',
           });
-          this.form.get('password')?.markAsTouched();
+          this.form.get('password')?.markAsUntouched();
         })
       )
       .pipe(
-        take(2),
-        tap(([response, returnUrl]) => this.handleNext(response, returnUrl))
-      )
-      .subscribe({
-        error: (err) => {
-          console.error(err);
-        },
-      });
-  }
-
-  private handleNext(
-    response: ApiResponse<TokenResultResponse>,
-    returnUrl: string
-  ) {
-    this.loginResponse = response;
-    if (response.status === ApiResponseStatus.Success) {
-      this.router.navigate([returnUrl]);
-    }
+        map(([response, returnURL]) => {
+          if (response.status === ApiResponseStatus.Success) {
+            this.router.navigate([returnURL]);
+          }
+          return response;
+        })
+      );
   }
 }
