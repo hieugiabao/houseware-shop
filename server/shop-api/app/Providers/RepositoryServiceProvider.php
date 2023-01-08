@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Shop\Carts\Repositories\CartRepository;
+use App\Shop\Carts\Repositories\CartRepositoryInterface;
 use App\Shop\Categories\Repositories\CategoryRepository;
 use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
 use App\Shop\Customers\Repositories\CustomerRepository;
@@ -34,6 +36,11 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(
       EmployeeRepositoryInterface::class,
       EmployeeRepository::class,
+    );
+
+    $this->app->bind(
+      CartRepositoryInterface::class,
+      CartRepository::class,
     );
   }
 }

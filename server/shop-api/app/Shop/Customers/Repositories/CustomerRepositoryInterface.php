@@ -19,4 +19,8 @@ interface CustomerRepositoryInterface extends BaseRepositoryInterface
   public function deleteCustomer(): bool;
 
   public function searchCustomer(string $query): Collection;
+
+  public function getCarts(): Collection;
+
+  public function getNumberOfCartItems(): int;
 }

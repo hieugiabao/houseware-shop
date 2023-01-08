@@ -2,6 +2,7 @@
 
 namespace App\Shop\Customers;
 
+use App\Shop\Carts\Cart;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,5 +79,13 @@ class Customer extends Authenticatable implements JWTSubject
   public function getJWTCustomClaims()
   {
     return [];
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function carts()
+  {
+    return $this->hasMany(Cart::class);
   }
 }
