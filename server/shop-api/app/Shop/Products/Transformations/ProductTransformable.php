@@ -26,6 +26,9 @@ trait ProductTransformable
     $prod->status = $product->status;
     $prod->weight = (float) $product->weight;
     $prod->mass_unit = $product->mass_unit;
+    $prod->categories = $product->categories()->get();
+    $prod->created_at = $product->created_at;
+    $prod->updated_at = $product->updated_at;
 
     return $prod;
   }

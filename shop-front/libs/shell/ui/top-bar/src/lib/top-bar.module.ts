@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedUiLogoModule } from '@shop/shared/ui/logo';
 import { OptionComponent } from './not-auth-option/option.component';
 import { RouterModule } from '@angular/router';
+import { RippleModule } from 'primeng/ripple';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
     InputTextModule,
     SharedUiLogoModule,
     RouterModule,
+    RippleModule,
   ],
   declarations: [TopBarComponent, UserInfoComponent, OptionComponent],
   exports: [TopBarComponent],
