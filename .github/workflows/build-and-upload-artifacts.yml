@@ -73,6 +73,8 @@ jobs:
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: "deploy"
 
       - name: Build projects
         run: |
@@ -82,6 +84,7 @@ jobs:
           else
             cd shop-front && yarn build:web:affected
           fi
+
       - name: Upload Nx Cache
         uses: actions/upload-artifact@v2
         with:
