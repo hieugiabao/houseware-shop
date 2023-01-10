@@ -1,17 +1,7 @@
 <div class="flex flex-row h-full content-center">
   <div class="gap-2 flex flex-row pr-4 border-gray-400 border-r-[1px]">
-    <span class="p-input-icon-left">
-      <i class="pi pi-search"></i>
-      <input
-        type="text"
-        pInputText
-        placeholder="Search here..."
-        autofocus
-        class="h-[35px] !rounded-2xl"
-      />
-    </span>
     <div
-      class="relative text-xl h-[35px] px-2 rounded-[4px] flex items-center justify-center cursor-pointer hover:bg-gray-300"
+      class="relative text-xl h-[35px] px-2 rounded-[4px] flex items-center justify-center cursor-pointer"
     >
       <i class="pi pi-shopping-cart"></i>
       <span
@@ -20,7 +10,7 @@
       >
     </div>
     <div
-      class="relative text-xl h-[35px] px-2 rounded-[4px] flex items-center justify-center cursor-pointer hover:bg-gray-300"
+      class="relative text-xl h-[35px] px-2 rounded-[4px] flex items-center justify-center cursor-pointer"
     >
       <i class="pi pi-bell"></i>
       <span
@@ -29,21 +19,28 @@
       >
     </div>
   </div>
-  <div class="border-r-[1px] border-gray-400 px-4">
-    <div class="h-[35px] rounded-[4px] hover:bg-gray-300 cursor-pointer">
+  <div class="pl-4">
+    <div
+      class="h-[35px] rounded-[4px] cursor-pointer"
+      *ngIf="currentUser$ | async as user; else noUser"
+    >
       <img
         src="/assets/images/user.png"
         alt="user-image"
         class="h-full inline-block rounded-sm"
       />
-      <span class="text-sm px-1">{{ username | titlecase }}</span>
+      <span class="text-sm px-1">{{ user.name | titlecase }}</span>
     </div>
-  </div>
-  <div class="pl-4">
-    <div
-      class="bg-gray-200 w-[35px] leading-8 h-[35px] rounded-[4px] flex items-center justify-center text-xl hover:bg-gray-300 cursor-pointer"
-    >
-      <i class="pi pi-align-right"></i>
-    </div>
+    <ng-template #noUser>
+      <i class="pi pi-user"></i>
+      <span class="text-sm leading-normal">
+        <a
+          routerLink="/login"
+          class="px-1 border-r-[1px] border-r-gray-600 hover:underline"
+          >Login</a
+        >
+        <a routerLink="/register" class="pl-1 hover:underline">Register</a>
+      </span>
+    </ng-template>
   </div>
 </div>

@@ -10,6 +10,7 @@ import { SharedUiLogoModule } from '@shop/shared/ui/logo';
 import { OptionComponent } from './not-auth-option/option.component';
 import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   imports: [
@@ -21,7 +22,12 @@ import { RippleModule } from 'primeng/ripple';
     RouterModule,
     RippleModule,
   ],
-  declarations: [TopBarComponent, UserInfoComponent, OptionComponent],
+  declarations: [
+    TopBarComponent,
+    UserInfoComponent,
+    OptionComponent,
+    SearchComponent,
+  ],
   exports: [TopBarComponent],
 })
 export class TopBarModule {}
