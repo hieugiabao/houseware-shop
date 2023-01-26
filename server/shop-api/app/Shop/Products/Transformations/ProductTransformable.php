@@ -20,7 +20,7 @@ trait ProductTransformable
     $prod->sku = $product->sku;
     $prod->slug = $product->slug;
     $prod->description = $product->description;
-    $prod->thumb = $product->thumb ? asset("storage/$product->thumb") : null;
+    $prod->thumb = $product->thumb ? config('filesystems.disks.s3.url') . '/' . $product->thumb : null;
     $prod->quantity = $product->quantity;
     $prod->price = $product->price;
     $prod->status = $product->status;

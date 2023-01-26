@@ -100,6 +100,10 @@ class ProductController extends Controller
 
     $productRepo = new ProductRepository($product, $this->attributeValueRepo);
 
+    if ($request->hasFile('thumb')) {
+      $data['thumb'] = $productRepo->uploadOne($request->thumb, 'products');
+    }
+
     $product = $productRepo->updateProduct($data);
 
     return response()->json($this->transformProduct($product), 200);

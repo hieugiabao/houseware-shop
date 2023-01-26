@@ -2,40 +2,30 @@
 
 namespace App\Shop\Tools;
 
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 trait UploadableTrait
 {
   /**
    * Upload a single file in the server
    *
-   * @param UploadedFile $file
-   * @param null $folder
-   * @param string $disk
-   * @param null $filename
+   * @param $file
+   * @param string $folder
    * @return false|string
    */
-  public function uploadOne(UploadedFile $file, $folder = null, $disk = 'public', $filename = null)
+  public function uploadOne($file, string $folder = null)
   {
-    $name = !is_null($filename) ? $filename : rand(0, 9999999);
+    $file_name = time() . '-' . $file->getClientOriginalName();
 
-    return $file->storeAs(
-      $folder,
-      $name . "." . $file->getClientOriginalExtension(),
-      $disk
-    );
+    $file_path = $folder . '/' . $file_name;
+
+    Storage::disk('s3')->put($file_path, file_get_contents($file->getRealPath()), 'public');
+    return $file_path;
   }
 
-  /**
-   * @param UploadedFile $file
-   *
-   * @param string $folder
-   * @param string $disk
-   *
-   * @return false|string
-   */
-  public function storeFile(UploadedFile $file, $folder = 'products', $disk = 'public')
+  public function deleteFile($file_path)
   {
-    return $file->store($folder, ['disk' => $disk]);
+    Storage::disk('s3')->delete($file_path);
   }
 }

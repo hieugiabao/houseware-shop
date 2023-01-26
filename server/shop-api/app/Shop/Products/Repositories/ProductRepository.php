@@ -73,10 +73,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
       $collection = collect($data);
       $slug = (isset($data['name'])) ? Str::slug($data['name']) : '';
 
-      $thumb = (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) ?
-        $this->uploadOne($data['thumb'], 'products') : '';
-
-      $merge = $collection->merge(compact('slug', 'thumb'));
+      $merge = $collection->merge(compact('slug'));
 
       $product = new Product($merge->all());
 
@@ -150,6 +147,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
       $slug = Str::slug($collection->get('name'));
 
       if (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) {
+        if ($product->thumb != null) {
+          $this->deletefile($product->thumb);
+        }
         $thumb = $this->uploadOne($data['thumb'], 'products');
         $merge = $collection->merge(compact('thumb', 'slug'));
       } else {
