@@ -87,7 +87,6 @@ export class AuthService {
   private setupRefreshTimer(expiresAt: Date) {
     const expiry = LuxonUtil.fromDate(expiresAt);
     const diffInMilli = expiry.minus({ minute: 1 }).diffNow().milliseconds;
-    console.log(diffInMilli, expiresAt);
     // reset if timer is already running
     this.jwtSubscriptions?.unsubscribe();
 

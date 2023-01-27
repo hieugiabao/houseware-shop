@@ -3,9 +3,11 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'shop-logo',
   template: `
-    <a routerLink="/"
-      ><h1 class="text-2xl no-underline cursor-pointer">
-        {{ 'Houseware Shop' | uppercase }}
+    <a routerLink="/" class="flex gap-1">
+      <img src="/assets/images/logo.png" alt="logo" />
+      <h1 class="text-lg no-underline flex flex-col gap-0 leading-none">
+        <span>Shop</span>
+        <span>Houseware</span>
       </h1></a
     >
   `,

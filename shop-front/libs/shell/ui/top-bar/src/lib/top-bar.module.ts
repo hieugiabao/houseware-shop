@@ -1,3 +1,4 @@
+import { SkeletonModule } from 'primeng/skeleton';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -7,9 +8,10 @@ import { UserInfoComponent } from './user-info/user-info.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedUiLogoModule } from '@shop/shared/ui/logo';
-import { OptionComponent } from './not-auth-option/option.component';
 import { RouterModule } from '@angular/router';
 import { RippleModule } from 'primeng/ripple';
+import { SearchComponent } from './search/search.component';
+import { ShellUiListCategoryModule } from '@shop/shell/ui/list-category';
 
 @NgModule({
   imports: [
@@ -20,8 +22,10 @@ import { RippleModule } from 'primeng/ripple';
     SharedUiLogoModule,
     RouterModule,
     RippleModule,
+    ShellUiListCategoryModule,
+    SkeletonModule,
   ],
-  declarations: [TopBarComponent, UserInfoComponent, OptionComponent],
+  declarations: [TopBarComponent, UserInfoComponent, SearchComponent],
   exports: [TopBarComponent],
 })
 export class TopBarModule {}

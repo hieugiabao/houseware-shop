@@ -1,3 +1,28 @@
 @layer base {
 
+  /* Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--secondary) var(--primary);
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--primary);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--secondary);
+    border-radius: 20px;
+    border: 3px solid var(--primary);
+  }
+
+  *::-webkit-scrollbar-track {
+    background: var(--primary);
+    border-radius: 5px;
+  }
 }

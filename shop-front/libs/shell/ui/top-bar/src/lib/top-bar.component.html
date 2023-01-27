@@ -1,11 +1,12 @@
-<div
-  class="fixed top-0 h-[56px] w-full bg-slate-50 flex align-items-stretch justify-between px-4 border-b-[1px]"
+<section
+  class="flex flex-col h-[125px] border-b-[1px] fixed top-0 w-full bg-white px-8 justify-between"
 >
-  <shop-logo></shop-logo>
-  <div *ngIf="currentUser !== null; else notauth">
-    <shop-user-info></shop-user-info>
+  <div class="w-full flex align-items-stretch justify-between py-4 z-[10000]">
+    <shop-logo class="grow-0"></shop-logo>
+    <shop-search class="grow-1"></shop-search>
+    <shop-user-info class="grow-0"></shop-user-info>
   </div>
-  <ng-template #notauth>
-    <shop-top-bar-option></shop-top-bar-option>
-  </ng-template>
-</div>
+  <div class="w-3/4">
+    <shop-list-category></shop-list-category>
+  </div>
+</section>
