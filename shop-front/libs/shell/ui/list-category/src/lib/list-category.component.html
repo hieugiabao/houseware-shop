@@ -1,7 +1,7 @@
 <section *ngIf="response$ | async as response">
   <ul
     *ngIf="response.status === 'success' && response.data; else skeleton"
-    class="flex gap-4 py-2"
+    class="flex gap-4"
   >
     <li
       *ngFor="let category of response.data.data"
