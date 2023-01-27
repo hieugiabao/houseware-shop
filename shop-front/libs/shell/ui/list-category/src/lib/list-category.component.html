@@ -1,0 +1,23 @@
+<section *ngIf="response$ | async as response">
+  <ul
+    *ngIf="response.status === 'success' && response.data; else skeleton"
+    class="flex gap-4 py-2"
+  >
+    <li
+      *ngFor="let category of response.data.data"
+      class="cursor-pointer hover:bg-gray-100 px-2 py-1 rounded-sm"
+    >
+      <a [routerLink]="['/category', category.id]">
+        {{ category.name }}
+      </a>
+    </li>
+  </ul>
+
+  <ng-template #skeleton>
+    <ul class="flex gap-6 py-2">
+      <li *ngFor="let i of [1, 2, 3, 4, 5, 6]">
+        <p-skeleton width="48px" height="12px" borderRadius="8px"></p-skeleton>
+      </li>
+    </ul>
+  </ng-template>
+</section>

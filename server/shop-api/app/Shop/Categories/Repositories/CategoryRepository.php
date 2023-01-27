@@ -181,7 +181,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findProducts(): Collection
   {
-    return $this->model->products;
+    return $this->model->products()->get();
   }
 
   /**
@@ -239,7 +239,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findParentCategory()
   {
-    return $this->model->parent;
+    return $this->model->parent()->get();
   }
 
   /**
@@ -247,6 +247,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findChildren()
   {
-    return $this->model->children;
+    return $this->model->children()->get();
   }
 }

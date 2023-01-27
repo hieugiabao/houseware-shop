@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AdminSecurityController;
 use App\Http\Controllers\Auth\CustomerSecurityController;
+use App\Http\Controllers\Categories\CategoryController;
 use App\Http\Controllers\Products\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,13 @@ Route::group(['prefix' => 'products'], function ($router) {
     Route::post('/', [ProductController::class, 'createProduct']);
     Route::post('/{id}', [ProductController::class, 'updateProduct']);
     Route::delete('/{id}', [ProductController::class, 'removeProduct']);
+});
+
+Route::group(['prefix' => 'categories'], function ($router) {
+    Route::get('/', [CategoryController::class, 'listCategories']);
+    Route::get('/{id}', [CategoryController::class, 'getCategoryById']);
+    Route::get('/{id}/products', [CategoryController::class, 'getProducts']);
+    Route::get('/{id}/children', [CategoryController::class, 'getChildCategories']);
 });
 
 // register auth

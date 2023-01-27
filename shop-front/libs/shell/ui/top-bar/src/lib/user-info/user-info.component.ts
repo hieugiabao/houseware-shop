@@ -12,10 +12,18 @@ import { CustomerInfomation } from '@shop/shared/data-access/models';
 })
 export class UserInfoComponent implements OnInit {
   public currentUser$!: Observable<CustomerInfomation | null>;
+  public haveToken$!: Observable<boolean>;
 
   constructor(private readonly authStateService: AuthStateService) {}
 
   ngOnInit(): void {
     this.currentUser$ = this.authStateService.currentUser$;
+    this.haveToken$ = new Observable<boolean>((subscriber) => {
+      if (localStorage.getItem('rtok')) {
+        subscriber.next(true);
+      } else {
+        subscriber.next(false);
+      }
+    });
   }
 }

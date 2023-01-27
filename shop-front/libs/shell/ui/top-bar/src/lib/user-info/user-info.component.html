@@ -20,16 +20,28 @@
     </div>
   </div>
   <div class="pl-4">
-    <div
-      class="h-[35px] rounded-[4px] cursor-pointer"
-      *ngIf="currentUser$ | async as user; else noUser"
-    >
-      <img
-        src="/assets/images/user.png"
-        alt="user-image"
-        class="h-full inline-block rounded-sm"
-      />
-      <span class="text-sm px-1">{{ user.name | titlecase }}</span>
+    <div *ngIf="haveToken$ | async; else noUser">
+      <div
+        class="h-[35px] rounded-[4px] cursor-pointer"
+        *ngIf="currentUser$ | async as user; else skeleton"
+      >
+        <img
+          src="/assets/images/user.png"
+          alt="user-image"
+          class="h-full inline-block rounded-sm"
+        />
+        <span class="text-sm px-1">{{ user.name | titlecase }}</span>
+      </div>
+      <ng-template #skeleton>
+        <div class="flex flex-row items-center">
+          <p-skeleton
+            width="35px"
+            height="35px"
+            borderRadius="100rem"
+          ></p-skeleton>
+          <p-skeleton width="30px" height="10px" class="pl-1"></p-skeleton>
+        </div>
+      </ng-template>
     </div>
     <ng-template #noUser>
       <i class="pi pi-user"></i>

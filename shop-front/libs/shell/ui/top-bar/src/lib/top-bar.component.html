@@ -1,7 +1,12 @@
-<div
-  class="fixed top-0 h-[125px] w-full bg-white flex align-items-stretch justify-between px-8 border-b-[1px]"
+<section
+  class="flex flex-col h-[125px] border-b-[1px] fixed top-0 w-full bg-white px-8 justify-between"
 >
-  <shop-logo class="grow-0"></shop-logo>
-  <shop-search class="grow-1"></shop-search>
-  <shop-user-info class="grow-0"></shop-user-info>
-</div>
+  <div class="w-full flex align-items-stretch justify-between py-4 z-[10000]">
+    <shop-logo class="grow-0"></shop-logo>
+    <shop-search class="grow-1"></shop-search>
+    <shop-user-info class="grow-0"></shop-user-info>
+  </div>
+  <div class="w-3/4">
+    <shop-list-category></shop-list-category>
+  </div>
+</section>

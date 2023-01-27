@@ -7,7 +7,22 @@ module.exports = {
   },
   content: [],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        'skeleton-loading': {
+          from: {
+            'background-color': 'hsl(200, 20%, 80%)',
+          },
+          to: {
+            'background-color': 'hsl(200, 20%, 90%)',
+          },
+        },
+      },
+      animation: {
+        'skeleton-loading':
+          'skeleton-loading 1.5s ease-in-out infinite alternate',
+      },
+    },
   },
   plugins: [],
 };

@@ -47,8 +47,12 @@
       "@shop/shared/utilities/string": [
         "libs/shared/utilities/string/src/index.ts"
       ],
+      "@shop/shell/data-access": ["libs/shell/data-access/src/index.ts"],
       "@shop/shell/feature": ["libs/shell/feature/src/index.ts"],
       "@shop/shell/ui/layout": ["libs/shell/ui/layout/src/index.ts"],
+      "@shop/shell/ui/list-category": [
+        "libs/shell/ui/list-category/src/index.ts"
+      ],
       "@shop/shell/ui/main-view": ["libs/shell/ui/main-view/src/index.ts"],
       "@shop/shell/ui/top-bar": ["libs/shell/ui/top-bar/src/index.ts"]
     }
