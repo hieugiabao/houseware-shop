@@ -10,6 +10,7 @@ use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Products\Requests\CreateProductRequest;
 use App\Shop\Products\Requests\UpdateProductRequest;
 use App\Shop\Products\Transformations\ProductTransformable;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -63,6 +64,21 @@ class ProductController extends Controller
       'next_page_url',
       'prev_page_url',
     );
+    return response()->json(
+      $result,
+      200
+    );
+  }
+
+  public function getBestSellerProducts()
+  {
+    $products = $this->productRepo->bestSellerProducts();
+    $products = $products->map(function (Product $item) {
+      return $this->transformProduct($item);
+    })->all();
+
+    $result = collect($this->productRepo->paginateArrayResults($products, request()->input('per_page', 10)))->all();
+
     return response()->json(
       $result,
       200
