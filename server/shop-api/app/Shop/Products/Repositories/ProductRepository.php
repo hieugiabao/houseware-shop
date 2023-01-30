@@ -64,6 +64,9 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     $products = Product::where('sale_percentage', '>', 0)->orderBy('sale_percentage', 'desc')->limit(50)->get();
     if (count($products) < 0) {
       $products = $this->listProducts('updated_at', 'desc', ['*']);
+    } else {
+      $more_products = $this->listProducts('updated_at', 'desc', ['*']);
+      $products = $products->merge($more_products);
     }
 
     return $products;

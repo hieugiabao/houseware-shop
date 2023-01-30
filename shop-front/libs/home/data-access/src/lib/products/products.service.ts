@@ -22,4 +22,14 @@ export class ProductsService {
       () => 'Error when getting products'
     );
   }
+
+  getBestSellerProducts(
+    params: PaginateParamsDto
+  ): Observable<ApiResponse<PaginateResultResponse<Product>>> {
+    return handleApiResponse(
+      this.productsApiService.getBestSellerProducts(params),
+      null,
+      () => 'Error when getting best seller products'
+    );
+  }
 }
