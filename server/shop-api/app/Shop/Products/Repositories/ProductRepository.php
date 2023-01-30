@@ -59,6 +59,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     return $this->all($columns, $order, $sort);
   }
 
+  public function bestSellerProducts(): Collection
+  {
+    $products = Product::where('sale_percentage', '>', 0)->orderBy('sale_percentage', 'desc')->limit(50)->get();
+    if (count($products) < 0) {
+      $products = $this->listProducts('updated_at', 'desc', ['*']);
+    } else {
+      $more_products = $this->listProducts('updated_at', 'desc', ['*']);
+      $products = $products->merge($more_products);
+    }
+
+    return $products;
+  }
+
+
   /**
    * Create the product
    *
@@ -160,6 +174,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $this->syncCategories($data['categories']);
       } else {
         $this->detachCategories();
+      }
+
+      if (isset($data['sale_price']) && $data['sale_price'] > 0) {
+        $sale_percentage = round((($product->price - $data['sale_price']) / $product->price) * 100);
+        $merge = $merge->merge(compact('sale_percentage'));
       }
 
       $product->update($merge->all());

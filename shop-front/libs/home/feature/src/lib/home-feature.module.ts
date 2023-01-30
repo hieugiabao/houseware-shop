@@ -4,6 +4,7 @@ import { HomeComponent } from './home.component';
 import { RouterModule } from '@angular/router';
 import { HomeGreetingModule } from '@shop/home/ui/greeting';
 import { FeaturedProductsModule } from '@shop/home/ui/featured-products';
+import { HomeUiBestSellerModule } from '@shop/home/ui/best-seller';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { FeaturedProductsModule } from '@shop/home/ui/featured-products';
     ]),
     HomeGreetingModule,
     FeaturedProductsModule,
+    HomeUiBestSellerModule,
   ],
   declarations: [HomeComponent],
   exports: [HomeComponent],

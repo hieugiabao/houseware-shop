@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpResponseBase,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
 import {
@@ -12,7 +7,7 @@ import {
   Product,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
-import { Observable, mergeMap, catchError, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api';
 
 @Injectable({ providedIn: 'root' })
@@ -42,23 +37,27 @@ export class ProductsApiService extends BaseApiService {
           fromObject: StringUtil.convertKeysFromCamelCaseToSnakeCase(params),
         }),
       })
-      .pipe(
-        mergeMap((response) =>
-          this.process<PaginateResultResponse<Product>>(response, 200)
-        )
-      )
-      .pipe(
-        catchError((response) => {
-          if (response instanceof HttpResponseBase) {
-            try {
-              return this.process<PaginateResultResponse<Product>>(response);
-            } catch (e) {
-              return throwError(() => e);
-            }
-          } else {
-            return throwError(() => response);
-          }
-        })
-      );
+      .pipe(this.handleResponse<PaginateResultResponse<Product>>(200));
+  }
+
+  getBestSellerProducts(
+    params: PaginateParamsDto
+  ): Observable<PaginateResultResponse<Product>> {
+    let url = this.appConfig.baseURL + '/products/best_seller';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+        params: new HttpParams({
+          fromObject: StringUtil.convertKeysFromCamelCaseToSnakeCase(params),
+        }),
+      })
+      .pipe(this.handleResponse<PaginateResultResponse<Product>>(200));
   }
 }

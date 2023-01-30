@@ -18,6 +18,7 @@
       "@shop/auth/interceptor": ["libs/auth/interceptor/src/index.ts"],
       "@shop/home/data-access": ["libs/home/data-access/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
+      "@shop/home/ui/best-seller": ["libs/home/ui/best-seller/src/index.ts"],
       "@shop/home/ui/featured-products": [
         "libs/home/ui/featured-products/src/index.ts"
       ],

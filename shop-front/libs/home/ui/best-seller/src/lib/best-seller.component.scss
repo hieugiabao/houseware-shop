@@ -1,0 +1,35 @@
+:host ::ng-deep{
+  .card {
+    padding: 1.5rem;
+    border-color: #e0e0e0;
+    border-width: 1px;
+    box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+  }
+
+  .p-carousel-content {
+    position: relative;
+
+    .p-carousel-next, .p-carousel-prev {
+      position: absolute;
+      border: 1px solid #e0e0e0;
+      background-color: #dfdf;
+      z-index: 2;
+    }
+
+    .p-carousel-prev {
+      left: 0;
+      transform: translateX(-25%);
+    }
+
+    .p-carousel-next {
+      right: 0;
+      transform: translateX(25%);
+    }
+
+    .p-disabled {
+      display: none;
+    }
+  }
+}

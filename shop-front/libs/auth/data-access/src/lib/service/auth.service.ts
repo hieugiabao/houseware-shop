@@ -108,6 +108,7 @@ export class AuthService {
       .pipe(
         catchError((err: ApiErrorDto) => {
           if (err.statusCode === 401) {
+            this.localStorageService.remove('rtok');
             this.redirectService.redirectToLogin();
           }
 

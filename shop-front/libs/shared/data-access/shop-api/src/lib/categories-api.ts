@@ -1,19 +1,14 @@
-import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpParams,
-  HttpResponseBase,
-} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { BaseApiService } from './base-api';
-import { catchError, mergeMap, Observable, throwError } from 'rxjs';
+import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
 import {
   Category,
   PaginateParamsDto,
   PaginateResultResponse,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
+import { Observable } from 'rxjs';
+import { BaseApiService } from './base-api';
 
 @Injectable({ providedIn: 'root' })
 export class CategoriesApiService extends BaseApiService {
@@ -42,23 +37,6 @@ export class CategoriesApiService extends BaseApiService {
           fromObject: StringUtil.convertKeysFromCamelCaseToSnakeCase(params),
         }),
       })
-      .pipe(
-        mergeMap((response) =>
-          this.process<PaginateResultResponse<Category>>(response, 200)
-        )
-      )
-      .pipe(
-        catchError((response) => {
-          if (response instanceof HttpResponseBase) {
-            try {
-              return this.process<PaginateResultResponse<Category>>(response);
-            } catch (e) {
-              return throwError(() => e);
-            }
-          } else {
-            return throwError(() => response);
-          }
-        })
-      );
+      .pipe(this.handleResponse<PaginateResultResponse<Category>>(200));
   }
 }

@@ -24,6 +24,8 @@ class Product extends Model
     'thumb',
     'quantity',
     'price',
+    'sale_price',
+    'sale_percentage',
     'status',
     'weight',
     'mass_unit',

@@ -24,6 +24,7 @@ Route::get('/health', function (Request $request) {
 
 Route::group(['prefix' => 'products'], function ($router) {
     Route::get('/', [ProductController::class, 'getPaginationProducts']);
+    Route::get('/best_seller', [ProductController::class, 'getBestSellerProducts']);
     Route::post('/', [ProductController::class, 'createProduct']);
     Route::post('/{id}', [ProductController::class, 'updateProduct']);
     Route::delete('/{id}', [ProductController::class, 'removeProduct']);
