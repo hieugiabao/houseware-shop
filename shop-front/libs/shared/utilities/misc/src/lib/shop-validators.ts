@@ -14,4 +14,9 @@ export class ShopValidators {
       ? null
       : { isEmail: true };
   }
+  static checkPasswords(group: AbstractControl): ValidationErrors | null {
+    let pass = group.get('password')?.value;
+    let confirmPass = group.get('passwordConfirmation')?.value;
+    return pass === confirmPass ? null : { notSame: true };
+  }
 }

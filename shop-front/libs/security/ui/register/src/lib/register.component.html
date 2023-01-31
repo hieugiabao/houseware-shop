@@ -3,23 +3,45 @@
 >
   <section class="flex justify-center"><h2 class="">Logo here</h2></section>
   <section class="flex flex-col space-y-4 items-center shrink-1">
-    <h4 class="text-4xl w-full text-center my-8">Welcome back</h4>
+    <h4 class="text-4xl w-full text-center my-8">Register</h4>
     <p class="text-gray-600 text-sm w-4/5 font-medium">
       Please enter your details
     </p>
-    <ng-container *ngIf="loginResponse$ | async as response">
+    <!-- <ng-container *ngIf="loginResponse$ | async as response">
       <span
         *ngIf="response.status === 'failure'"
         class="text-red-500 p-invalid w-4/5"
       >
         <small>{{ response.error }}</small>
       </span>
-    </ng-container>
+    </ng-container> -->
     <form
       [formGroup]="form"
       class="flex flex-col space-y-4 w-4/5"
       (ngSubmit)="submit()"
     >
+      <label for="name" class="flex flex-col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-user"></i>
+          <input
+            [class.p-invalid]="
+              form.get('name')?.touched && !!form.get('name')?.errors
+            "
+            class="w-full"
+            type="text"
+            pInputText
+            autocomplete="off"
+            id="name"
+            placeholder="Enter name"
+            formControlName="name"
+          />
+        </span>
+        <small
+          class="p-invalid"
+          *ngIf="form.get('name')?.touched && !!form.get('name')?.errors?.['required']"
+          >Name is required</small
+        >
+      </label>
       <label for="email" class="flex flex-col">
         <span class="p-input-icon-left">
           <i class="pi pi-envelope"></i>
@@ -74,44 +96,45 @@
         </small>
       </label>
 
-      <span
-        class="w-full flex flex-row justify-between text-sm max-sm:flex-col"
-      >
-        <label
-          for="remember"
-          class="flex flex-row justify-center max-sm:block max-sm:mb-1"
+      <label for="passwordConfirmation" class="flex flex-col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-lock"></i>
+          <input
+            type="password"
+            pInputText
+            id="passwordConfirmation"
+            [class.p-invalid]="
+              form.get('passwordConfirmation')?.touched &&
+              !!form.get('passwordConfirmation')?.errors
+            "
+            autocomplete
+            class="w-full"
+            placeholder="Enter passwordConfirmation"
+            formControlName="passwordConfirmation"
+          />
+        </span>
+        <small
+          class="p-invalid"
+          *ngIf="
+            form.get('passwordConfirmation')?.touched && !!form.get('passwordConfirmation')?.errors?.['required']
+          "
         >
-          <p-checkbox
-            name="remember"
-            value="remember"
-            class="p-element ng-touched ng-valid ng-dirty"
-            formControlName="remember"
-          >
-          </p-checkbox>
-          <span class="ml-2 font-semibold">Remember me</span>
-        </label>
-
-        <a href="#" class="underline text-blue-500 hover:text-blue-700"
-          >I forgot my password?</a
+          passwordConfirmation is required
+        </small>
+        <small
+          class="p-invalid"
+          *ngIf="
+          form.get('passwordConfirmation')?.touched && !!form.errors?.['notSame']
+        "
         >
-      </span>
-      <button
-        pButton
-        type="submit"
-        [disabled]="
-          form.invalid || (loginResponse$ | async)?.status === 'loading'
-        "
-        [label]="
-          (loginResponse$ | async)?.status === 'loading'
-            ? 'Signing in'
-            : 'Sign in'
-        "
-        class="w-full"
-      ></button>
+          passwordConfirmation not match with password
+        </small>
+      </label>
+      <button pButton type="submit" class="w-full" label="Signup"></button>
     </form>
     <p class="text-sm w-4/5">
-      <span>Don't have an account?&nbsp;</span>
-      <a href="/register" class="text-blue-600">Create one here</a>
+      <span>Already have an account?&nbsp;</span>
+      <a href="/login" class="text-blue-600">Login</a>
     </p>
   </section>
 </div>

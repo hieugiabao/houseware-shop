@@ -5,6 +5,7 @@ import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
 import {
   CustomerInfomation,
   LoginParamsDto,
+  RegisterParamsDto,
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
@@ -18,6 +19,25 @@ export class CustomerAuthApiService extends BaseApiService {
     private httpClient: HttpClient
   ) {
     super();
+  }
+
+  register(body: RegisterParamsDto): Observable<unknown> {
+    let url = this.appConfig.baseURL + '/auth/register';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('post', url, {
+        body: JSON.stringify(
+          StringUtil.convertKeysFromCamelCaseToSnakeCase(body)
+        ),
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<unknown>(201));
   }
 
   login(body: LoginParamsDto): Observable<TokenResultResponse> {

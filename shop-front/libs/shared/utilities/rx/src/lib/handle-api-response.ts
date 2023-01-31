@@ -13,11 +13,15 @@ export function handleApiResponse<TData>(
     | ((err: unknown) => unknown | Observable<unknown>)
 ): Observable<ApiResponse<TData>> {
   return apiCall.pipe(
-    map((data) => ({
-      status: ApiResponseStatus.Success,
-      data,
-      error: '',
-    })),
+    map((data) => {
+      console.log('data', data);
+
+      return {
+        status: ApiResponseStatus.Success,
+        data,
+        error: '',
+      };
+    }),
     startWith({
       status: ApiResponseStatus.Loading,
       data: initialValue,
