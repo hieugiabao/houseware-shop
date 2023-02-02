@@ -31,4 +31,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
   public function syncCategories(array $params);
 
   public function listProductAttributes(): Collection;
+
+  public function findProductImages(): Collection;
+
+  public function saveProductImages(Collection $collection);
 }

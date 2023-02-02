@@ -2,6 +2,7 @@
 
 namespace App\Shop\Products\Repositories;
 
+use App\Shop\ProductImages\ProductImage;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductNotFoundException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
@@ -121,7 +122,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         if ($product->thumb != null) {
           $this->deletefile($product->thumb);
         }
-        $thumb = $this->uploadOne($data['thumb'], 'products');
+        $thumb = $this->uploadOne($data['thumb'], 'products/thumbnails');
         $merge = $collection->merge(compact('thumb', 'slug'));
       } else {
         $merge = $collection->merge(compact('slug'));
@@ -243,5 +244,30 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   public function listProductAttributes(): Collection
   {
     return $this->model->attributes()->get();
+  }
+
+  /**
+   * @return mixed
+   */
+  public function findProductImages(): Collection
+  {
+    return $this->model->images()->get();
+  }
+
+  /**
+   * @param Collection $collection
+   *
+   * @return void
+   */
+  public function saveProductImages(Collection $collection)
+  {
+    $collection->each(function (UploadedFile $file) {
+      $filename = $this->uploadOne($file, 'products/' . $this->model->id);
+      $productImage = new ProductImage([
+        'product_id' => $this->model->id,
+        'src' => $filename
+      ]);
+      $this->model->images()->save($productImage);
+    });
   }
 }

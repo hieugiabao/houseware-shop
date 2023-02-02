@@ -21,6 +21,7 @@ class UpdateProductRequest extends BaseFormRequest
       'price' => ['required', 'numeric', 'min:0'],
       'weight' => ['nullable', 'numeric', 'min:0'],
       'thumb' => 'image|max:2048',
+      'image' => 'nullable|array',
     ];
   }
 }
