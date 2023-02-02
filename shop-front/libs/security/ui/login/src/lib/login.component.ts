@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
   submit() {
     const { email, password, remember } = this.form.value;
     this.authService
-      .login(email, password, !!remember)
+      .login(email, password)
       .pipe(
         withLatestFrom(
           this.route.queryParamMap.pipe(
