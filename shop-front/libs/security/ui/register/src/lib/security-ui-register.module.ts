@@ -1,12 +1,13 @@
-import { SharedUiLogoModule } from '@shop/shared/ui/logo';
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login.component';
+import { RegisterComponent } from './register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
-import { RouterModule } from '@angular/router';
+import { RegisterService } from '@shop/security/data-access';
+import { SharedUiLogoModule } from '@shop/shared/ui/logo';
 
 @NgModule({
   imports: [
@@ -16,10 +17,11 @@ import { RouterModule } from '@angular/router';
     ButtonModule,
     CheckboxModule,
     FormsModule,
-    RouterModule,
     SharedUiLogoModule,
+    RouterModule,
   ],
-  declarations: [LoginComponent],
-  exports: [LoginComponent],
+  declarations: [RegisterComponent],
+  exports: [RegisterComponent],
+  providers: [RegisterService],
 })
-export class SecurityUiLoginModule {}
+export class SecurityUiRegisterModule {}

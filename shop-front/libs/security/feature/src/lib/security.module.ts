@@ -6,6 +6,10 @@ import {
   SecurityUiLayoutModule,
 } from '@shop/security/ui/layout';
 import { LoginComponent, SecurityUiLoginModule } from '@shop/security/ui/login';
+import {
+  RegisterComponent,
+  SecurityUiRegisterModule,
+} from '@shop/security/ui/register';
 
 @NgModule({
   imports: [
@@ -19,11 +23,16 @@ import { LoginComponent, SecurityUiLoginModule } from '@shop/security/ui/login';
             path: 'login',
             component: LoginComponent,
           },
+          {
+            path: 'register',
+            component: RegisterComponent,
+          },
         ],
       },
     ]),
     SecurityUiLayoutModule,
     SecurityUiLoginModule,
+    SecurityUiRegisterModule,
   ],
   exports: [RouterModule],
 })

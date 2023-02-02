@@ -143,6 +143,25 @@ export abstract class BaseApiService {
           );
         })
       );
+    } else if (status === 422) {
+      return this.blobToText(responseBlob).pipe(
+        mergeMap((_responseText: string) => {
+          let result422: any = null;
+          result422 =
+            _responseText === ''
+              ? null
+              : (StringUtil.convertKeysFromSnakeCaseToCamelCase(
+                  JSON.parse(_responseText, this.jsonParseReviver)
+                ) as ApiErrorDto);
+          return this.throwException(
+            'Unprocessable Entity',
+            status,
+            _responseText,
+            _headers,
+            result422
+          );
+        })
+      );
     } else if (status !== 200 && status !== 204) {
       return this.blobToText(responseBlob).pipe(
         mergeMap((_responseText: string) => {
