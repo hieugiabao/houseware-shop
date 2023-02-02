@@ -3,11 +3,16 @@ import {
   ApiResponseStatus,
 } from '@shop/shared/data-access/models';
 import { RegisterService } from '@shop/security/data-access';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ShopValidators } from '@shop/shared/utilities/misc';
-import { EMPTY, finalize, Observable, tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 @Component({
   selector: 'shop-register',
@@ -16,13 +21,12 @@ import { EMPTY, finalize, Observable, tap } from 'rxjs';
 })
 export class RegisterComponent implements OnInit {
   public form!: FormGroup;
-  public registerResponse$:
-    | Observable<ApiResponse<unknown>>
-    | Observable<never> = EMPTY;
+  public registerResponse: ApiResponse<null> | null = null;
   constructor(
     private readonly fb: FormBuilder,
     private readonly router: Router,
-    private readonly registerService: RegisterService
+    private readonly registerService: RegisterService,
+    private readonly cdf: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -45,9 +49,8 @@ export class RegisterComponent implements OnInit {
   }
 
   submit() {
-    console.log('this.form.value', this.form.value);
     const { name, email, password, passwordConfirmation } = this.form.value;
-    this.registerResponse$ = this.registerService
+    this.registerService
       .register({
         name,
         email,
@@ -56,11 +59,11 @@ export class RegisterComponent implements OnInit {
       })
       .pipe(
         tap((res) => {
-          console.log('res', res);
           if (res.status === ApiResponseStatus.Success) {
-            console.log('------------success', res);
             this.router.navigate(['/login']);
           }
+          this.registerResponse = res as ApiResponse<null>;
+          this.cdf.detectChanges();
         }),
         finalize(() => {
           this.form.reset({
@@ -69,12 +72,11 @@ export class RegisterComponent implements OnInit {
             password: '',
             passwordConfirmation: '',
           });
+
+          this.form.get('password')?.markAsUntouched();
+          this.form.get('passwordConfirmation')?.markAsUntouched();
         })
-      );
-    this.registerResponse$.subscribe({
-      next: (res) => console.log('res', res),
-      error: (err) => console.log('err', err),
-      complete: () => console.log('complete'),
-    });
+      )
+      .subscribe();
   }
 }

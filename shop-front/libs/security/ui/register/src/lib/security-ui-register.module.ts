@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisterComponent } from './register.component';
@@ -6,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RegisterService } from '@shop/security/data-access';
+import { SharedUiLogoModule } from '@shop/shared/ui/logo';
 
 @NgModule({
   imports: [
@@ -15,6 +17,8 @@ import { RegisterService } from '@shop/security/data-access';
     ButtonModule,
     CheckboxModule,
     FormsModule,
+    SharedUiLogoModule,
+    RouterModule,
   ],
   declarations: [RegisterComponent],
   exports: [RegisterComponent],

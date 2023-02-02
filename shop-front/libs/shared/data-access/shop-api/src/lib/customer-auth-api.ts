@@ -21,7 +21,7 @@ export class CustomerAuthApiService extends BaseApiService {
     super();
   }
 
-  register(body: RegisterParamsDto): Observable<unknown> {
+  register(body: RegisterParamsDto): Observable<void> {
     let url = this.appConfig.baseURL + '/auth/register';
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
@@ -37,7 +37,7 @@ export class CustomerAuthApiService extends BaseApiService {
           Accept: 'application/json',
         }),
       })
-      .pipe(this.handleResponse<unknown>(201));
+      .pipe(this.handleResponse<void>(201));
   }
 
   login(body: LoginParamsDto): Observable<TokenResultResponse> {

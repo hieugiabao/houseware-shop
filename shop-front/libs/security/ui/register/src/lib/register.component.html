@@ -1,20 +1,20 @@
 <div
-  class="w-[600px] min-h-[450px] bg-slate-50 rounded-sm p-8 bg-clip-border shadow-lg max-sm:max-w-[375px]"
+  class="w-[600px] min-h-[450px] bg-slate-50 rounded-sm p-7 bg-clip-border shadow-lg max-sm:max-w-[375px]"
 >
-  <section class="flex justify-center"><h2 class="">Logo here</h2></section>
-  <section class="flex flex-col space-y-4 items-center shrink-1">
-    <h4 class="text-4xl w-full text-center my-8">Register</h4>
-    <p class="text-gray-600 text-sm w-4/5 font-medium">
-      Please enter your details
+  <section class="flex justify-center"><shop-logo></shop-logo></section>
+  <section class="flex flex-col items-center shrink-1">
+    <h4 class="text-4xl w-full text-center my-6">Register</h4>
+    <p class="text-gray-600 text-sm w-4/5 font-medium mb-2">
+      Please enter your informations
     </p>
-    <!-- <ng-container *ngIf="loginResponse$ | async as response">
+    <ng-container *ngIf="registerResponse">
       <span
-        *ngIf="response.status === 'failure'"
+        *ngIf="registerResponse.status === 'failure'"
         class="text-red-500 p-invalid w-4/5"
       >
-        <small>{{ response.error }}</small>
+        <small>{{ registerResponse.error }}</small>
       </span>
-    </ng-container> -->
+    </ng-container>
     <form
       [formGroup]="form"
       class="flex flex-col space-y-4 w-4/5"
@@ -61,7 +61,7 @@
         <small
           class="p-invalid"
           *ngIf="form.get('email')?.touched && !!form.get('email')?.errors?.['isEmail']"
-          >A valid email</small
+          >Please enter a valid email</small
         >
         <small
           class="p-invalid"
@@ -89,10 +89,18 @@
         <small
           class="p-invalid"
           *ngIf="
-            form.get('password')?.touched && !!form.get('password')?.errors
+            form.get('password')?.touched && !!form.get('password')?.errors?.['required']
           "
         >
           Password is required
+        </small>
+        <small
+          class="p-invalid"
+          *ngIf="
+            form.get('password')?.touched && !!form.get('password')?.errors?.['minlength']
+          "
+        >
+          Password must be at least 8 characters
         </small>
       </label>
 
@@ -109,7 +117,7 @@
             "
             autocomplete
             class="w-full"
-            placeholder="Enter passwordConfirmation"
+            placeholder="Confirm password"
             formControlName="passwordConfirmation"
           />
         </span>
@@ -119,22 +127,38 @@
             form.get('passwordConfirmation')?.touched && !!form.get('passwordConfirmation')?.errors?.['required']
           "
         >
-          passwordConfirmation is required
+          Confirm password is required
         </small>
         <small
           class="p-invalid"
           *ngIf="
-          form.get('passwordConfirmation')?.touched && !!form.errors?.['notSame']
+            form.get('passwordConfirmation')?.touched && !!form.get('passwordConfirmation')?.errors?.['minlength']
+          "
+        >
+          Confirm password must be at least 8 characters
+        </small>
+        <small
+          class="p-invalid"
+          *ngIf="
+          form.get('passwordConfirmation')?.touched && !form.get('passwordConfirmation')?.errors && !!form.errors?.['notSame']
         "
         >
-          passwordConfirmation not match with password
+          Confirm password not match with password
         </small>
       </label>
-      <button pButton type="submit" class="w-full" label="Signup"></button>
+      <button
+        pButton
+        type="submit"
+        class="w-full"
+        [disabled]="form.invalid || registerResponse?.status === 'loading'"
+        [label]="
+          registerResponse?.status === 'loading' ? 'Registering...' : 'Register'
+        "
+      ></button>
     </form>
-    <p class="text-sm w-4/5">
+    <p class="text-sm w-4/5 mt-2">
       <span>Already have an account?&nbsp;</span>
-      <a href="/login" class="text-blue-600">Login</a>
+      <a routerLink="/login" class="text-blue-600">Login</a>
     </p>
   </section>
 </div>
