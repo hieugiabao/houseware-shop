@@ -2,8 +2,6 @@
 
 namespace App\Shop\Products\Repositories;
 
-use App\Shop\AttributeValues\AttributeValue;
-use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\Products\Product;
 use Illuminate\Support\Collection;
 use Jsdecena\Baserepo\BaseRepositoryInterface;
@@ -33,14 +31,4 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
   public function syncCategories(array $params);
 
   public function listProductAttributes(): Collection;
-
-  public function saveProductAttributes(ProductAttribute $productAttribute): ProductAttribute;
-
-  public function removeProductAttribute(ProductAttribute $productAttribute): ?bool;
-
-  public function saveCombination(ProductAttribute $productAttribute, AttributeValue ...$attributeValues): Collection;
-
-  public function listCombinations(): Collection;
-
-  public function findProductCombination(ProductAttribute $attribute);
 }

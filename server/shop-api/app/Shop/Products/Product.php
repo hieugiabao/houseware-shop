@@ -69,12 +69,4 @@ class Product extends Model
   {
     return $this->belongsToMany(Category::class);
   }
-
-  /**
-   * @return \Illuminate\Database\Eloquent\Relations\HasMany
-   */
-  public function attributes()
-  {
-    return $this->hasMany(ProductAttribute::class);
-  }
 }

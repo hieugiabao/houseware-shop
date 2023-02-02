@@ -22,7 +22,7 @@ trait CategoryTransformable
     $property->description = $category->description;
     $property->parent_id = $category->parent_id;
     $property->status =  $category->status;
-    $property->thumb = $category->thumb ? asset("storage/$category->thumb") : null;
+    $property->thumb = $category->thumb ? config('filesystems.disks.s3.url') . '/' . $category->thumb : null;
     $property->created_at = $category->created_at;
     $property->updated_at = $category->updated_at;
 

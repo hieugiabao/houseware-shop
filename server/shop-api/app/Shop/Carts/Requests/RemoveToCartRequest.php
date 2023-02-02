@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Shop\Attributes\Requests;
+namespace App\Shop\Carts\Requests;
 
 use App\Shop\Base\BaseFormRequest;
 
-class UpdateAttributeRequest extends BaseFormRequest
+class RemoveToCartRequest extends BaseFormRequest
 {
   /**
    * Get the validation rules that apply to the request.
@@ -14,7 +14,7 @@ class UpdateAttributeRequest extends BaseFormRequest
   public function rules()
   {
     return [
-      'name' => ['unique:attributes']
+      'product_ids' => ['required', 'array']
     ];
   }
 }

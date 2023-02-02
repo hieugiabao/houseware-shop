@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('product_attributes', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('quantity');
-            $table->decimal('price')->nullable();
-            $table->unsignedInteger('product_id');
+        Schema::create('carts', function (Blueprint $table) {
+            $table->integer('customer_id')->unsigned();
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->integer('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');
-            $table->tinyInteger('default')->default(0);
+            $table->integer('quantity');
+            $table->primary(['customer_id', 'product_id']);
+
             $table->timestamps();
         });
     }
@@ -31,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_attributes');
+        Schema::dropIfExists('carts');
     }
 };

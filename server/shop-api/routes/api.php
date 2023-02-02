@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\AdminSecurityController;
 use App\Http\Controllers\Auth\CustomerSecurityController;
-use App\Http\Controllers\Categories\CategoryController;
-use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Front\Categories\CategoryController;
+use App\Http\Controllers\Front\Carts\CartController;
+use App\Http\Controllers\Front\Customers\CustomerController;
+use App\Http\Controllers\Front\Products\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -52,4 +54,12 @@ Route::namespace('Admin')->group(function () {
     Route::get('admin/me', [AdminSecurityController::class, 'me'])->middleware(['jwt.verify', 'auth:employee']);
     Route::post('admin/logout', [AdminSecurityController::class, 'logout'])->middleware(['jwt.verify', 'auth:employee']);
     Route::post('admin/refresh', [AdminSecurityController::class, 'refresh']);
+});
+
+Route::group(['prefix' => 'carts', 'middleware' => 'jwt.auth'], function ($router) {
+    Route::post('/', [CartController::class, 'addToCart']);
+    Route::post('/update', [CartController::class, 'updateCart']);
+    Route::delete('/', [CartController::class, 'removeToCart']);
+    Route::get('/count', [CustomerController::class, 'getCartItemCount']);
+    Route::get('/', [CustomerController::class, 'getAllCartItems']);
 });

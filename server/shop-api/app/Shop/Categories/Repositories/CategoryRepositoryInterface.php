@@ -31,8 +31,6 @@ interface CategoryRepositoryInterface extends BaseRepositoryInterface
 
   public function rootCategories(string $string, string $string1);
 
-  public function deleteFile(array $file, $disk = null): bool;
-
   public function findChildren();
 
   public function findParentCategory();

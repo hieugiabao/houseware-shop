@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Products;
+namespace App\Http\Controllers\Front\Products;
 
 use App\Http\Controllers\Controller;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Products\Requests\CreateProductRequest;
 use App\Shop\Products\Requests\UpdateProductRequest;
 use App\Shop\Products\Transformations\ProductTransformable;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -23,21 +21,13 @@ class ProductController extends Controller
   private $productRepo;
 
   /**
-   * @var AttributeValueRepositoryInterface
-   *
-   */
-  private $attributeValueRepo;
-
-  /**
    * Constructor
    *
    * @param ProductRepositoryInterface $productRepository
-   * @param AttributeValueRepositoryInterface $attributeValueRepository
    */
-  public function __construct(ProductRepositoryInterface $productRepository, AttributeValueRepositoryInterface $attributeValueRepository)
+  public function __construct(ProductRepositoryInterface $productRepository)
   {
     $this->productRepo = $productRepository;
-    $this->attributeValueRepo = $attributeValueRepository;
   }
 
   /**
@@ -114,11 +104,7 @@ class ProductController extends Controller
     );
     $product = $this->productRepo->findProductById($id);
 
-    $productRepo = new ProductRepository($product, $this->attributeValueRepo);
-
-    if ($request->hasFile('thumb')) {
-      $data['thumb'] = $productRepo->uploadOne($request->thumb, 'products');
-    }
+    $productRepo = new ProductRepository($product);
 
     $product = $productRepo->updateProduct($data);
 
@@ -129,7 +115,7 @@ class ProductController extends Controller
   {
     $product = $this->productRepo->findProductById($id);
 
-    $productRepo = new ProductRepository($product, $this->attributeValueRepo);
+    $productRepo = new ProductRepository($product);
     $productRepo->removeProduct();
 
     return response()->json($this->transformProduct($product), 200);

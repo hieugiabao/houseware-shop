@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Categories;
+namespace App\Http\Controllers\Front\Categories;
 
 use App\Http\Controllers\Controller;
 use App\Shop\Categories\Repositories\CategoryRepository;

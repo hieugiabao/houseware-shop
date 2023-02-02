@@ -126,4 +126,20 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
     }
     return $this->model->searchCustomer($query)->get();
   }
+
+  /**
+   * @return mixed
+   */
+  public function getCarts(): Collection
+  {
+    return $this->model->carts()->get();
+  }
+
+  /**
+   * @return int
+   */
+  public function getNumberOfCartItems(): int
+  {
+    return $this->model->carts()->count();
+  }
 }
