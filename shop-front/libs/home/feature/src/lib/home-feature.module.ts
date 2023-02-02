@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HomeGreetingModule } from '@shop/home/ui/greeting';
 import { FeaturedProductsModule } from '@shop/home/ui/featured-products';
 import { HomeUiBestSellerModule } from '@shop/home/ui/best-seller';
+import { HomeUiShopByCategoryModule } from '@shop/home/ui/shop-by-category';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { HomeUiBestSellerModule } from '@shop/home/ui/best-seller';
     HomeGreetingModule,
     FeaturedProductsModule,
     HomeUiBestSellerModule,
+    HomeUiShopByCategoryModule,
   ],
   declarations: [HomeComponent],
   exports: [HomeComponent],

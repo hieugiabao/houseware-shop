@@ -1,0 +1,47 @@
+<section class="my-8">
+  <h2 class="text-xl font-semibold uppercase mb-4">shop by category</h2>
+  <div
+    class="flex flex-row gap-2 h-[300px]"
+    *ngIf="categoriesResponse$ | async as response"
+  >
+    <div
+      class="h-full flex flex-col justify-around bg-teal-100 w-[270px] text-blue-500 p-2 rounded-md"
+    >
+      <span class="uppercase text-3xl w-3/4 mt-16 ml-4">all new arrivals</span>
+      <button
+        pButton
+        label="Discover"
+        icon="pi pi-angle-right"
+        iconPos="right"
+        class="w-1/2 !bg-transparent !border-none !text-blue-500 !text-xl hover:!bg-teal-200"
+      ></button>
+    </div>
+
+    <ng-container *ngIf="response.status === 'success'; else noData">
+      <div class="h-full" *ngFor="let category of response.data?.data">
+        <a
+          [routerLink]="'/category/' + category.slug"
+          class="h-full relative overflow-hidden inline-block"
+        >
+          <img
+            src="/assets/images/bath-category.jpg"
+            class="h-full rounded-md hover:animate-zoom-1.1 max-w-[300px]"
+          />
+          <span
+            class="absolute px-6 py-2 left-1/2 -translate-x-1/2 bottom-10 bg-white rounded-3xl text-black font-semibold"
+            >{{ category.name }}</span
+          >
+        </a>
+      </div>
+    </ng-container>
+    <ng-template #noData>
+      <div class="h-full relative" *ngFor="let _item of [1, 2, 3]">
+        <p-skeleton width="300px" height="100%"></p-skeleton>
+        <span
+          class="absolute px-6 py-2 left-1/2 -translate-x-1/2 bottom-10 bg-white rounded-3xl text-white font-semibold"
+          >abcdefgh</span
+        >
+      </div>
+    </ng-template>
+  </div>
+</section>
