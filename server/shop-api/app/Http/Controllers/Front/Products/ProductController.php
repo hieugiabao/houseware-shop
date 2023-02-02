@@ -60,49 +60,64 @@ class ProductController extends Controller
     );
   }
 
-  // /**
-  //  * Create a new product
-  //  *
-  //  * @param CreateProductRequest $request
-  //  *
-  //  * @return \Illuminate\Http\JsonResponse
-  //  */
-  // public function createProduct(CreateProductRequest $request)
-  // {
-  //   $product = $this->productRepo->createProduct($request->except('_token', '_method'));
-  //   return response()->json($this->transformProduct($product), 201);
-  // }
+  public function getBestSellerProducts()
+  {
+    $products = $this->productRepo->bestSellerProducts();
+    $products = $products->map(function (Product $item) {
+      return $this->transformProduct($item);
+    })->all();
 
-  // /**
-  //  * Update the product
-  //  *
-  //  * @param int $id
-  //  * @param UpdateProductRequest $request
-  //  *
-  //  * @return \Illuminate\Http\JsonResponse
-  //  */
-  // public function updateProduct(UpdateProductRequest $request, int $id)
-  // {
-  //   $data = $request->except(
-  //     '_token',
-  //     '_method',
-  //   );
-  //   $product = $this->productRepo->findProductById($id);
+    $result = collect($this->productRepo->paginateArrayResults($products, request()->input('per_page', 10)))->all();
 
-  //   $productRepo = new ProductRepository($product, $this->attributeValueRepo);
+    return response()->json(
+      $result,
+      200
+    );
+  }
 
-  //   $product = $productRepo->updateProduct($data);
+  /**
+   * Create a new product
+   *
+   * @param CreateProductRequest $request
+   *
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function createProduct(CreateProductRequest $request)
+  {
+    $product = $this->productRepo->createProduct($request->except('_token', '_method'));
+    return response()->json($this->transformProduct($product), 201);
+  }
 
-  //   return response()->json($this->transformProduct($product), 200);
-  // }
+  /**
+   * Update the product
+   *
+   * @param int $id
+   * @param UpdateProductRequest $request
+   *
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function updateProduct(UpdateProductRequest $request, int $id)
+  {
+    $data = $request->except(
+      '_token',
+      '_method',
+    );
+    $product = $this->productRepo->findProductById($id);
 
-  // public function removeProduct(int $id)
-  // {
-  //   $product = $this->productRepo->findProductById($id);
+    $productRepo = new ProductRepository($product);
 
-  //   $productRepo = new ProductRepository($product, $this->attributeValueRepo);
-  //   $productRepo->removeProduct();
+    $product = $productRepo->updateProduct($data);
 
-  //   return response()->json($this->transformProduct($product), 200);
-  // }
+    return response()->json($this->transformProduct($product), 200);
+  }
+
+  public function removeProduct(int $id)
+  {
+    $product = $this->productRepo->findProductById($id);
+
+    $productRepo = new ProductRepository($product);
+    $productRepo->removeProduct();
+
+    return response()->json($this->transformProduct($product), 200);
+  }
 }

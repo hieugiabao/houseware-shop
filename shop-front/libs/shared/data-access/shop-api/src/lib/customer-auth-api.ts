@@ -1,18 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { mergeMap, Observable, catchError, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpResponseBase,
-} from '@angular/common/http';
 import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
-import { BaseApiService } from './base-api';
 import {
+  CustomerInfomation,
   LoginParamsDto,
   TokenResultResponse,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
+import { Observable } from 'rxjs';
+import { BaseApiService } from './base-api';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerAuthApiService extends BaseApiService {
@@ -39,24 +36,7 @@ export class CustomerAuthApiService extends BaseApiService {
           Accept: 'application/json',
         }),
       })
-      .pipe(
-        mergeMap((response: any) =>
-          this.process<TokenResultResponse>(response, 200)
-        )
-      )
-      .pipe(
-        catchError((response) => {
-          if (response instanceof HttpResponseBase) {
-            try {
-              return this.process<TokenResultResponse>(response);
-            } catch (e) {
-              return throwError(() => e);
-            }
-          } else {
-            return throwError(() => response);
-          }
-        })
-      );
+      .pipe(this.handleResponse<TokenResultResponse>(200));
   }
 
   logout(body: { refreshToken?: string }): Observable<void> {
@@ -75,20 +55,7 @@ export class CustomerAuthApiService extends BaseApiService {
           Accept: 'application/json',
         }),
       })
-      .pipe(mergeMap((response) => this.process<void>(response, 204)))
-      .pipe(
-        catchError((response) => {
-          if (response instanceof HttpResponseBase) {
-            try {
-              return this.process<void>(response);
-            } catch (e) {
-              return throwError(() => e);
-            }
-          } else {
-            return throwError(() => response);
-          }
-        })
-      );
+      .pipe(this.handleResponse<void>(204));
   }
 
   refresh(body: { token: string }): Observable<TokenResultResponse> {
@@ -97,9 +64,6 @@ export class CustomerAuthApiService extends BaseApiService {
 
     return this.httpClient
       .request('post', url, {
-        body: JSON.stringify(
-          StringUtil.convertKeysFromCamelCaseToSnakeCase(body)
-        ),
         observe: 'response',
         responseType: 'blob',
         headers: new HttpHeaders({
@@ -108,21 +72,22 @@ export class CustomerAuthApiService extends BaseApiService {
           Authorization: 'Bearer ' + body.token,
         }),
       })
-      .pipe(
-        mergeMap((response) => this.process<TokenResultResponse>(response, 200))
-      )
-      .pipe(
-        catchError((response) => {
-          if (response instanceof HttpResponseBase) {
-            try {
-              return this.process<TokenResultResponse>(response);
-            } catch (e) {
-              return throwError(() => e);
-            }
-          } else {
-            return throwError(() => response);
-          }
-        })
-      );
+      .pipe(this.handleResponse<TokenResultResponse>(200));
+  }
+
+  me(): Observable<CustomerInfomation | null> {
+    let url = this.appConfig.baseURL + '/auth/me';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .get(url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<CustomerInfomation | null>(200));
   }
 }

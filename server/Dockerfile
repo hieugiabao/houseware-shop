@@ -20,6 +20,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 COPY ./.docker/entrypoint/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
+RUN apt-get update && apt-get install -y netcat
+
 ENV COMPOSER_INSTALL=ENABLE
 ENV NPM_INSTALL=ENABLE
 ENV DB_MIGRATE=ENABLE

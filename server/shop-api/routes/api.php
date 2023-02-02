@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AdminSecurityController;
 use App\Http\Controllers\Auth\CustomerSecurityController;
+use App\Http\Controllers\Front\Categories\CategoryController;
 use App\Http\Controllers\Front\Carts\CartController;
 use App\Http\Controllers\Front\Customers\CustomerController;
 use App\Http\Controllers\Front\Products\ProductController;
@@ -25,9 +26,17 @@ Route::get('/health', function (Request $request) {
 
 Route::group(['prefix' => 'products'], function ($router) {
     Route::get('/', [ProductController::class, 'getPaginationProducts']);
-    // Route::post('/', [ProductController::class, 'createProduct']);
-    // Route::post('/{id}', [ProductController::class, 'updateProduct']);
-    // Route::delete('/{id}', [ProductController::class, 'removeProduct']);
+    Route::get('/best_seller', [ProductController::class, 'getBestSellerProducts']);
+    Route::post('/', [ProductController::class, 'createProduct']);
+    Route::post('/{id}', [ProductController::class, 'updateProduct']);
+    Route::delete('/{id}', [ProductController::class, 'removeProduct']);
+});
+
+Route::group(['prefix' => 'categories'], function ($router) {
+    Route::get('/', [CategoryController::class, 'listCategories']);
+    Route::get('/{id}', [CategoryController::class, 'getCategoryById']);
+    Route::get('/{id}/products', [CategoryController::class, 'getProducts']);
+    Route::get('/{id}/children', [CategoryController::class, 'getChildCategories']);
 });
 
 // register auth
@@ -47,10 +56,10 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/refresh', [AdminSecurityController::class, 'refresh']);
 });
 
-Route::group(['prefix' => 'carts'], function ($router) {
-    Route::post('/', [CartController::class, 'addToCart'])->middleware('jwt.auth');
-    Route::post('/update', [CartController::class, 'updateCart'])->middleware('jwt.auth');
-    Route::delete('/', [CartController::class, 'removeToCart'])->middleware('jwt.auth');
-    Route::get('/count', [CustomerController::class, 'getCartItemCount'])->middleware('jwt.auth');
-    Route::get('/', [CustomerController::class, 'getAllCartItems'])->middleware('jwt.auth');
+Route::group(['prefix' => 'carts', 'middleware' => 'jwt.auth'], function ($router) {
+    Route::post('/', [CartController::class, 'addToCart']);
+    Route::post('/update', [CartController::class, 'updateCart']);
+    Route::delete('/', [CartController::class, 'removeToCart']);
+    Route::get('/count', [CustomerController::class, 'getCartItemCount']);
+    Route::get('/', [CustomerController::class, 'getAllCartItems']);
 });

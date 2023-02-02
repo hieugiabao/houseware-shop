@@ -14,19 +14,29 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@shop/shared/data-access/models": [
-        "libs/shared/data-access/models/src/index.ts"
-      ],
       "@shop/auth/data-access": ["libs/auth/data-access/src/index.ts"],
       "@shop/auth/interceptor": ["libs/auth/interceptor/src/index.ts"],
+      "@shop/home/data-access": ["libs/home/data-access/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
+      "@shop/home/ui/best-seller": ["libs/home/ui/best-seller/src/index.ts"],
+      "@shop/home/ui/featured-products": [
+        "libs/home/ui/featured-products/src/index.ts"
+      ],
       "@shop/home/ui/greeting": ["libs/home/ui/greeting/src/index.ts"],
       "@shop/security/feature": ["libs/security/feature/src/index.ts"],
       "@shop/security/ui/layout": ["libs/security/ui/layout/src/index.ts"],
       "@shop/security/ui/login": ["libs/security/ui/login/src/index.ts"],
       "@shop/shared/app-config": ["libs/shared/app-config/src/index.ts"],
+      "@shop/shared/data-access/models": [
+        "libs/shared/data-access/models/src/index.ts"
+      ],
       "@shop/shared/data-access/shop-api": [
         "libs/shared/data-access/shop-api/src/index.ts"
+      ],
+      "@shop/shared/ui/logo": ["libs/shared/ui/logo/src/index.ts"],
+      "@shop/shared/ui/product": ["libs/shared/ui/product/src/index.ts"],
+      "@shop/shared/ui/product-cover": [
+        "libs/shared/ui/product-cover/src/index.ts"
       ],
       "@shop/shared/utilities/misc": [
         "libs/shared/utilities/misc/src/index.ts"
@@ -38,8 +48,12 @@
       "@shop/shared/utilities/string": [
         "libs/shared/utilities/string/src/index.ts"
       ],
+      "@shop/shell/data-access": ["libs/shell/data-access/src/index.ts"],
       "@shop/shell/feature": ["libs/shell/feature/src/index.ts"],
       "@shop/shell/ui/layout": ["libs/shell/ui/layout/src/index.ts"],
+      "@shop/shell/ui/list-category": [
+        "libs/shell/ui/list-category/src/index.ts"
+      ],
       "@shop/shell/ui/main-view": ["libs/shell/ui/main-view/src/index.ts"],
       "@shop/shell/ui/top-bar": ["libs/shell/ui/top-bar/src/index.ts"]
     }

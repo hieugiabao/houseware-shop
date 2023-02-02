@@ -1,0 +1,46 @@
+<ng-container *ngIf="productsResponse$ | async as response">
+  <div [ngSwitch]="response.status">
+    <ng-container *ngSwitchCase="'loading'">
+      <span>Loading</span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'success'">
+      <div class="card" *ngIf="response.data">
+        <p-dataView
+          #dv
+          [value]="response.data.data"
+          [paginator]="false"
+          layout="grid"
+        >
+          <ng-template pTemplate="header">
+            <h2 class="text-2xl font-semibold">Product overview</h2>
+          </ng-template>
+          <ng-template let-product pTemplate="gridItem">
+            <shop-product
+              class="card w-[30.5%] inline-block m-4 !rounded-xl max-lg:w-[45%] max-xl::w-[35%]"
+              [imageUrl]="product.thumb"
+              [title]="product.name"
+              [description]="product.description"
+              [price]="product.price"
+              page
+              link="/shop/product/{{ product.id }}"
+              [quantity]="product.quantity"
+              [categories]="getNameCategories(product.categories)"
+            ></shop-product>
+          </ng-template>
+        </p-dataView>
+        <p-paginator
+          [rows]="perPage"
+          [totalRecords]="response.data.total || 0"
+          [rowsPerPageOptions]="[9, 12, 15]"
+          (onPageChange)="paginate($event)"
+          [first]="(response.data.from || 1) - 1"
+        ></p-paginator>
+      </div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'error'">
+      <div class="error">
+        <div class="error-message">{{ response.error }}</div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
