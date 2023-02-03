@@ -61,7 +61,7 @@ Route::namespace('Admin')->group(function () {
 
 Route::group(['prefix' => 'carts'], function ($router) {
     Route::post('/', [CartController::class, 'addToCart']);
-    Route::post('/update', [CartController::class, 'update']);
-    Route::delete('/', [CartController::class, 'destroy']);
+    Route::post('/{id}', [CartController::class, 'update']);
+    Route::delete('/{id}', [CartController::class, 'destroy']);
     Route::get('/', [CartController::class, 'getCart']);
 });

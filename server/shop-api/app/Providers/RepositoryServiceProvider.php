@@ -14,10 +14,16 @@ use App\Shop\Categories\Repositories\CategoryRepository;
 use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
 use App\Shop\Cities\Repositories\CityRepository;
 use App\Shop\Cities\Repositories\CityRepositoryInterface;
+use App\Shop\Couriers\Repositories\CourierRepository;
+use App\Shop\Couriers\Repositories\CourierRepositoryInterface;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
 use App\Shop\Employees\Repositories\EmployeeRepository;
 use App\Shop\Employees\Repositories\EmployeeRepositoryInterface;
+use App\Shop\Orders\Repositories\OrderRepository;
+use App\Shop\Orders\Repositories\OrderRepositoryInterface;
+use App\Shop\OrderStatuses\Repositories\OrderStatusRepository;
+use App\Shop\OrderStatuses\Repositories\OrderStatusRepositoryInterface;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepository;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
@@ -83,6 +89,21 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(
       ProductAttributeRepositoryInterface::class,
       ProductAttributeRepository::class,
+    );
+
+    $this->app->bind(
+      CourierRepositoryInterface::class,
+      CourierRepository::class,
+    );
+
+    $this->app->bind(
+      OrderRepositoryInterface::class,
+      OrderRepository::class,
+    );
+
+    $this->app->bind(
+      OrderStatusRepositoryInterface::class,
+      OrderStatusRepository::class,
     );
   }
 }

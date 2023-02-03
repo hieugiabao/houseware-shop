@@ -11,6 +11,8 @@ use Jsdecena\Baserepo\BaseRepositoryInterface;
 
 interface AddressRepositoryInterface extends BaseRepositoryInterface
 {
+  public function listCustomerAddresses($customer_id): Collection;
+
   public function createAddress(array $params): Address;
 
   public function attachToCustomer(Address $address, Customer $customer);
