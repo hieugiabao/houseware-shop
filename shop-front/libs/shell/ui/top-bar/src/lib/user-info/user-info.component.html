@@ -29,8 +29,10 @@
           src="/assets/images/user.png"
           alt="user-image"
           class="h-full inline-block rounded-sm"
+          (click)="menu.toggle($event)"
         />
         <span class="text-sm px-1">{{ user.name | titlecase }}</span>
+        <p-menu #menu [popup]="true" [model]="items"></p-menu>
       </div>
       <ng-template #skeleton>
         <div class="flex flex-row items-center">

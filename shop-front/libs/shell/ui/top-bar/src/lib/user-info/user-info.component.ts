@@ -1,3 +1,5 @@
+import { LogoutService } from '@shop/shell/data-access';
+import { MenuItem } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -13,10 +15,43 @@ import { CustomerInfomation } from '@shop/shared/data-access/models';
 export class UserInfoComponent implements OnInit {
   public currentUser$!: Observable<CustomerInfomation | null>;
   public haveToken$!: Observable<boolean>;
+  items!: MenuItem[];
 
-  constructor(private readonly authStateService: AuthStateService) {}
+  constructor(
+    private readonly authStateService: AuthStateService,
+    private readonly logoutService: LogoutService
+  ) {}
 
   ngOnInit(): void {
+    this.items = [
+      {
+        items: [
+          {
+            label: 'Profile',
+            icon: 'pi pi-user',
+            command: () => {},
+          },
+          {
+            label: 'Orders',
+            icon: 'pi pi-shopping-cart',
+            command: () => {},
+          },
+          {
+            label: 'Logout',
+            icon: 'pi pi-sign-out',
+            command: () => {
+              this.logoutService.logout().subscribe({
+                next: () => {
+                  localStorage.removeItem('rtok');
+                  window.location.reload();
+                },
+              });
+            },
+          },
+        ],
+      },
+    ];
+
     this.currentUser$ = this.authStateService.currentUser$;
     this.haveToken$ = new Observable<boolean>((subscriber) => {
       if (localStorage.getItem('rtok')) {
