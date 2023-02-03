@@ -4,6 +4,10 @@ namespace App\Providers;
 
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
+use App\Shop\Attributes\Repositories\AttributeRepository;
+use App\Shop\Attributes\Repositories\AttributeRepositoryInterface;
+use App\Shop\AttributeValues\Repositories\AttributeValueRepository;
+use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
 use App\Shop\Carts\Repositories\CartRepository;
 use App\Shop\Carts\Repositories\CartRepositoryInterface;
 use App\Shop\Categories\Repositories\CategoryRepository;
@@ -14,6 +18,8 @@ use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
 use App\Shop\Employees\Repositories\EmployeeRepository;
 use App\Shop\Employees\Repositories\EmployeeRepositoryInterface;
+use App\Shop\ProductAttributes\Repositories\ProductAttributeRepository;
+use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Provinces\Repositories\ProvinceRepository;
@@ -62,6 +68,21 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(
       CityRepositoryInterface::class,
       CityRepository::class,
+    );
+
+    $this->app->bind(
+      AttributeRepositoryInterface::class,
+      AttributeRepository::class,
+    );
+
+    $this->app->bind(
+      AttributeValueRepositoryInterface::class,
+      AttributeValueRepository::class,
+    );
+
+    $this->app->bind(
+      ProductAttributeRepositoryInterface::class,
+      ProductAttributeRepository::class,
     );
   }
 }
