@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address_2')->nullable();
             $table->string('zip')->nullable();
             $table->string('city')->nullable();
-            $table->integer('province_id')->nullable();
+            $table->integer('province_id')->unsigned()->nullable();
             $table->foreign('province_id')->references('id')->on('provinces');
             $table->integer('customer_id')->unsigned()->index();
             $table->foreign('customer_id')->references('id')->on('customers');
