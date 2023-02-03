@@ -42,6 +42,15 @@ Route::group(['prefix' => 'categories'], function ($router) {
     Route::get('/{id}/children', [CategoryController::class, 'getChildCategories']);
 });
 
+Route::group(['prefix' => 'customer', 'middleware' => 'jwt.auth'], function ($router) {
+    Route::group(['prefix' => 'addresses'], function ($router) {
+        Route::get('/', [CustomerController::class, 'getAllAddresses']);
+        Route::post('/', [CustomerController::class, 'addAddress']);
+        Route::post('/{id}', [CustomerController::class, 'updateAddress']);
+        Route::delete('/{id}', [CustomerController::class, 'deleteAddress']);
+    });
+});
+
 // register auth
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('/login', [CustomerSecurityController::class, 'login']);
