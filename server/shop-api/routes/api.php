@@ -59,10 +59,9 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/refresh', [AdminSecurityController::class, 'refresh']);
 });
 
-Route::group(['prefix' => 'carts', 'middleware' => 'jwt.auth'], function ($router) {
+Route::group(['prefix' => 'carts'], function ($router) {
     Route::post('/', [CartController::class, 'addToCart']);
-    Route::post('/update', [CartController::class, 'updateCart']);
-    Route::delete('/', [CartController::class, 'removeToCart']);
-    Route::get('/count', [CustomerController::class, 'getCartItemCount']);
-    Route::get('/', [CustomerController::class, 'getAllCartItems']);
+    Route::post('/update', [CartController::class, 'update']);
+    Route::delete('/', [CartController::class, 'destroy']);
+    Route::get('/', [CartController::class, 'getCart']);
 });

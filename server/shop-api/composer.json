@@ -11,6 +11,7 @@
         "php": "^8.0.2|7.4.3",
         "doctrine/dbal": "^3.5",
         "guzzlehttp/guzzle": "^7.2",
+        "hardevine/shoppingcart": "^3.1",
         "jsdecena/baserepo": "^2.0",
         "kalnoy/nestedset": "^6.0",
         "laravel/framework": "^9.19",

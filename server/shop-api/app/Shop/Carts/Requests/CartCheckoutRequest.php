@@ -4,7 +4,12 @@ namespace App\Shop\Carts\Requests;
 
 use App\Shop\Base\BaseFormRequest;
 
-class UpdateCartRequest extends BaseFormRequest
+/**
+ * Class CartCheckoutRequest
+ * @package App\Shop\Cart\Requests
+ * @codeCoverageIgnore
+ */
+class CartCheckoutRequest extends BaseFormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +19,7 @@ class UpdateCartRequest extends BaseFormRequest
     public function rules()
     {
         return [
-            'quantity' => ['required', 'integer', 'min:1']
+            'billing_address' => ['required']
         ];
     }
 }
