@@ -30,6 +30,8 @@ use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
 use App\Shop\Provinces\Repositories\ProvinceRepository;
 use App\Shop\Provinces\Repositories\ProvinceRepositoryInterface;
+use App\Shop\Shipping\ShippingInterface;
+use App\Shop\Shipping\Shippo\ShippoShipmentRepository;
 use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -104,6 +106,11 @@ class RepositoryServiceProvider extends ServiceProvider
     $this->app->bind(
       OrderStatusRepositoryInterface::class,
       OrderStatusRepository::class,
+    );
+
+    $this->app->bind(
+      ShippingInterface::class,
+      ShippoShipmentRepository::class,
     );
   }
 }
