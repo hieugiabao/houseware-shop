@@ -29,11 +29,13 @@ export class UserInfoComponent implements OnInit {
           {
             label: 'Profile',
             icon: 'pi pi-user',
+            url: '/profile',
             command: () => {},
           },
           {
             label: 'Orders',
             icon: 'pi pi-shopping-cart',
+            url: '/orders',
             command: () => {},
           },
           {

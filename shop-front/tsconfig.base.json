@@ -33,6 +33,7 @@
       "@shop/product-list/ui/product-category": [
         "libs/product-list/ui/product-category/src/index.ts"
       ],
+      "@shop/profile/feature": ["libs/profile/feature/src/index.ts"],
       "@shop/security/data-access": ["libs/security/data-access/src/index.ts"],
       "@shop/security/feature": ["libs/security/feature/src/index.ts"],
       "@shop/security/ui/layout": ["libs/security/ui/layout/src/index.ts"],
