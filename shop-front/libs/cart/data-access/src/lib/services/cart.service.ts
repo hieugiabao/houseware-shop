@@ -36,10 +36,11 @@ export class CartService {
       this.cartApiService.addToCart({ product: productId, quantity }).pipe(
         tap((item) => {
           if (item) {
-            const cartItems = this.cartStateService.get('cartItems');
-            cartItems.push(item);
-            this.cartStateService.set({
-              cartItems,
+            const cart = this.cartStateService.get();
+            cart.cartItems.push(item);
+            this.cartStateService.setCart({
+              ...cart,
+              cartItems: cart.cartItems,
             });
           }
         })
