@@ -6,6 +6,7 @@ import {
   Product,
 } from '@shop/shared/data-access/models';
 import { Observable } from 'rxjs';
+import { CartService } from '@shop/cart/data-access';
 
 @Component({
   selector: 'shop-best-seller',
@@ -16,7 +17,10 @@ import { Observable } from 'rxjs';
 export class BestSellerComponent implements OnInit {
   productsResponse$!: Observable<ApiResponse<PaginateResultResponse<Product>>>;
 
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.productsResponse$ = this.productsService.getBestSellerProducts({
@@ -27,5 +31,9 @@ export class BestSellerComponent implements OnInit {
 
   getNameCategories(categories: any[]): string[] {
     return categories.map((category) => category?.name || '');
+  }
+
+  addToCart(productId: number) {
+    this.cartService.addToCart(productId, 1).subscribe();
   }
 }

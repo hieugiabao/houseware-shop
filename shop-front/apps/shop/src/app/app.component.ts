@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@shop/auth/data-access';
+import { CartService } from '@shop/cart/data-access';
 
 @Component({
   selector: 'shop-root',
@@ -9,9 +10,13 @@ import { AuthService } from '@shop/auth/data-access';
 export class AppComponent implements OnInit {
   title = 'shop';
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.authService.retrieveTokenOnPageLoad();
+    this.cartService.init();
   }
 }

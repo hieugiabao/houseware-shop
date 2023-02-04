@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'shop-product',
@@ -7,6 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductComponent {
+  @Input() id!: number;
   @Input() imageUrl: string | undefined;
   @Input() title!: string;
   @Input() price!: number;
@@ -15,4 +22,5 @@ export class ProductComponent {
   @Input() roundedImage? = false;
   @Input() quantity!: number;
   @Input() categories!: string[];
+  @Output() addToCart = new EventEmitter<number>();
 }
