@@ -143,6 +143,9 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
     public function clearCart()
     {
         $this->model->destroy();
+        if (auth()->user()) {
+            $this->saveCart(auth()->user());
+        }
     }
 
     /**
