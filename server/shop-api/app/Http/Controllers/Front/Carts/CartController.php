@@ -90,23 +90,19 @@ class CartController extends Controller
       $options['combination'] = $attr->attributesValues->toArray();
     }
 
-    $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
+    $item = $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
     if ($request->user()) {
       $this->cartRepo->saveCart(auth()->user());
     }
-    return response()->json([
-      'message' => 'Item added to cart'
-    ], 200);
+    return response()->json($this->cartRepo->getItemTransformed($item), 200);
   }
 
   public function update(UpdateCartRequest $request, $id)
   {
     $item = $this->cartRepo->updateQuantityInCart($id, $request->input('quantity'));
 
-    return response()->json([
-      'item' => $item
-    ], 200);
+    return response()->json($this->cartRepo->getItemTransformed($item), 200);
   }
 
   /**
