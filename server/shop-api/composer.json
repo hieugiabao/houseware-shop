@@ -20,6 +20,7 @@
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.12",
         "nicolaslopezj/searchable": "^1.13",
+        "shippo/shippo-php": "^2.0",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
