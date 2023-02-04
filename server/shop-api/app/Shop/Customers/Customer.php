@@ -2,6 +2,7 @@
 
 namespace App\Shop\Customers;
 
+use App\Shop\Addresses\Address;
 use App\Shop\Carts\Cart;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Addresses\Requests\CreateAddressRequest;
+use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
 
 class CustomerController extends Controller
@@ -53,7 +54,7 @@ class CustomerController extends Controller
     ], 201);
   }
 
-  public function updateAddress(CreateAddressRequest $request, $addressId)
+  public function updateAddress(UpdateAddressRequest $request, $addressId)
   {
     $address = $this->addressRepo->findAddressById($addressId);
 
