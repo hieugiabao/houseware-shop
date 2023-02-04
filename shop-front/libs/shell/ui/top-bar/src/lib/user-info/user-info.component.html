@@ -24,12 +24,12 @@
       <div
         class="h-[35px] rounded-[4px] cursor-pointer"
         *ngIf="currentUser$ | async as user; else skeleton"
+        (click)="menu.toggle($event)"
       >
         <img
           src="/assets/images/user.png"
           alt="user-image"
           class="h-full inline-block rounded-sm"
-          (click)="menu.toggle($event)"
         />
         <span class="text-sm px-1">{{ user.name | titlecase }}</span>
         <p-menu #menu [popup]="true" [model]="items"></p-menu>

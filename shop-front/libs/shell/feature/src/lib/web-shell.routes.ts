@@ -22,6 +22,11 @@ export const webShellRoutes: Route[] = [
           (await import('@shop/product-detail/feature'))
             .ProductDetailFeatureModule,
       },
+      {
+        path: 'profile',
+        loadChildren: async () =>
+          (await import('@shop/profile/feature')).ProfileFeatureModule,
+      },
     ],
   },
   {
