@@ -1,0 +1,31 @@
+<div class="product-detail">
+  <p-breadcrumb [model]="breadCrumbItems" [home]="home"></p-breadcrumb>
+  <div class="product__content">
+    <div class="product__content__img">
+      <p-galleria
+        [value]="images"
+        [responsiveOptions]="responsiveOptions"
+        [containerStyle]="{ maxWidth: '1200px' }"
+        [numVisible]="6"
+        [changeItemOnIndicatorHover]="true"
+        [circular]="true"
+        [autoPlay]="false"
+        [transitionInterval]="4000"
+      >
+        <ng-template pTemplate="item" let-item>
+          <img [src]="item.previewImageSrc" style="width: 100%" />
+        </ng-template>
+        <ng-template pTemplate="thumbnail" let-item>
+          <div class="grid grid-nogutter justify-content-center">
+            <img [src]="item.thumbnailImageSrc" />
+          </div>
+        </ng-template>
+      </p-galleria>
+    </div>
+    <shop-product-detail-main
+      [product]="product"
+      [sizeOptions]="['S', 'M', 'L', 'XL']"
+      [colorOptions]="['Red', 'Blue', 'Green', 'Yellow']"
+    ></shop-product-detail-main>
+  </div>
+</div>

@@ -23,6 +23,12 @@
         "libs/home/ui/featured-products/src/index.ts"
       ],
       "@shop/home/ui/greeting": ["libs/home/ui/greeting/src/index.ts"],
+      "@shop/product-detail/feature": [
+        "libs/product-detail/feature/src/index.ts"
+      ],
+      "@shop/product-detail/ui/main": [
+        "libs/product-detail/ui/main/src/index.ts"
+      ],
       "@shop/product-list/feature": ["libs/product-list/feature/src/index.ts"],
       "@shop/product-list/ui/product-category": [
         "libs/product-list/ui/product-category/src/index.ts"
