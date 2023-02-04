@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
             $table->string('reference')->unique();
-            $table->integer('courier_id')->unsigned()->index();
+            $table->integer('courier_id')->unsigned()->nullable();
             $table->foreign('courier_id')->references('id')->on('couriers');
-            $table->string('courier');
+            $table->string('courier')->nullable();
             $table->integer('customer_id')->unsigned()->index();
             $table->foreign('customer_id')->references('id')->on('customers');
             $table->integer('address_id')->unsigned()->index();
@@ -34,7 +34,7 @@ return new class extends Migration
             $table->decimal('total_paid')->default(0.00);
             $table->string('invoice')->nullable();
             $table->string('label_url')->nullable();
-            $table->string('tracking_number');
+            $table->string('tracking_number')->nullable();
             $table->timestamps();
         });
     }
