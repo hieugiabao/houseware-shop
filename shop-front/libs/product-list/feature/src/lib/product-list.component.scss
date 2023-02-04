@@ -1,0 +1,44 @@
+:host ::ng-deep {
+  #product-list {
+    padding: 60px 32px;
+    .main__content {
+      display: flex;
+    }
+    .p-breadcrumb {
+      border: none;
+    }
+    .p-panelmenu {
+      .p-panelmenu-header-link {
+        border: none !important;
+        background-color: white;
+      }
+      .p-panelmenu-icon {
+        display: none;
+      }
+      .p-panelmenu-header > a {
+        font-weight: normal;
+        &:hover {
+          font-weight: 600;
+        }
+        &:focus {
+          box-shadow: none;
+          font-weight: 600;
+        }
+      }
+      .p-panelmenu-content {
+        border: none;
+      }
+      .p-menuitem-link {
+        margin-left: 16px;
+        &:hover {
+          background-color: white;
+          font-weight: 600;
+        }
+        &:focus {
+          box-shadow: none;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}

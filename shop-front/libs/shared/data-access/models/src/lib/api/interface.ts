@@ -25,7 +25,7 @@ export interface Product extends TimeStamp {
   weight: number;
   massUnit: string;
   slug: string;
-  categories: Category[];
+  categories?: Category[];
 
   [key: string]: unknown;
 }
