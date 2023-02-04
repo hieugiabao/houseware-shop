@@ -108,7 +108,6 @@ class ShippoShipmentRepository implements ShippingInterface
                 'async' => false
             )
         );
-        Log::info($shipment);
         return $shipment;
     }
 

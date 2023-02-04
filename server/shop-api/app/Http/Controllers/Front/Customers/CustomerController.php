@@ -7,10 +7,16 @@ use App\Shop\Addresses\Repositories\AddressRepository;
 use App\Shop\Addresses\Repositories\AddressRepositoryInterface;
 use App\Shop\Addresses\Requests\CreateAddressRequest;
 use App\Shop\Addresses\Requests\UpdateAddressRequest;
+use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
+use App\Shop\Orders\Order;
+use App\Shop\Orders\Transformers\OrderTransformable;
 
 class CustomerController extends Controller
 {
+
+  use OrderTransformable;
+
   /**
    * @var CustomerRepositoryInterface $customerRepo
    */
@@ -83,5 +89,21 @@ class CustomerController extends Controller
     return response()->json([
       'message' => 'Address deleted successfully'
     ], 200);
+  }
+
+  public function getAllOrders()
+  {
+    $customerRepo = new CustomerRepository(auth()->user());
+    $orders = $customerRepo->findOrders(['*'], 'created_at');
+    $orders->transform(function (Order $order) {
+      return $this->transformOrder($order);
+    });
+
+    $orders->load('products');
+
+    return response()->json(
+      array_values($orders->toArray()),
+      200
+    );
   }
 }

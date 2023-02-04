@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AdminSecurityController;
 use App\Http\Controllers\Auth\CustomerSecurityController;
 use App\Http\Controllers\Front\Categories\CategoryController;
 use App\Http\Controllers\Front\Carts\CartController;
+use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\Customers\CustomerController;
 use App\Http\Controllers\Front\Products\ProductController;
 use Illuminate\Http\Request;
@@ -49,6 +50,11 @@ Route::group(['prefix' => 'customer', 'middleware' => 'jwt.auth'], function ($ro
         Route::post('/{id}', [CustomerController::class, 'updateAddress']);
         Route::delete('/{id}', [CustomerController::class, 'deleteAddress']);
     });
+    Route::group(['prefix' => 'checkout'], function ($router) {
+        Route::get('/', [CheckoutController::class, 'index']);
+        Route::post('/', [CheckoutController::class, 'store']);
+    });
+    Route::get('/orders', [CustomerController::class, 'getAllOrders']);
 });
 
 // register auth

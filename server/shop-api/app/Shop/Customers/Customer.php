@@ -4,6 +4,7 @@ namespace App\Shop\Customers;
 
 use App\Shop\Addresses\Address;
 use App\Shop\Carts\Cart;
+use App\Shop\Orders\Order;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;

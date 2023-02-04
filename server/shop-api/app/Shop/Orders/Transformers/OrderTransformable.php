@@ -20,10 +20,12 @@ trait OrderTransformable
      * @param Order $order
      * @return Order
      */
-    protected function transformOrder(Order $order) : Order
+    protected function transformOrder(Order $order): Order
     {
-        $courierRepo = new CourierRepository(new Courier());
-        $order->courier = $courierRepo->findCourierById($order->courier_id);
+        if ($order->courier_id) {
+            $courierRepo = new CourierRepository(new Courier());
+            $order->courier = $courierRepo->findCourierById($order->courier_id);
+        }
 
         $customerRepo = new CustomerRepository(new Customer());
         $order->customer = $customerRepo->findCustomerById($order->customer_id);
