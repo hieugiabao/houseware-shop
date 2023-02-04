@@ -1,0 +1,17 @@
+:host ::ng-deep {
+  .product-detail {
+    padding: 60px 32px;
+    display: flex;
+    flex-direction: column;
+    .p-breadcrumb {
+      border: none;
+    }
+    .product__content {
+      display: flex;
+      flex-direction: row;
+      &__img {
+        margin-top: 36px;
+      }
+    }
+  }
+}

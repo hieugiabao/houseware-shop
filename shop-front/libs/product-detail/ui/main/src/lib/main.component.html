@@ -1,0 +1,29 @@
+<div class="main">
+  <!-- name -->
+  <h1>{{ product.name }}</h1>
+  <h1>${{ product.price }}</h1>
+  <div class="attribute">
+    <span>Color</span>
+    <p-selectButton [options]="colorOptions" [(ngModel)]="colorValue">
+      <ng-template let-item>
+        <span>{{ item }}</span>
+      </ng-template>
+    </p-selectButton>
+  </div>
+  <div class="attribute">
+    <span>Size</span>
+    <p-selectButton [options]="sizeOptions" [(ngModel)]="sizeValue">
+      <ng-template let-item>
+        <span>{{ item }}</span>
+      </ng-template>
+    </p-selectButton>
+  </div>
+  <div class="add">
+    <button class="add_btn">
+      <span>Add to cart</span>
+    </button>
+    <button class="heart_btn">
+      <i class="pi pi-heart"></i>
+    </button>
+  </div>
+</div>

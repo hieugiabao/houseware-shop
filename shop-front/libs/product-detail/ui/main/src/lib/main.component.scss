@@ -1,0 +1,52 @@
+:host ::ng-deep {
+  width: 100%;
+  .main {
+    padding: 24px;
+    margin-left: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    width: 100%;
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      line-height: 1.75rem;
+      letter-spacing: 0.00938em;
+      margin-bottom: 32px;
+    }
+    .attribute {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      & > span {
+        font-weight: 600;
+      }
+      .p-buttonset .p-button {
+        font-size: 16px !important;
+        padding: 8px 16px;
+      }
+      .p-button.p-highlight {
+        background-color: #0f172a;
+      }
+    }
+    .add {
+      display: flex;
+      width: 100%;
+      max-width: 500px;
+      justify-content: space-between;
+      gap: 12px;
+      .add_btn {
+        background-color: #0f172a;
+        color: white;
+        width: 100%;
+        padding: 16px;
+        border-radius: 10px;
+      }
+      .heart_btn {
+        background-color: #f1f5f9;
+        padding: 16px 24px;
+        border-radius: 10px;
+      }
+    }
+  }
+}
