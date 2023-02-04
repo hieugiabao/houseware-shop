@@ -167,4 +167,13 @@ class AddressRepository extends BaseRepository implements AddressRepositoryInter
   {
     return $this->model->orders()->get();
   }
+
+  /**
+   * @param int $customer_id
+   * @return Collection
+   */
+  public function listCustomerAddresses($customer_id): Collection
+  {
+    return $this->model->where('customer_id', $customer_id)->get();
+  }
 }

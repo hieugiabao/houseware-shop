@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AdminSecurityController;
 use App\Http\Controllers\Auth\CustomerSecurityController;
 use App\Http\Controllers\Front\Categories\CategoryController;
 use App\Http\Controllers\Front\Carts\CartController;
+use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\Customers\CustomerController;
 use App\Http\Controllers\Front\Products\ProductController;
 use Illuminate\Http\Request;
@@ -42,6 +43,20 @@ Route::group(['prefix' => 'categories'], function ($router) {
     Route::get('/{id}/children', [CategoryController::class, 'getChildCategories']);
 });
 
+Route::group(['prefix' => 'customer', 'middleware' => 'jwt.auth'], function ($router) {
+    Route::group(['prefix' => 'addresses'], function ($router) {
+        Route::get('/', [CustomerController::class, 'getAllAddresses']);
+        Route::post('/', [CustomerController::class, 'addAddress']);
+        Route::post('/{id}', [CustomerController::class, 'updateAddress']);
+        Route::delete('/{id}', [CustomerController::class, 'deleteAddress']);
+    });
+    Route::group(['prefix' => 'checkout'], function ($router) {
+        Route::get('/', [CheckoutController::class, 'index']);
+        Route::post('/', [CheckoutController::class, 'store']);
+    });
+    Route::get('/orders', [CustomerController::class, 'getAllOrders']);
+});
+
 // register auth
 Route::group(['prefix' => 'auth'], function ($router) {
     Route::post('/login', [CustomerSecurityController::class, 'login']);
@@ -59,10 +74,9 @@ Route::namespace('Admin')->group(function () {
     Route::post('admin/refresh', [AdminSecurityController::class, 'refresh']);
 });
 
-Route::group(['prefix' => 'carts', 'middleware' => 'jwt.auth'], function ($router) {
+Route::group(['prefix' => 'carts'], function ($router) {
     Route::post('/', [CartController::class, 'addToCart']);
-    Route::post('/update', [CartController::class, 'updateCart']);
-    Route::delete('/', [CartController::class, 'removeToCart']);
-    Route::get('/count', [CustomerController::class, 'getCartItemCount']);
-    Route::get('/', [CustomerController::class, 'getAllCartItems']);
+    Route::post('/{id}', [CartController::class, 'update']);
+    Route::delete('/{id}', [CartController::class, 'destroy']);
+    Route::get('/', [CartController::class, 'getCart']);
 });

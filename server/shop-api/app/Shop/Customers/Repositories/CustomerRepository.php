@@ -2,6 +2,7 @@
 
 namespace App\Shop\Customers\Repositories;
 
+use App\Shop\Addresses\Address;
 use App\Shop\Customers\Customer;
 use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentsException;
 use App\Shop\Customers\Exceptions\CustomerNotFoundException;
@@ -128,18 +129,33 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
   }
 
   /**
-   * @return mixed
+   * @param Address $address
+   * @return Address
    */
-  public function getCarts(): Collection
+  public function attachAddress(Address $address): Address
   {
-    return $this->model->carts()->get();
+    $this->model->addresses()->save($address);
+    return $address;
   }
 
   /**
-   * @return int
+   * Find the address attached to the customer
+   *
+   * @return mixed
    */
-  public function getNumberOfCartItems(): int
+  public function findAddresses(): Collection
   {
-    return $this->model->carts()->count();
+    return $this->model->addresses;
+  }
+
+  /**
+   * @param array $columns
+   * @param string $orderBy
+   *
+   * @return Collection
+   */
+  public function findOrders($columns = ['*'], string $orderBy = 'id'): Collection
+  {
+    return $this->model->orders()->get($columns)->sortByDesc($orderBy);
   }
 }

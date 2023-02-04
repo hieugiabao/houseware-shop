@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad37cb8f828a947e956c2a48c46b3be1",
+    "content-hash": "f64b7a92503b21ab7d7703e2d397b1a9",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1378,6 +1378,70 @@
                 }
             ],
             "time": "2022-10-26T14:07:24+00:00"
+        },
+        {
+            "name": "hardevine/shoppingcart",
+            "version": "3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hardevine/LaravelShoppingcart.git",
+                "reference": "fc734910e8d5c69e711a02784010ae687d0fd908"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hardevine/LaravelShoppingcart/zipball/fc734910e8d5c69e711a02784010ae687d0fd908",
+                "reference": "fc734910e8d5c69e711a02784010ae687d0fd908",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/events": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9",
+                "illuminate/session": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9",
+                "illuminate/support": "5.1.*|5.2.*|5.3.*|5.4.*|5.5.*|5.6.*|5.7.*|5.8.*|^6|^7|^8|^9"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.0",
+                "orchestra/testbench": "~3.1",
+                "phpunit/phpunit": "~5.0 || ~6.0 || ~7.0"
+            },
+            "suggest": {
+                "gloudemans/notify": "Simple flash notifications for Laravel"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider"
+                    ],
+                    "aliases": {
+                        "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gloudemans\\Shoppingcart\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Gloudemans",
+                    "email": "info@robgloudemans.nl"
+                }
+            ],
+            "description": "Laravel Shoppingcart",
+            "keywords": [
+                "laravel",
+                "shoppingcart"
+            ],
+            "support": {
+                "issues": "https://github.com/hardevine/LaravelShoppingcart/issues",
+                "source": "https://github.com/hardevine/LaravelShoppingcart/tree/3.1"
+            },
+            "time": "2022-02-17T07:23:57+00:00"
         },
         {
             "name": "jsdecena/baserepo",
@@ -4042,6 +4106,64 @@
                 }
             ],
             "time": "2022-11-05T23:03:38+00:00"
+        },
+        {
+            "name": "shippo/shippo-php",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/goshippo/shippo-php-client.git",
+                "reference": "7422af5b97c8b36718593dbaf5cfb757771fb907"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/goshippo/shippo-php-client/zipball/7422af5b97c8b36718593dbaf5cfb757771fb907",
+                "reference": "7422af5b97c8b36718593dbaf5cfb757771fb907",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=7.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.5.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/Shippo/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Shippo & Contributors",
+                    "homepage": "https://goshippo.com/"
+                }
+            ],
+            "description": "A PHP library for connecting with multiple carriers (FedEx, UPS, USPS) using Shippo.",
+            "homepage": "https://goshippo.com/",
+            "keywords": [
+                "FedEx",
+                "Uber",
+                "address",
+                "dhl",
+                "shipping",
+                "shyp",
+                "tracking",
+                "ups",
+                "usps"
+            ],
+            "support": {
+                "issues": "https://github.com/goshippo/shippo-php-client/issues",
+                "source": "https://github.com/goshippo/shippo-php-client/tree/v2.0.0"
+            },
+            "time": "2022-01-19T22:36:48+00:00"
         },
         {
             "name": "stella-maris/clock",

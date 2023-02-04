@@ -2,87 +2,183 @@
 
 namespace App\Shop\Carts\Repositories;
 
-use App\Shop\Carts\Cart;
-use App\Shop\Carts\Exceptions\AddToCartErrorException;
-use App\Shop\Carts\Exceptions\CartItemNotFoundException;
-use App\Shop\Carts\Exceptions\UpdateCartErrorException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Collection;
 use Jsdecena\Baserepo\BaseRepository;
+use App\Shop\Carts\Exceptions\ProductInCartNotFoundException;
+use App\Shop\Carts\ShoppingCart;
+// use App\Shop\Couriers\Courier;
+use App\Shop\Customers\Customer;
+use App\Shop\Products\Product;
+use App\Shop\Products\Repositories\ProductRepository;
+use Gloudemans\Shoppingcart\Cart;
+use Gloudemans\Shoppingcart\CartItem;
+use Gloudemans\Shoppingcart\Exceptions\InvalidRowIDException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class CartRepository extends BaseRepository implements CartRepositoryInterface
 {
-  /**
-   * @var Cart $model
-   */
-  protected $model;
-
-  /**
-   * CartRepository constructor.
-   * @param Cart $cart
-   */
-  public function __construct(Cart $cart)
-  {
-    parent::__construct($cart);
-    $this->model = $cart;
-  }
-
-  /**
-   * @param array $params
-   * @return Cart
-   */
-  public function addToCart(array $params): Cart
-  {
-    try {
-      $cart = new Cart([
-        'quantity' => $params['quantity'],
-      ]);
-      $cart->customer()->associate($params['customer_id']);
-      $cart->product()->associate($params['product_id']);
-
-      $cart->save();
-
-      return $cart;
-    } catch (QueryException $e) {
-      throw new AddToCartErrorException($e->getMessage(), 500, $e);
+    /**
+     * @var ShoppingCart
+     */
+    protected $model;
+    /**
+     * CartRepository constructor.
+     * @param ShoppingCart $cart
+     */
+    public function __construct(ShoppingCart $cart)
+    {
+        $this->model = $cart;
     }
-  }
 
-  /**
-   * @param array $params
-   * @return Cart
-   */
-  public function updateCart(array $params): Cart
-  {
-    try {
-      $this->model->where('product_id', $this->model->product_id)->where('customer_id', $this->model->customer_id)->update($params);
-
-      return $this->model;
-    } catch (QueryException $e) {
-      throw new UpdateCartErrorException($e->getMessage(), 500, $e);
+    /**
+     * @param Product $product
+     * @param int $int
+     * @param array $options
+     * @return CartItem
+     */
+    public function addToCart(Product $product, int $int, $options = []): CartItem
+    {
+        return $this->model->add($product, $int, $options);
     }
-  }
 
-  /**
-   * @return bool
-   */
-  public function deleteCartItem(): bool
-  {
-    return $this->model->where('product_id', $this->model->product_id)->where('customer_id', $this->model->customer_id)->delete();
-  }
-
-  /**
-   * @param int $product_id
-   * @param int $customer_id
-   * @return Cart
-   */
-  public function findCartItemByPk(int $product_id, int $customer_id): Cart
-  {
-    try {
-      return $this->model->where('product_id', $product_id)->where('customer_id', $customer_id)->firstOrFail();
-    } catch (ModelNotFoundException $e) {
-      throw new CartItemNotFoundException($e->getMessage(), 404, $e);
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function getCartItems(): Collection
+    {
+        return $this->model->content();
     }
-  }
+
+    /**
+     * @param string $rowId
+     *
+     * @throws ProductInCartNotFoundException
+     */
+    public function removeToCart(string $rowId)
+    {
+        try {
+            $this->model->remove($rowId);
+        } catch (InvalidRowIDException $e) {
+            throw new ProductInCartNotFoundException('Product in cart not found.');
+        }
+    }
+
+    /**
+     * Count the items in the cart
+     *
+     * @return int
+     */
+    public function countItems(): int
+    {
+        return $this->model->count();
+    }
+
+    /**
+     * Get the sub total of all the items in the cart
+     *
+     * @param int $decimals
+     * @return float
+     */
+    public function getSubTotal(int $decimals = 2)
+    {
+        return $this->model->subtotal($decimals, '.', '');
+    }
+
+    /**
+     * Get the final total of all the items in the cart minus tax
+     *
+     * @param int $decimals
+     * @param float $shipping
+     * @return float
+     */
+    public function getTotal(int $decimals = 2, $shipping = 0.00)
+    {
+        return $this->model->total($decimals, '.', '', $shipping);
+    }
+
+    /**
+     * @param string $rowId
+     * @param int $quantity
+     * @return CartItem
+     */
+    public function updateQuantityInCart(string $rowId, int $quantity): CartItem
+    {
+        return $this->model->update($rowId, $quantity);
+    }
+
+    /**
+     * Return the specific item in the cart
+     *
+     * @param string $rowId
+     * @return \Gloudemans\Shoppingcart\CartItem
+     */
+    public function findItem(string $rowId): CartItem
+    {
+        return $this->model->get($rowId);
+    }
+
+    /**
+     * Returns the tax
+     *
+     * @param int $decimals
+     * @return float
+     */
+    public function getTax(int $decimals = 2)
+    {
+        return $this->model->tax($decimals);
+    }
+
+    /**
+     * @param Courier $courier
+     * @return mixed
+     */
+    // public function getShippingFee(Courier $courier)
+    // {
+    //     return number_format($courier->cost, 2);
+    // }
+
+    /**
+     * Clear the cart content
+     */
+    public function clearCart()
+    {
+        $this->model->destroy();
+        if (auth()->user()) {
+            $this->saveCart(auth()->user());
+        }
+    }
+
+    /**
+     * @param Customer $customer
+     * @param string $instance
+     */
+    public function saveCart(Customer $customer, $instance = 'default')
+    {
+        $this->model->instance($instance)->store($customer->email);
+    }
+
+    /**
+     * @param Customer $customer
+     * @param string $instance
+     * @return Cart
+     */
+    public function openCart(Customer $customer, $instance = 'default')
+    {
+        $this->model->instance($instance)->restore($customer->email);
+        return $this->model;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCartItemsTransformed(): Collection
+    {
+        return $this->getCartItems()->map(function ($item) {
+            $thumb = $item->model->thumb ? config('filesystems.disks.s3.url') . '/' . $item->model->thumb : null;
+
+            $data = collect($item);
+            $data->put('thumb', $thumb);
+            return $data;
+        });
+    }
 }

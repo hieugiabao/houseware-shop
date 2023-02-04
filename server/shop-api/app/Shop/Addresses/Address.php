@@ -84,4 +84,12 @@ class Address extends Model
   {
     return self::search($term);
   }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function orders()
+  {
+    return $this->hasMany(Order::class);
+  }
 }
