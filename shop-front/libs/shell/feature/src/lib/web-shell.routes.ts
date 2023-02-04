@@ -16,6 +16,11 @@ export const webShellRoutes: Route[] = [
         loadChildren: async () =>
           (await import('@shop/product-list/feature')).ProductListFeatureModule,
       },
+      {
+        path: 'cart',
+        loadChildren: async () =>
+          (await import('@shop/cart/feature')).CartFeatureModule,
+      },
     ],
   },
   {
