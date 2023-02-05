@@ -57,7 +57,7 @@ export class UserInfoComponent implements OnInit {
                         '=;expires=' + new Date().toUTCString() + ';path=/'
                       );
                   });
-                  // window.location.reload();
+                  window.location.reload();
                 },
               });
             },

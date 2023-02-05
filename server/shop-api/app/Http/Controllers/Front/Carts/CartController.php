@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front\Carts;
 
 use App\Http\Controllers\Controller;
+use App\Shop\Carts\Repositories\CartRepository;
 use App\Shop\Carts\Repositories\CartRepositoryInterface;
 use App\Shop\Carts\Requests\AddToCartRequest;
 use App\Shop\Carts\Requests\UpdateCartRequest;
@@ -46,21 +47,13 @@ class CartController extends Controller
 
   public function getCart()
   {
+    $cartRepo = $this->cartRepo;
     if (auth()->user()) {
-      $this->cartRepo->openCart(auth()->user());
+      $cart = $this->cartRepo->openCart(auth()->user());
+      $cartRepo = new CartRepository($cart);
     }
 
-    $cartItems = $this->cartRepo->getCartItemsTransformed()->toArray();
-    $subTotal = $this->cartRepo->getSubTotal();
-    $tax = $this->cartRepo->getTax();
-    $total = $this->cartRepo->getTotal(2);
-
-    return response()->json([
-      'cart_items' => array_values($cartItems),
-      'sub_total' => $subTotal,
-      'tax' => $tax,
-      'total' => $total
-    ], 200);
+    return response()->json($this->getCartItems($cartRepo), 200);
   }
 
   public function addToCart(AddToCartRequest $request)
@@ -92,17 +85,17 @@ class CartController extends Controller
 
     $item = $this->cartRepo->addToCart($product, $request->input('quantity'), $options);
 
-    if ($request->user()) {
+    if (auth()->user()) {
       $this->cartRepo->saveCart(auth()->user());
     }
-    return response()->json($this->cartRepo->getItemTransformed($item), 200);
+    return response()->json($this->getCartItems($this->cartRepo), 200);
   }
 
   public function update(UpdateCartRequest $request, $id)
   {
     $item = $this->cartRepo->updateQuantityInCart($id, $request->input('quantity'));
 
-    return response()->json($this->cartRepo->getItemTransformed($item), 200);
+    return response()->json($this->getCartItems($this->cartRepo), 200);
   }
 
   /**
@@ -115,8 +108,21 @@ class CartController extends Controller
   {
     $this->cartRepo->removeToCart($id);
 
-    return response()->json([
-      'message' => 'Item removed from cart'
-    ], 200);
+    return response()->json($this->getCartItems($this->cartRepo), 200);
+  }
+
+  private function getCartItems(CartRepository $cartRepo)
+  {
+    $cartItems = $cartRepo->getCartItemsTransformed()->toArray();
+    $subTotal = $cartRepo->getSubTotal();
+    $tax = $cartRepo->getTax();
+    $total = $cartRepo->getTotal(2);
+
+    return [
+      'cart_items' => array_values($cartItems),
+      'sub_total' => $subTotal,
+      'tax' => $tax,
+      'total' => $total
+    ];
   }
 }

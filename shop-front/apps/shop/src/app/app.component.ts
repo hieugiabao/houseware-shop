@@ -16,7 +16,10 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.retrieveTokenOnPageLoad();
-    this.cartService.init();
+    this.authService.refreshToken().subscribe({
+      complete: () => {
+        this.cartService.init();
+      },
+    });
   }
 }

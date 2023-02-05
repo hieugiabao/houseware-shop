@@ -3,7 +3,6 @@ import {
   ApiResponse,
   ApiResponseStatus,
   Cart,
-  CartItem,
 } from '@shop/shared/data-access/models';
 import { CartApiService } from '@shop/shared/data-access/shop-api';
 import { handleApiResponse } from '@shop/shared/utilities/rx';
@@ -31,18 +30,11 @@ export class CartService {
   addToCart(
     productId: number,
     quantity: number
-  ): Observable<ApiResponse<CartItem>> {
+  ): Observable<ApiResponse<Cart>> {
     return handleApiResponse(
       this.cartApiService.addToCart({ product: productId, quantity }).pipe(
-        tap((item) => {
-          if (item) {
-            const cart = this.cartStateService.get();
-            cart.cartItems.push(item);
-            this.cartStateService.setCart({
-              ...cart,
-              cartItems: cart.cartItems,
-            });
-          }
+        tap((cart) => {
+          this.cartStateService.setCart(cart);
         })
       ),
       null,
@@ -53,18 +45,11 @@ export class CartService {
   updateCartItem(
     rowId: string,
     quantity: number
-  ): Observable<ApiResponse<CartItem>> {
+  ): Observable<ApiResponse<Cart>> {
     return handleApiResponse(
       this.cartApiService.updateCartItem(rowId, quantity).pipe(
-        tap((item) => {
-          if (item) {
-            const cartItems = this.cartStateService.get('cartItems');
-            const index = cartItems.findIndex((i) => i.rowId === rowId);
-            cartItems[index] = item;
-            this.cartStateService.set({
-              cartItems,
-            });
-          }
+        tap((cart) => {
+          this.cartStateService.setCart(cart);
         })
       ),
       null,
@@ -72,18 +57,11 @@ export class CartService {
     );
   }
 
-  removeCartItem(rowId: string): Observable<ApiResponse<{ message: string }>> {
+  removeCartItem(rowId: string): Observable<ApiResponse<Cart>> {
     return handleApiResponse(
       this.cartApiService.removeCartItem(rowId).pipe(
-        tap((res) => {
-          if (res) {
-            const cartItems = this.cartStateService.get('cartItems');
-            const index = cartItems.findIndex((i) => i.rowId === rowId);
-            cartItems.splice(index, 1);
-            this.cartStateService.set({
-              cartItems,
-            });
-          }
+        tap((cart) => {
+          this.cartStateService.setCart(cart);
         })
       ),
       null,

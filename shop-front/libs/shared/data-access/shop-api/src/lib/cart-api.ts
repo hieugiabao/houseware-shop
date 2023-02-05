@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { AppConfig, APP_CONFIG } from '@shop/shared/app-config';
-import { Cart, CartItem } from '@shop/shared/data-access/models';
+import { Cart } from '@shop/shared/data-access/models';
 import { Observable } from 'rxjs';
 import { BaseApiService } from './base-api';
 
@@ -31,10 +31,7 @@ export class CartApiService extends BaseApiService {
       .pipe(this.handleResponse<Cart>(200));
   }
 
-  addToCart(params: {
-    product: number;
-    quantity: number;
-  }): Observable<CartItem> {
+  addToCart(params: { product: number; quantity: number }): Observable<Cart> {
     let url = this.appConfig.baseURL + '/carts';
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
@@ -48,10 +45,10 @@ export class CartApiService extends BaseApiService {
         }),
         withCredentials: true,
       })
-      .pipe(this.handleResponse<CartItem>(200));
+      .pipe(this.handleResponse<Cart>(200));
   }
 
-  updateCartItem(rowId: string, quantity: number): Observable<CartItem> {
+  updateCartItem(rowId: string, quantity: number): Observable<Cart> {
     let url = this.appConfig.baseURL + '/carts/' + rowId;
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
@@ -66,10 +63,10 @@ export class CartApiService extends BaseApiService {
         withCredentials: true,
         body: { quantity },
       })
-      .pipe(this.handleResponse<CartItem>(200));
+      .pipe(this.handleResponse<Cart>(200));
   }
 
-  removeCartItem(rowId: string): Observable<{ message: string }> {
+  removeCartItem(rowId: string): Observable<Cart> {
     let url = this.appConfig.baseURL + '/carts/' + rowId;
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
@@ -83,6 +80,6 @@ export class CartApiService extends BaseApiService {
         }),
         withCredentials: true,
       })
-      .pipe(this.handleResponse<{ message: string }>(200));
+      .pipe(this.handleResponse<Cart>(200));
   }
 }
