@@ -74,3 +74,8 @@ export interface Address extends TimeStamp {
   customerId: number;
   deletedAt: string;
 }
+
+export interface Province extends TimeStamp {
+  id: number;
+  name: string;
+}

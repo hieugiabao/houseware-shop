@@ -147,61 +147,80 @@
       </form>
     </div>
   </section>
+  <!-- <section class="section">
+    <shop-profile-ui-address></shop-profile-ui-address>
+  </section> -->
   <section class="section">
     <div class="section__top">
-      <h4 class="section__top__title">Personal details</h4>
+      <h4 class="section__top__title">Address</h4>
       <button
         class="section__top__btn"
         [className]="!showFormAddress ? '' : 'hidden'"
-        (click)="toggleFormPersonalDetails()"
+        (click)="toggleFormAddress()"
       >
         Edit
       </button>
       <button
         class="section__top__btn"
         [className]="showFormAddress ? '' : 'hidden'"
-        (click)="toggleFormPersonalDetails()"
+        (click)="toggleFormAddress()"
       >
         Cancel
       </button>
     </div>
     <div class="section__content">
-      <form [formGroup]="formPersonalDetails" class="form">
+      <form [formGroup]="formAddress" class="form">
         <div [className]="!showFormAddress ? '' : 'hidden'">
-          <p>{{ userData?.name }}</p>
-          <p>{{ userData?.email }}</p>
+          <p>{{ address?.alias + ', ' + address?.address_1 }}</p>
         </div>
         <div class="show_form" [className]="showFormAddress ? '' : 'hidden'">
           <div class="form__input">
-            <label for="name">Name</label>
+            <label for="alias">Address name</label>
+            <input type="text" id="alias" formControlName="alias" pInputText />
+          </div>
+          <div class="form__input">
+            <label for="address_1">Address</label>
             <input
               type="text"
-              id="name"
-              formControlName="name"
+              id="address_1"
+              formControlName="address_1"
               pInputText
-              [value]="userData?.name"
             />
           </div>
           <div class="form__input">
-            <label for="email">Email</label>
+            <label for="address_2">Addition information</label>
             <input
-              type="email"
-              id="email"
-              formControlName="email"
-              [value]="userData?.email"
+              type="text"
+              id="address_2"
+              formControlName="address_2"
               pInputText
             />
           </div>
+          <div class="form__input">
+            <label for="provinceId">Province</label>
+            <p-dropdown
+              [options]="provinces"
+              formControlName="provinceId"
+              optionLabel="name"
+              optionValue="id"
+            ></p-dropdown>
+          </div>
 
+          <div class="form__input">
+            <label for="city">City</label>
+            <input type="text" id="city" formControlName="city" pInputText />
+          </div>
+          <div class="form__input">
+            <label for="zip">zip</label>
+            <input type="text" id="zip" formControlName="zip" pInputText />
+          </div>
           <button
             pButton
             type="button"
             label="Save"
             class="p-button-secondary form__btn"
-            [disabled]="
-              !formPersonalDetails.dirty || formPersonalDetails.invalid
-            "
-            (click)="submitFormPersonalDetails()"
+            [disabled]="!formAddress.dirty || formAddress.invalid"
+            (click)="submitFormAddress()"
           ></button>
         </div>
       </form>
