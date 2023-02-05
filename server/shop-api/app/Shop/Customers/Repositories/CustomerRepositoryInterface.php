@@ -26,4 +26,6 @@ interface CustomerRepositoryInterface extends BaseRepositoryInterface
   public function findAddresses(): Collection;
 
   public function attachAddress(Address $address): Address;
+
+  public function changePassword(array $params): bool;
 }

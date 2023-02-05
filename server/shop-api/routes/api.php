@@ -55,6 +55,8 @@ Route::group(['prefix' => 'customer', 'middleware' => 'jwt.auth'], function ($ro
         Route::post('/', [CheckoutController::class, 'store']);
     });
     Route::get('/orders', [CustomerController::class, 'getAllOrders']);
+    Route::post('/info', [CustomerController::class, 'updateInfomation']);
+    Route::post('/change-password', [CustomerController::class, 'changePassword']);
 });
 
 // register auth

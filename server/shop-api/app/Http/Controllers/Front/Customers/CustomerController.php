@@ -9,6 +9,8 @@ use App\Shop\Addresses\Requests\CreateAddressRequest;
 use App\Shop\Addresses\Requests\UpdateAddressRequest;
 use App\Shop\Customers\Repositories\CustomerRepository;
 use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
+use App\Shop\Customers\Requests\ChangePasswordRequest;
+use App\Shop\Customers\Requests\UpdateCustomerRequest;
 use App\Shop\Orders\Order;
 use App\Shop\Orders\Transformers\OrderTransformable;
 
@@ -105,5 +107,23 @@ class CustomerController extends Controller
       array_values($orders->toArray()),
       200
     );
+  }
+
+  public function updateInfomation(UpdateCustomerRequest $request)
+  {
+    $customerRepo = new CustomerRepository(auth()->user());
+    $customerRepo->updateCustomer($request->except('_token', '_method', 'password'));
+
+    return response()->json(auth()->user(), 200);
+  }
+
+  public function changePassword(ChangePasswordRequest $request)
+  {
+    $customerRepo = new CustomerRepository(auth()->user());
+    $customerRepo->changePassword($request->except('_token', '_method'));
+
+    return response()->json([
+      'message' => 'Password changed successfully'
+    ], 200);
   }
 }
