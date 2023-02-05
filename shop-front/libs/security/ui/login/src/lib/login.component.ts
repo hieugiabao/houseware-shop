@@ -6,7 +6,8 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '@shop/auth/data-access';
+import { AuthService, AuthStateService } from '@shop/auth/data-access';
+import { CartService } from '@shop/cart/data-access';
 import {
   ApiResponse,
   ApiResponseStatus,
@@ -30,10 +31,21 @@ export class LoginComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly authService: AuthService,
+    private readonly authStateService: AuthStateService,
+    private readonly cartService: CartService,
     private readonly cdf: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    // check if user is already logged in
+    this.authStateService.isAuthorized$.subscribe({
+      next: (isAuthorized) => {
+        if (isAuthorized) {
+          this.router.navigate(['/']);
+        }
+      },
+    });
+
     this.form = this.fb.group({
       email: ['', [Validators.required, ShopValidators.isEmail]],
       password: ['', Validators.required],
@@ -42,7 +54,7 @@ export class LoginComponent implements OnInit {
   }
 
   submit() {
-    const { email, password, remember } = this.form.value;
+    const { email, password } = this.form.value;
     this.authService
       .login(email, password)
       .pipe(
@@ -63,6 +75,8 @@ export class LoginComponent implements OnInit {
       .pipe(
         map(([response, returnURL]) => {
           if (response.status === ApiResponseStatus.Success) {
+            this.cartService.autoAddItemWhenLoggedIn();
+            this.cartService.init();
             this.router.navigate([returnURL]);
           }
           return response;

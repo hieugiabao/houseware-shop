@@ -7,6 +7,7 @@ use App\Shop\Customers\Repositories\CustomerRepositoryInterface;
 use App\Shop\Customers\Requests\LoginCustomerRequest;
 use App\Shop\Customers\Requests\RegisterCustomerRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\UnauthorizedException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Facades\JWTFactory;
@@ -75,6 +76,8 @@ class CustomerSecurityController extends Controller
     if ($request->has('refresh_token')) {
       JWTAuth::setToken($request->refresh_token)->invalidate();
     }
+    // destroy session
+    Session::flush();
     return response()->json(null, 204);
   }
 

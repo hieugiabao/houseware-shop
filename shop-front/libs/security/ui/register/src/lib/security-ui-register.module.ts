@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RegisterService } from '@shop/security/data-access';
 import { SharedUiLogoModule } from '@shop/shared/ui/logo';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   imports: [
@@ -19,6 +20,7 @@ import { SharedUiLogoModule } from '@shop/shared/ui/logo';
     FormsModule,
     SharedUiLogoModule,
     RouterModule,
+    PasswordModule,
   ],
   declarations: [RegisterComponent],
   exports: [RegisterComponent],

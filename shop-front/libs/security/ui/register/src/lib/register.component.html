@@ -71,20 +71,21 @@
       </label>
 
       <label for="password" class="flex flex-col">
-        <span class="p-input-icon-left">
-          <i class="pi pi-lock"></i>
-          <input
-            type="password"
-            pInputText
-            id="password"
+        <span class="relative">
+          <span
+            class="absolute text-gray-500 left-0 top-0 z-50 h-full flex justify-center items-center w-10"
+            ><i class="pi pi-lock"></i
+          ></span>
+          <p-password
             [class.p-invalid]="
               form.get('password')?.touched && !!form.get('password')?.errors
             "
+            [toggleMask]="true"
             autocomplete
-            class="w-full"
+            styleClass="w-full"
             placeholder="Enter password"
             formControlName="password"
-          />
+          ></p-password>
         </span>
         <small
           class="p-invalid"
@@ -105,21 +106,23 @@
       </label>
 
       <label for="passwordConfirmation" class="flex flex-col">
-        <span class="p-input-icon-left">
-          <i class="pi pi-lock"></i>
-          <input
-            type="password"
-            pInputText
-            id="passwordConfirmation"
+        <span class="relative">
+          <span
+            class="absolute text-gray-500 left-0 top-0 z-50 h-full flex justify-center items-center w-10"
+            ><i class="pi pi-lock"></i
+          ></span>
+          <p-password
             [class.p-invalid]="
               form.get('passwordConfirmation')?.touched &&
               !!form.get('passwordConfirmation')?.errors
             "
+            [toggleMask]="true"
             autocomplete
-            class="w-full"
+            styleClass="w-full"
             placeholder="Confirm password"
             formControlName="passwordConfirmation"
-          />
+            [feedback]="false"
+          ></p-password>
         </span>
         <small
           class="p-invalid"

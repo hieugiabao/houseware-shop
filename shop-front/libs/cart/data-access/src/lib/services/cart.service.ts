@@ -68,4 +68,12 @@ export class CartService {
       (err) => err
     );
   }
+
+  autoAddItemWhenLoggedIn(): void {
+    const cartItems = this.cartStateService.get('cartItems');
+
+    for (const item of cartItems) {
+      this.addToCart(item.id, item.qty).subscribe();
+    }
+  }
 }

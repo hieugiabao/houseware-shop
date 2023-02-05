@@ -39,7 +39,7 @@
         <small
           class="p-invalid"
           *ngIf="form.get('email')?.touched && !!form.get('email')?.errors?.['isEmail']"
-          >A valid email</small
+          >Please enter a valid email</small
         >
         <small
           class="p-invalid"
@@ -49,20 +49,22 @@
       </label>
 
       <label for="password" class="flex flex-col">
-        <span class="p-input-icon-left">
-          <i class="pi pi-lock"></i>
-          <input
-            type="password"
-            pInputText
-            id="password"
+        <span class="relative">
+          <span
+            class="absolute text-gray-500 left-0 top-0 z-50 h-full flex justify-center items-center w-10"
+            ><i class="pi pi-lock"></i
+          ></span>
+          <p-password
+            [toggleMask]="true"
             [class.p-invalid]="
               form.get('password')?.touched && !!form.get('password')?.errors
             "
             autocomplete
-            class="w-full"
+            styleClass="w-full"
             placeholder="Enter password"
             formControlName="password"
-          />
+            [feedback]="false"
+          ></p-password>
         </span>
         <small
           class="p-invalid"
