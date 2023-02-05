@@ -32,4 +32,15 @@ export class ProductsService {
       () => 'Error when getting best seller products'
     );
   }
+
+  getProductsByCategory(
+    params: PaginateParamsDto,
+    categoryId: string
+  ): Observable<ApiResponse<PaginateResultResponse<Product>>> {
+    return handleApiResponse(
+      this.productsApiService.getProductsByCategory(params, categoryId),
+      null,
+      () => 'Error when getting products by category'
+    );
+  }
 }

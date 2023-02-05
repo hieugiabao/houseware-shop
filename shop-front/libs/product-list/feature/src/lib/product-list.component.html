@@ -8,9 +8,17 @@
         [multiple]="false"
       ></p-panelMenu>
     </div>
-    <div class="main__list">
-      <span>390 items</span>
-      <shop-product-category></shop-product-category>
+    <div class="main__list" *ngIf="productsResponse$ | async as response">
+      <div *ngIf="response.status === 'loading'; else data">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+      <ng-template #data>
+        <span>{{ response.data?.total }} items</span>
+        <shop-product-category
+          [products]="response.data"
+          [categoryName]="category.name"
+        ></shop-product-category>
+      </ng-template>
     </div>
   </div>
 </div>

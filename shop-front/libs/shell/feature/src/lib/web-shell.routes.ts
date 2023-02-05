@@ -12,7 +12,7 @@ export const webShellRoutes: Route[] = [
           (await import('@shop/home/feature')).HomeFeatureModule,
       },
       {
-        path: 'products',
+        path: 'category',
         loadChildren: async () =>
           (await import('@shop/product-list/feature')).ProductListFeatureModule,
       },
