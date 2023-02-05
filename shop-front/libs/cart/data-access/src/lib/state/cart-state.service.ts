@@ -5,6 +5,7 @@ import { map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CartStateService extends RxState<Cart> {
+  cart$ = this.select();
   cartItems$ = this.select('cartItems');
   count$ = this.cartItems$.pipe(map((items) => items.length));
 

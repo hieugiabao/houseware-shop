@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { CartStateService } from '@shop/cart/data-access';
-import { CartItem } from '@shop/shared/data-access/models';
+import { Cart } from '@shop/shared/data-access/models';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -10,11 +10,11 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartComponent implements OnInit {
-  cartItems$!: Observable<CartItem[]>;
+  cart$!: Observable<Cart>;
 
   constructor(private readonly cartStateService: CartStateService) {}
 
   ngOnInit(): void {
-    this.cartItems$ = this.cartStateService.cartItems$;
+    this.cart$ = this.cartStateService.cart$;
   }
 }

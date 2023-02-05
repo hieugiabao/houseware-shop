@@ -19,6 +19,7 @@
       "@shop/cart/data-access": ["libs/cart/data-access/src/index.ts"],
       "@shop/cart/feature": ["libs/cart/feature/src/index.ts"],
       "@shop/cart/ui/cart-item": ["libs/cart/ui/cart-item/src/index.ts"],
+      "@shop/cart/ui/cart-total": ["libs/cart/ui/cart-total/src/index.ts"],
       "@shop/home/data-access": ["libs/home/data-access/src/index.ts"],
       "@shop/home/feature": ["libs/home/feature/src/index.ts"],
       "@shop/home/ui/best-seller": ["libs/home/ui/best-seller/src/index.ts"],
