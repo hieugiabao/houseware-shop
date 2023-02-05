@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\Categories\CategoryController;
 use App\Http\Controllers\Front\Carts\CartController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\Customers\CustomerController;
+use App\Http\Controllers\Front\ProductAttributes\ProductAttributeController;
 use App\Http\Controllers\Front\Products\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::group(['prefix' => 'products'], function ($router) {
     Route::post('/', [ProductController::class, 'createProduct']);
     Route::post('/{id}', [ProductController::class, 'updateProduct']);
     Route::delete('/{id}', [ProductController::class, 'removeProduct']);
+    Route::get('/{id}/attributes', [ProductAttributeController::class, 'getProductAttributes']);
 });
 
 Route::group(['prefix' => 'categories'], function ($router) {
