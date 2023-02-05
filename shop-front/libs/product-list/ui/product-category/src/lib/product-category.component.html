@@ -11,8 +11,10 @@
         [description]="product.description"
         [price]="product.price"
         page
-        link="/shop/product/{{ product.id }}"
+        link="/product/{{ product.id }}"
         [quantity]="product.quantity"
+        [id]="product.id"
+        (addToCart)="addToCart($event)"
       ></shop-product>
     </ng-template>
   </p-dataView>

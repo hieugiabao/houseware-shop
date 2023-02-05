@@ -17,6 +17,7 @@
         <shop-product-category
           [products]="response.data"
           [categoryName]="category.name"
+          (pageChange)="pageChange($event)"
         ></shop-product-category>
       </ng-template>
     </div>

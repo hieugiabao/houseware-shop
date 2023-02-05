@@ -23,13 +23,13 @@
   </div>
   <div class="product-description grow text-center mb-6">
     <a [routerLink]="link"
-      ><span class="text-2xl font-bold">{{
+      ><span class="text-xl font-bold">{{
         title.slice(0, 14) + '...'
       }}</span></a
     >
   </div>
   <div class="flex items-center justify-between flex-none">
-    <span class="text-2xl font-semibold">{{ price }}₫</span>
+    <span class="text-xl font-semibold">{{ price | currency }}</span>
     <button
       pButton
       pRipple

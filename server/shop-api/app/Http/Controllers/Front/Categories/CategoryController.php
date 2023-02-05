@@ -67,13 +67,13 @@ class CategoryController extends Controller
    *
    * @return A collection of products.
    */
-  public function getProducts(int $id)
+  public function getProducts(int $id, Request $request)
   {
     $category = $this->categoryRepository->findCategoryById($id);
     $categoryRepository = new CategoryRepository($category);
     $product = $categoryRepository->findProducts();
 
-    return response()->json($this->categoryRepository->paginateArrayResults($product->toArray(), 10));
+    return response()->json($this->categoryRepository->paginateArrayResults($product->toArray(), $request->input('per_page', 10)));
   }
 
   public function getChildCategories(int $id)

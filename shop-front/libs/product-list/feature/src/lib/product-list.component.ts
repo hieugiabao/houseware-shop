@@ -31,7 +31,7 @@ export class ProductListComponent implements OnInit, OnChanges {
   category!: Category;
   productsResponse$!: Observable<ApiResponse<PaginateResultResponse<Product>>>;
   page = 1;
-  perPage = 9;
+  perPage = 4;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -88,6 +88,12 @@ export class ProductListComponent implements OnInit, OnChanges {
   ngOnChanges() {
     console.log('ngOnChanges');
     this.categoryId = this.route.snapshot.paramMap.get('id') || '';
+    this.getProducts();
+  }
+
+  pageChange(event: { page: number; perPage: number }) {
+    this.page = event.page;
+    this.perPage = event.perPage;
     this.getProducts();
   }
 }
