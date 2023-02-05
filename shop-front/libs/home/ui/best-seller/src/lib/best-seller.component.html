@@ -14,10 +14,9 @@
         class="card inline-block m-4 !rounded-xl w-11/12"
         [id]="product.id"
         [imageUrl]="product.thumb"
-        [title]="product.name.slice(0, 10) + '...'"
-        [description]="product.description.slice(0, 20) + '...'"
+        [title]="product.name"
+        [description]="product.description"
         [price]="product.price"
-        page
         link="/product/{{ product.id }}"
         [quantity]="product.quantity"
         [categories]="getNameCategories(product.categories)"
