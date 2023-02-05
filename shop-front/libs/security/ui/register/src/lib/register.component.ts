@@ -17,6 +17,7 @@ import { finalize, tap } from 'rxjs';
 @Component({
   selector: 'shop-register',
   templateUrl: './register.component.html',
+  styleUrls: ['./register.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent implements OnInit {

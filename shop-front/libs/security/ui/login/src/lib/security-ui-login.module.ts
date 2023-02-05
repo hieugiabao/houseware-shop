@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { RouterModule } from '@angular/router';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { RouterModule } from '@angular/router';
     FormsModule,
     RouterModule,
     SharedUiLogoModule,
+    PasswordModule,
   ],
   declarations: [LoginComponent],
   exports: [LoginComponent],
