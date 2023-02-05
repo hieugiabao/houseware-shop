@@ -62,3 +62,15 @@ export interface Cart {
   tax: number;
   total: number;
 }
+
+export interface Address extends TimeStamp {
+  id: string;
+  alias: string;
+  address_1: string;
+  address_2: string;
+  city: string;
+  zip: string;
+  provinceId: number;
+  customerId: number;
+  deletedAt: string;
+}

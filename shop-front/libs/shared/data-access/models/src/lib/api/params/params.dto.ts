@@ -14,3 +14,14 @@ export interface PaginateParamsDto {
   page: number;
   perPage: number;
 }
+
+export interface UpdateCustomerParamsDto {
+  name?: string;
+  email?: string;
+}
+
+export interface UpdatePasswordParamsDto {
+  currentPassword: string;
+  password: string;
+  passwordConfirmation: string;
+}

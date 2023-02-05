@@ -7,7 +7,12 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
 import { PasswordModule } from 'primeng/password';
-
+import { ToastModule } from 'primeng/toast';
+import {
+  UpdateCustomerService,
+  ChangePasswordService,
+} from '@shop/security/data-access';
+import { MessageService } from 'primeng/api';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,9 +22,11 @@ import { PasswordModule } from 'primeng/password';
     ButtonModule,
     StyleClassModule,
     PasswordModule,
+    ToastModule,
     RouterModule.forChild([{ path: '', component: ProfileComponent }]),
   ],
   declarations: [ProfileComponent],
+  providers: [UpdateCustomerService, MessageService, ChangePasswordService],
   exports: [ProfileComponent],
 })
 export class ProfileFeatureModule {}

@@ -7,6 +7,8 @@ import {
   LoginParamsDto,
   RegisterParamsDto,
   TokenResultResponse,
+  UpdateCustomerParamsDto,
+  UpdatePasswordParamsDto,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
 import { Observable } from 'rxjs';
@@ -109,5 +111,45 @@ export class CustomerAuthApiService extends BaseApiService {
         }),
       })
       .pipe(this.handleResponse<CustomerInfomation | null>(200));
+  }
+
+  updateMe(body: UpdateCustomerParamsDto): Observable<UpdateCustomerParamsDto> {
+    let url = this.appConfig.baseURL + '/customer/info';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('post', url, {
+        body: JSON.stringify(
+          StringUtil.convertKeysFromCamelCaseToSnakeCase(body)
+        ),
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<UpdateCustomerParamsDto>(200));
+  }
+
+  changePassword(
+    body: UpdatePasswordParamsDto
+  ): Observable<UpdatePasswordParamsDto> {
+    let url = this.appConfig.baseURL + '/customer/change-password';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('post', url, {
+        body: JSON.stringify(
+          StringUtil.convertKeysFromCamelCaseToSnakeCase(body)
+        ),
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<UpdatePasswordParamsDto>(200));
   }
 }

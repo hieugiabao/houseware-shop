@@ -1,3 +1,4 @@
+<p-toast position="bottom-right"></p-toast>
 <div class="profile">
   <section class="section">
     <h1>Profile</h1>
@@ -23,9 +24,8 @@
     <div class="section__content">
       <form [formGroup]="formPersonalDetails" class="form">
         <div [className]="!showFormPersonalDetails ? '' : 'hidden'">
-          <p>{{ formPersonalDetails.value.name }}</p>
-          <p>{{ formPersonalDetails.value.email }}</p>
-          <p>{{ formPersonalDetails.value.telephone }}</p>
+          <p>{{ userData?.name }}</p>
+          <p>{{ userData?.email }}</p>
         </div>
         <div
           class="show_form"
@@ -33,27 +33,34 @@
         >
           <div class="form__input">
             <label for="name">Name</label>
-            <input type="text" id="name" formControlName="name" pInputText />
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              pInputText
+              [value]="userData?.name"
+            />
           </div>
           <div class="form__input">
             <label for="email">Email</label>
-            <input type="email" id="email" formControlName="email" pInputText />
-          </div>
-          <div class="form__input">
-            <label for="telephone" class="block">Telephone</label>
             <input
-              id="telephone"
-              type="tel"
+              type="email"
+              id="email"
+              formControlName="email"
+              [value]="userData?.email"
               pInputText
-              formControlName="telephone"
             />
           </div>
+
           <button
             pButton
             type="button"
             label="Save"
             class="p-button-secondary form__btn"
-            [disabled]="!formPersonalDetails.dirty"
+            [disabled]="
+              !formPersonalDetails.dirty || formPersonalDetails.invalid
+            "
+            (click)="submitFormPersonalDetails()"
           ></button>
         </div>
       </form>
@@ -94,13 +101,21 @@
             ></p-password>
           </div>
           <div class="form__input">
-            <label for="newPassword">New password</label>
+            <label for="password">New password</label>
             <p-password
               type="password"
-              id="newPassword"
-              formControlName="newPassword"
+              id="password"
+              formControlName="password"
               [toggleMask]="true"
             ></p-password>
+            <small
+              class="p-invalid"
+              *ngIf="
+            formPassword.get('password')?.touched && !!formPassword.get('password')?.errors?.['minlength']
+          "
+            >
+              Password must be at least 8 characters
+            </small>
           </div>
           <div class="form__input">
             <label for="telephone" class="block">Confirm password</label>
@@ -111,13 +126,22 @@
               [toggleMask]="true"
               [feedback]="false"
             ></p-password>
+            <small
+              class="p-invalid"
+              *ngIf="
+              formPassword.get('passwordConfirmation')?.touched && !formPassword.get('passwordConfirmation')?.errors && !!formPassword.errors?.['notSame']
+        "
+            >
+              Confirm password not match with password
+            </small>
           </div>
           <button
             pButton
             type="button"
             label="Save"
             class="p-button-secondary form__btn"
-            [disabled]="!formPassword.invalid"
+            [disabled]="formPassword.invalid"
+            (click)="submitFormPassword()"
           ></button>
         </div>
       </form>
@@ -125,11 +149,62 @@
   </section>
   <section class="section">
     <div class="section__top">
-      <h4 class="section__top__title">Address</h4>
-      <button class="section__top__btn">Edit</button>
+      <h4 class="section__top__title">Personal details</h4>
+      <button
+        class="section__top__btn"
+        [className]="!showFormAddress ? '' : 'hidden'"
+        (click)="toggleFormPersonalDetails()"
+      >
+        Edit
+      </button>
+      <button
+        class="section__top__btn"
+        [className]="showFormAddress ? '' : 'hidden'"
+        (click)="toggleFormPersonalDetails()"
+      >
+        Cancel
+      </button>
     </div>
     <div class="section__content">
-      <div></div>
+      <form [formGroup]="formPersonalDetails" class="form">
+        <div [className]="!showFormAddress ? '' : 'hidden'">
+          <p>{{ userData?.name }}</p>
+          <p>{{ userData?.email }}</p>
+        </div>
+        <div class="show_form" [className]="showFormAddress ? '' : 'hidden'">
+          <div class="form__input">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              pInputText
+              [value]="userData?.name"
+            />
+          </div>
+          <div class="form__input">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              [value]="userData?.email"
+              pInputText
+            />
+          </div>
+
+          <button
+            pButton
+            type="button"
+            label="Save"
+            class="p-button-secondary form__btn"
+            [disabled]="
+              !formPersonalDetails.dirty || formPersonalDetails.invalid
+            "
+            (click)="submitFormPersonalDetails()"
+          ></button>
+        </div>
+      </form>
     </div>
   </section>
 </div>
