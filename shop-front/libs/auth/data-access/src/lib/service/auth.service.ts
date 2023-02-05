@@ -129,7 +129,7 @@ export class AuthService {
   login(
     email: string,
     password: string,
-    rememberMe: boolean = true
+    rememberMe = true
   ): Observable<ApiResponse<TokenResultResponse>> {
     return handleApiResponse<TokenResultResponse>(
       this.customerAuthApiService
