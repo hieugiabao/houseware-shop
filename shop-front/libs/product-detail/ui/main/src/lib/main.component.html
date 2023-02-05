@@ -1,28 +1,47 @@
 <div class="main">
   <!-- name -->
-  <h1>{{ product.name }}</h1>
-  <h1>${{ product.price }}</h1>
-  <div class="attribute">
-    <span>Color</span>
-    <p-selectButton [options]="colorOptions" [(ngModel)]="colorValue">
-      <ng-template let-item>
-        <span>{{ item }}</span>
-      </ng-template>
-    </p-selectButton>
-  </div>
-  <div class="attribute">
-    <span>Size</span>
-    <p-selectButton [options]="sizeOptions" [(ngModel)]="sizeValue">
-      <ng-template let-item>
-        <span>{{ item }}</span>
-      </ng-template>
-    </p-selectButton>
+  <span>
+    <h1 class="mb-6">{{ product.name }}</h1>
+    <div class="flex gap-2">
+      <h1 [class.old-price]="product.salePrice">
+        {{ product.price | currency }}
+      </h1>
+      <h1 *ngIf="product.salePrice">{{ product.salePrice | currency }}</h1>
+      <span *ngIf="product.salePrice" class="text-xs"
+        >-{{ product.salePercentage | number : '2.0-0' }}%</span
+      >
+      <span
+        *ngIf="product.quantity <= 0"
+        class="ml-10 text-red-500 font-semibold bg-slate-400 rounded-md px-4 py-2"
+        >Out stock</span
+      >
+    </div>
+  </span>
+  <ng-container></ng-container>
+  <div class="flex flex-col gap-4">
+    <ng-container *ngFor="let attribute of attributes">
+      <div class="attribute">
+        <span>{{ attribute.name }}</span>
+        <p-selectButton
+          [options]="attribute.values"
+          (onChange)="changeAttribute($event, attribute)"
+        >
+          <ng-template let-item>
+            <span>{{ item.value }}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
+    </ng-container>
   </div>
   <div class="add">
-    <button class="add_btn">
+    <button
+      class="add_btn"
+      [disabled]="product.quantity <= 0 || loading"
+      (click)="addToCart()"
+    >
       <span>Add to cart</span>
     </button>
-    <button class="heart_btn">
+    <button class="heart_btn" title="Not implement">
       <i class="pi pi-heart"></i>
     </button>
   </div>

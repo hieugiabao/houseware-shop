@@ -27,6 +27,9 @@
         "libs/home/ui/featured-products/src/index.ts"
       ],
       "@shop/home/ui/greeting": ["libs/home/ui/greeting/src/index.ts"],
+      "@shop/product-detail/data-access": [
+        "libs/product-detail/data-access/src/index.ts"
+      ],
       "@shop/product-detail/feature": [
         "libs/product-detail/feature/src/index.ts"
       ],

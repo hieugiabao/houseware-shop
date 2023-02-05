@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Shop\AttributeValues\AttributeValue;
 use App\Shop\ProductAttributes\ProductAttribute;
 use App\Shop\ProductAttributes\Repositories\ProductAttributeRepositoryInterface;
+use App\Shop\ProductImages\ProductImageTransformable;
 use App\Shop\Products\Product;
 use App\Shop\Products\Repositories\ProductRepository;
 use App\Shop\Products\Repositories\ProductRepositoryInterface;
@@ -13,7 +14,7 @@ use App\Shop\Products\Transformations\ProductTransformable;
 
 class ProductAttributeController extends Controller
 {
-  use ProductTransformable;
+  use ProductTransformable, ProductImageTransformable;
   /**
    * @var ProductAttributeRepositoryInterface
    *
@@ -51,7 +52,7 @@ class ProductAttributeController extends Controller
       $attributesValues = $productAttribute->attributesValues()->get()->map(function (AttributeValue $attributeValue) {
         return [
           'id' => $attributeValue->id,
-          'attribute' => $attributeValue->attribute()->get(),
+          'attribute' => $attributeValue->attribute()->first(),
           'value' => $attributeValue->value
         ];
       });
@@ -59,7 +60,8 @@ class ProductAttributeController extends Controller
       $productAttribute->attributesValues = $attributesValues;
       return $productAttribute;
     });
-
+    $images = $productRepository->findProductImages();
+    $product->images = $this->transformProductImages($images);
     $product->productAttributes = $productAttributes;
 
     return response()->json($product, 200);
