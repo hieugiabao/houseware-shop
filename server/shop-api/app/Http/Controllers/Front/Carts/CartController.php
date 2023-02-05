@@ -93,8 +93,10 @@ class CartController extends Controller
 
   public function update(UpdateCartRequest $request, $id)
   {
-    $item = $this->cartRepo->updateQuantityInCart($id, $request->input('quantity'));
-
+    $this->cartRepo->updateQuantityInCart($id, $request->input('quantity'));
+    if (auth()->user()) {
+      $this->cartRepo->saveCart(auth()->user());
+    }
     return response()->json($this->getCartItems($this->cartRepo), 200);
   }
 
@@ -107,7 +109,9 @@ class CartController extends Controller
   public function destroy($id)
   {
     $this->cartRepo->removeToCart($id);
-
+    if (auth()->user()) {
+      $this->cartRepo->saveCart(auth()->user());
+    }
     return response()->json($this->getCartItems($this->cartRepo), 200);
   }
 
