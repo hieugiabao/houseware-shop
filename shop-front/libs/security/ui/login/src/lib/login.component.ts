@@ -7,6 +7,7 @@ import {
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService, AuthStateService } from '@shop/auth/data-access';
+import { CartService } from '@shop/cart/data-access';
 import {
   ApiResponse,
   ApiResponseStatus,
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
     private readonly router: Router,
     private readonly authService: AuthService,
     private readonly authStateService: AuthStateService,
+    private readonly cartService: CartService,
     private readonly cdf: ChangeDetectorRef
   ) {}
 
@@ -73,6 +75,8 @@ export class LoginComponent implements OnInit {
       .pipe(
         map(([response, returnURL]) => {
           if (response.status === ApiResponseStatus.Success) {
+            this.cartService.autoAddItemWhenLoggedIn();
+            this.cartService.init();
             this.router.navigate([returnURL]);
           }
           return response;
