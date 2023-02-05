@@ -6,6 +6,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthStateService } from '@shop/auth/data-access';
 import { CustomerInfomation } from '@shop/shared/data-access/models';
 import { CartStateService } from '@shop/cart/data-access';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'shop-user-info',
@@ -15,15 +16,18 @@ import { CartStateService } from '@shop/cart/data-access';
 })
 export class UserInfoComponent implements OnInit {
   public currentUser$!: Observable<CustomerInfomation | null>;
-  public haveToken$!: Observable<boolean>;
+  public haveToken = false;
   items!: MenuItem[];
 
   totalItems$!: Observable<number>;
   constructor(
     private readonly authStateService: AuthStateService,
     private readonly cartStateService: CartStateService,
-    private readonly logoutService: LogoutService
-  ) {}
+    private readonly logoutService: LogoutService,
+    private readonly router: Router
+  ) {
+    this.haveToken = !!localStorage.getItem('rtok');
+  }
 
   ngOnInit(): void {
     this.items = [
@@ -32,14 +36,16 @@ export class UserInfoComponent implements OnInit {
           {
             label: 'Profile',
             icon: 'pi pi-user',
-            url: '/profile',
-            command: () => {},
+            command: () => {
+              this.router.navigate(['/profile']);
+            },
           },
           {
             label: 'Orders',
             icon: 'pi pi-shopping-cart',
-            url: '/orders',
-            command: () => {},
+            command: () => {
+              this.router.navigate(['/orders']);
+            },
           },
           {
             label: 'Logout',
@@ -48,15 +54,6 @@ export class UserInfoComponent implements OnInit {
               this.logoutService.logout().subscribe({
                 next: () => {
                   localStorage.removeItem('rtok');
-                  // clear all cookie
-                  document.cookie.split(';').forEach(function (c) {
-                    document.cookie = c
-                      .replace(/^ +/, '')
-                      .replace(
-                        /=.*/,
-                        '=;expires=' + new Date().toUTCString() + ';path=/'
-                      );
-                  });
                   window.location.reload();
                 },
               });
@@ -67,13 +64,6 @@ export class UserInfoComponent implements OnInit {
     ];
 
     this.currentUser$ = this.authStateService.currentUser$;
-    this.haveToken$ = new Observable<boolean>((subscriber) => {
-      if (localStorage.getItem('rtok')) {
-        subscriber.next(true);
-      } else {
-        subscriber.next(false);
-      }
-    });
     this.totalItems$ = this.cartStateService.count$;
   }
 }
