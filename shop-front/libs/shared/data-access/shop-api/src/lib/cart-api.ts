@@ -66,7 +66,7 @@ export class CartApiService extends BaseApiService {
       .pipe(this.handleResponse<Cart>(200));
   }
 
-  removeCartItem(rowId: string): Observable<{ message: string }> {
+  removeCartItem(rowId: string): Observable<Cart> {
     let url = this.appConfig.baseURL + '/carts/' + rowId;
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
@@ -80,6 +80,6 @@ export class CartApiService extends BaseApiService {
         }),
         withCredentials: true,
       })
-      .pipe(this.handleResponse<{ message: string }>(200));
+      .pipe(this.handleResponse<Cart>(200));
   }
 }

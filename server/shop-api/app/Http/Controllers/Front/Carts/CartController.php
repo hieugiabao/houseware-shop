@@ -108,9 +108,7 @@ class CartController extends Controller
   {
     $this->cartRepo->removeToCart($id);
 
-    return response()->json([
-      'message' => 'Item removed from cart'
-    ], 200);
+    return response()->json($this->getCartItems($this->cartRepo), 200);
   }
 
   private function getCartItems(CartRepository $cartRepo)
