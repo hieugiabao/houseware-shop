@@ -25,9 +25,43 @@ export interface Product extends TimeStamp {
   weight: number;
   massUnit: string;
   slug: string;
+  salePrice?: number;
+  salePercentage?: number;
+  productAttributes: ProductAttribute[];
   categories?: Category[];
+  images?: ProductImage[];
 
   [key: string]: unknown;
+}
+
+export interface ProductImage {
+  id: number;
+  src: string;
+}
+
+export interface Attribute {
+  id: number;
+  name: string;
+  values: AttributeValue[];
+
+  [key: string]: unknown;
+}
+
+export interface AttributeValue extends TimeStamp {
+  id: number;
+  value: string;
+  attribute: Attribute;
+
+  [key: string]: unknown;
+}
+
+export interface ProductAttribute extends TimeStamp {
+  id: number;
+  quantity: number;
+  price: number;
+  salePrice: number;
+  default: boolean;
+  attributesValues: AttributeValue[];
 }
 
 export interface Category extends TimeStamp {
@@ -54,6 +88,8 @@ export interface CartItem {
   thumb: string;
   subtotal: number;
   options: any[];
+
+  [key: string]: unknown;
 }
 
 export interface Cart {

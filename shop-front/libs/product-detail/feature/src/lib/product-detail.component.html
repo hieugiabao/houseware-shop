@@ -1,31 +1,75 @@
 <div class="product-detail">
-  <p-breadcrumb [model]="breadCrumbItems" [home]="home"></p-breadcrumb>
-  <div class="product__content">
-    <div class="product__content__img">
-      <p-galleria
-        [value]="images"
-        [responsiveOptions]="responsiveOptions"
-        [containerStyle]="{ maxWidth: '1200px', width: '50vw' }"
-        [numVisible]="6"
-        [changeItemOnIndicatorHover]="true"
-        [circular]="true"
-        [autoPlay]="false"
-        [transitionInterval]="4000"
-      >
-        <ng-template pTemplate="item" let-item>
-          <img [src]="item.previewImageSrc" style="width: 100%" />
-        </ng-template>
-        <ng-template pTemplate="thumbnail" let-item>
-          <div class="grid grid-nogutter justify-content-center">
-            <img [src]="item.thumbnailImageSrc" />
+  <!-- <p-breadcrumb [model]="breadCrumbItems" [home]="home"></p-breadcrumb> -->
+  <div *ngIf="productResponse$ | async as response">
+    <ng-container [ngSwitch]="response.status">
+      <ng-container *ngSwitchCase="'success'">
+        <div class="product__content">
+          <div class="product__content__img">
+            <p-galleria
+              [value]="convertImages(response.data!.images || [])"
+              [responsiveOptions]="responsiveOptions"
+              [containerStyle]="{ maxWidth: '1200px', width: '50vw' }"
+              [numVisible]="6"
+              [changeItemOnIndicatorHover]="true"
+              [circular]="true"
+              [autoPlay]="false"
+              [transitionInterval]="4000"
+            >
+              <ng-template pTemplate="item" let-item>
+                <img [src]="item.previewImageSrc" style="width: 100%" />
+              </ng-template>
+              <ng-template pTemplate="thumbnail" let-item>
+                <div class="grid grid-nogutter justify-content-center">
+                  <img [src]="item.thumbnailImageSrc" />
+                </div>
+              </ng-template>
+            </p-galleria>
           </div>
-        </ng-template>
-      </p-galleria>
-    </div>
-    <shop-product-detail-main
-      [product]="product"
-      [sizeOptions]="['S', 'M', 'L', 'XL']"
-      [colorOptions]="['Red', 'Blue', 'Green', 'Yellow']"
-    ></shop-product-detail-main>
+          <shop-product-detail-main
+            [product]="response.data!"
+          ></shop-product-detail-main>
+        </div>
+        <section class="mb-20">
+          <h2 class="text-2xl font-semibold mb-4">Description</h2>
+          <p [innerHTML]="response.data?.description"></p>
+        </section>
+      </ng-container>
+      <ng-container *ngSwitchCase="'loading'">
+        <div class="my-8 flex flex-row gap-10">
+          <div class="w-[55%]">
+            <p-skeleton width="full" height="70vh"></p-skeleton>
+          </div>
+          <div class="flex flex-col w-[35%] justify-between">
+            <p-skeleton width="100%" height="10vh"></p-skeleton>
+            <p-skeleton width="15%" height="3vh" class="ml-4"></p-skeleton>
+            <div class="flex flex-col w-full gap-6">
+              <div class="flex flex-col gap-3">
+                <p-skeleton width="20%" height="3vh"></p-skeleton>
+                <p-skeleton width="50%" height="7vh"></p-skeleton>
+              </div>
+              <div class="flex flex-col gap-3">
+                <p-skeleton width="20%" height="3vh"></p-skeleton>
+                <p-skeleton width="40%" height="7vh"></p-skeleton>
+              </div>
+            </div>
+            <p-skeleton width="90%" height="7vh"></p-skeleton>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngSwitchCase="'failure'">
+        <!-- Producct not found -->
+        <div class="my-40 flex gap-10 flex-col">
+          <h1 class="text-4xl text-center">Product not found</h1>
+          <div class="text-center">
+            <button
+              pButton
+              routerLink="/"
+              class="p-button-secondary"
+              label="Go to home"
+            ></button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
   </div>
 </div>

@@ -21,11 +21,12 @@
       [rounded]="roundedImage"
     ></shop-product-cover>
   </div>
-  <div class="product-description grow text-center">
+  <div class="product-description grow text-center mb-6">
     <a [routerLink]="link"
-      ><span class="text-2xl font-bold">{{ title }}</span></a
+      ><span class="text-2xl font-bold">{{
+        title.slice(0, 14) + '...'
+      }}</span></a
     >
-    <div class="mb-3 text-gray-600">{{ description }}</div>
   </div>
   <div class="flex items-center justify-between flex-none">
     <span class="text-2xl font-semibold">{{ price }}₫</span>

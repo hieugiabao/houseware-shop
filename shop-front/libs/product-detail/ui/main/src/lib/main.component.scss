@@ -1,18 +1,30 @@
 :host ::ng-deep {
   width: 100%;
+  margin-bottom: 100px;
   .main {
     padding: 24px;
     margin-left: 32px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 32px;
     width: 100%;
+    min-height: 75vh;
+
+    .old-price {
+      text-decoration: line-through;
+      color: #f57a7a;
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 2rem;
+      letter-spacing: 0.00938em;
+    }
+
     h1 {
       font-size: 1.5rem;
       font-weight: 600;
       line-height: 1.75rem;
       letter-spacing: 0.00938em;
-      margin-bottom: 32px;
     }
     .attribute {
       display: flex;
@@ -41,11 +53,17 @@
         width: 100%;
         padding: 16px;
         border-radius: 10px;
+
+        &:disabled {
+          color: white;
+          cursor: not-allowed;
+        }
       }
       .heart_btn {
         background-color: #f1f5f9;
         padding: 16px 24px;
         border-radius: 10px;
+        cursor: not-allowed;
       }
     }
   }

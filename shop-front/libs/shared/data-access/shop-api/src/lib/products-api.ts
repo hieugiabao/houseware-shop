@@ -5,6 +5,7 @@ import {
   PaginateParamsDto,
   PaginateResultResponse,
   Product,
+  ProductImage,
 } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
 import { Observable } from 'rxjs';
@@ -81,5 +82,37 @@ export class ProductsApiService extends BaseApiService {
         }),
       })
       .pipe(this.handleResponse<PaginateResultResponse<Product>>(200));
+  }
+
+  getProductAttributeDetail(productId: number): Observable<Product> {
+    let url = this.appConfig.baseURL + `/products/${productId}/attributes`;
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<Product>(200));
+  }
+
+  getImageList(productId: number): Observable<ProductImage[]> {
+    let url = this.appConfig.baseURL + `/products/${productId}/images`;
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<ProductImage[]>(200));
   }
 }
