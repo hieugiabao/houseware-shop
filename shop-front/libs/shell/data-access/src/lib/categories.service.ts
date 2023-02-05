@@ -22,4 +22,22 @@ export class CategoriesService {
       () => 'Error when loading categories'
     );
   }
+
+  getCategoryById(categoryId: string): Observable<ApiResponse<Category>> {
+    return handleApiResponse(
+      this.categoriesApiService.getCategoryById(categoryId),
+      null,
+      () => 'Error when loading category'
+    );
+  }
+
+  getChildCategoriesByParentId(
+    id: string
+  ): Observable<ApiResponse<Category[]>> {
+    return handleApiResponse(
+      this.categoriesApiService.getChildCategoriesByParentId(id),
+      null,
+      () => 'Error when loading child categories'
+    );
+  }
 }

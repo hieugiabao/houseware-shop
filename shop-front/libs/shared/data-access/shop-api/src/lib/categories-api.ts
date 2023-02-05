@@ -39,4 +39,36 @@ export class CategoriesApiService extends BaseApiService {
       })
       .pipe(this.handleResponse<PaginateResultResponse<Category>>(200));
   }
+
+  getCategoryById(id: string): Observable<Category> {
+    let url = this.appConfig.baseURL + '/categories/' + id;
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<Category>(200));
+  }
+
+  getChildCategoriesByParentId(id: string): Observable<Category[]> {
+    let url = this.appConfig.baseURL + '/categories/' + id + '/children';
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+      })
+      .pipe(this.handleResponse<Category[]>(200));
+  }
 }

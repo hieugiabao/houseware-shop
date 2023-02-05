@@ -60,4 +60,26 @@ export class ProductsApiService extends BaseApiService {
       })
       .pipe(this.handleResponse<PaginateResultResponse<Product>>(200));
   }
+
+  getProductsByCategory(
+    params: PaginateParamsDto,
+    categoryId: string
+  ): Observable<PaginateResultResponse<Product>> {
+    let url = this.appConfig.baseURL + `/categories/${categoryId}/products`;
+    url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
+
+    return this.httpClient
+      .request('get', url, {
+        observe: 'response',
+        responseType: 'blob',
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        }),
+        params: new HttpParams({
+          fromObject: StringUtil.convertKeysFromCamelCaseToSnakeCase(params),
+        }),
+      })
+      .pipe(this.handleResponse<PaginateResultResponse<Product>>(200));
+  }
 }
