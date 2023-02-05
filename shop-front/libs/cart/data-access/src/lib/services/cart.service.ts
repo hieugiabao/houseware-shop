@@ -74,7 +74,18 @@ export class CartService {
 
   removeCartItem(rowId: string): Observable<ApiResponse<{ message: string }>> {
     return handleApiResponse(
-      this.cartApiService.removeCartItem(rowId),
+      this.cartApiService.removeCartItem(rowId).pipe(
+        tap((res) => {
+          if (res) {
+            const cartItems = this.cartStateService.get('cartItems');
+            const index = cartItems.findIndex((i) => i.rowId === rowId);
+            cartItems.splice(index, 1);
+            this.cartStateService.set({
+              cartItems,
+            });
+          }
+        })
+      ),
       null,
       (err) => err
     );

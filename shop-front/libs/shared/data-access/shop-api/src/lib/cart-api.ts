@@ -56,7 +56,7 @@ export class CartApiService extends BaseApiService {
     url = url.replace(/[?&]$/, ''); // remove any trailing ? or &
 
     return this.httpClient
-      .request('put', url, {
+      .request('post', url, {
         observe: 'response',
         responseType: 'blob',
         headers: new HttpHeaders({

@@ -1,12 +1,16 @@
-<section class="mt-4">
-  <table>
-    <thead>
-      <tr>
-        <td>Product</td>
-        <td>Price</td>
-        <td>Quantity</td>
-        <td>Subtotal</td>
-      </tr>
-    </thead>
-  </table>
+<section class="mt-10 mx-32">
+  <h2 class="text-xl font-bold mb-8">Items in cart</h2>
+  <ng-container *ngIf="cartItems$ | async as items">
+    <div
+      class="flex flex-row w-full mb-4 border-b-[1px] border-b-gray-400"
+      *ngIf="items.length !== 0"
+    >
+      <div class="basis-9/12 grow-0 shrink-0">Product</div>
+      <div class="basis-2/12 grow-0 shrink-2 text-center">Quantity</div>
+      <div class="basis-1/12 grow shrink-1 text-right">Price</div>
+    </div>
+    <div *ngFor="let item of items">
+      <shop-cart-item [item]="item"></shop-cart-item>
+    </div>
+  </ng-container>
 </section>
