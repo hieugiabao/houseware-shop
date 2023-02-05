@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Shop\Categories\Repositories\CategoryRepository;
 use App\Shop\Categories\Repositories\CategoryRepositoryInterface;
 use App\Shop\Categories\Transformations\CategoryTransformable;
+use App\Shop\Products\Transformations\ProductTransformable;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-  use CategoryTransformable;
+  use CategoryTransformable, ProductTransformable;
 
   /**
    * @var CategoryRepositoryInterface
@@ -72,7 +73,9 @@ class CategoryController extends Controller
     $category = $this->categoryRepository->findCategoryById($id);
     $categoryRepository = new CategoryRepository($category);
     $product = $categoryRepository->findProducts();
-
+    $product = $product->map(function ($item) {
+      return $this->transformProduct($item);
+    });
     return response()->json($this->categoryRepository->paginateArrayResults($product->toArray(), $request->input('per_page', 10)));
   }
 
@@ -83,5 +86,12 @@ class CategoryController extends Controller
     $childCategories = $categoryRepository->findChildren();
 
     return response()->json($this->transformCategories($childCategories));
+  }
+
+  public function createCategory(Request $request)
+  {
+    $category = $this->categoryRepository->createCategory($request->all());
+
+    return response()->json($this->transformCategory($category));
   }
 }

@@ -29,10 +29,6 @@
             [product]="response.data!"
           ></shop-product-detail-main>
         </div>
-        <section class="mb-20">
-          <h2 class="text-2xl font-semibold mb-4">Description</h2>
-          <p [innerHTML]="response.data?.description"></p>
-        </section>
       </ng-container>
       <ng-container *ngSwitchCase="'loading'">
         <div class="my-8 flex flex-row gap-10">

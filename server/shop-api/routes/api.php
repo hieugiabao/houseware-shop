@@ -40,6 +40,7 @@ Route::group(['prefix' => 'products'], function ($router) {
 
 Route::group(['prefix' => 'categories'], function ($router) {
     Route::get('/', [CategoryController::class, 'listCategories']);
+    Route::post('/', [CategoryController::class, 'createCategory']);
     Route::get('/{id}', [CategoryController::class, 'getCategoryById']);
     Route::get('/{id}/products', [CategoryController::class, 'getProducts']);
     Route::get('/{id}/children', [CategoryController::class, 'getChildCategories']);

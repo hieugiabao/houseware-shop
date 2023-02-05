@@ -31,7 +31,7 @@ export class ProductListComponent implements OnInit, OnChanges {
   category!: Category;
   productsResponse$!: Observable<ApiResponse<PaginateResultResponse<Product>>>;
   page = 1;
-  perPage = 4;
+  perPage = 9;
 
   constructor(
     private readonly route: ActivatedRoute,
