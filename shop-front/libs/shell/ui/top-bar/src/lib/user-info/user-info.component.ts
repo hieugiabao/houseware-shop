@@ -5,6 +5,7 @@ import { OnInit } from '@angular/core';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AuthStateService } from '@shop/auth/data-access';
 import { CustomerInfomation } from '@shop/shared/data-access/models';
+import { CartStateService } from '@shop/cart/data-access';
 
 @Component({
   selector: 'shop-user-info',
@@ -17,8 +18,10 @@ export class UserInfoComponent implements OnInit {
   public haveToken$!: Observable<boolean>;
   items!: MenuItem[];
 
+  totalItems$!: Observable<number>;
   constructor(
     private readonly authStateService: AuthStateService,
+    private readonly cartStateService: CartStateService,
     private readonly logoutService: LogoutService
   ) {}
 
@@ -45,7 +48,16 @@ export class UserInfoComponent implements OnInit {
               this.logoutService.logout().subscribe({
                 next: () => {
                   localStorage.removeItem('rtok');
-                  window.location.reload();
+                  // clear all cookie
+                  document.cookie.split(';').forEach(function (c) {
+                    document.cookie = c
+                      .replace(/^ +/, '')
+                      .replace(
+                        /=.*/,
+                        '=;expires=' + new Date().toUTCString() + ';path=/'
+                      );
+                  });
+                  // window.location.reload();
                 },
               });
             },
@@ -62,5 +74,6 @@ export class UserInfoComponent implements OnInit {
         subscriber.next(false);
       }
     });
+    this.totalItems$ = this.cartStateService.count$;
   }
 }

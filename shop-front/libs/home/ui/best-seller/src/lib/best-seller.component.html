@@ -12,6 +12,7 @@
       <shop-product
         *ngIf="response.status === 'success'; else load_product"
         class="card inline-block m-4 !rounded-xl w-11/12"
+        [id]="product.id"
         [imageUrl]="product.thumb"
         [title]="product.name.slice(0, 10) + '...'"
         [description]="product.description.slice(0, 20) + '...'"
@@ -20,6 +21,7 @@
         link="/shop/product/{{ product.id }}"
         [quantity]="product.quantity"
         [categories]="getNameCategories(product.categories)"
+        (addToCart)="addToCart($event)"
       ></shop-product>
       <ng-template #load_product>
         <div class="card m-4 !rounded-xl">

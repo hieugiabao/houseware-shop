@@ -42,3 +42,23 @@ export interface Category extends TimeStamp {
 
   [key: string]: unknown;
 }
+
+export interface CartItem {
+  rowId: string;
+  id: number;
+  name: string;
+  qty: number;
+  price: number;
+  tax: number;
+  isSaved: boolean;
+  thumb: string;
+  subtotal: number;
+  options: any[];
+}
+
+export interface Cart {
+  cartItems: CartItem[];
+  subTotal: number;
+  tax: number;
+  total: number;
+}

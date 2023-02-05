@@ -29,12 +29,14 @@
   </div>
   <div class="flex items-center justify-between flex-none">
     <span class="text-2xl font-semibold">{{ price }}₫</span>
-    <p-button
+    <button
+      pButton
       pRipple
       type="button"
       icon="pi pi-shopping-cart"
       class="p-element"
       [disabled]="quantity <= 0"
-    ></p-button>
+      (click)="addToCart.emit(id)"
+    ></button>
   </div>
 </div>

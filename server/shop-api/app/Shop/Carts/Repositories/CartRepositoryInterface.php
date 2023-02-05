@@ -38,4 +38,6 @@ interface CartRepositoryInterface extends BaseRepositoryInterface
     public function openCart(Customer $customer, $instance = 'default');
 
     public function getCartItemsTransformed(): Collection;
+
+    public function getItemTransformed(CartItem $item): array;
 }

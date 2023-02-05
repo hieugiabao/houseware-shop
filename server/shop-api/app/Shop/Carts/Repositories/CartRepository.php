@@ -173,12 +173,17 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
      */
     public function getCartItemsTransformed(): Collection
     {
-        return $this->getCartItems()->map(function ($item) {
-            $thumb = $item->model->thumb ? config('filesystems.disks.s3.url') . '/' . $item->model->thumb : null;
-
-            $data = collect($item);
-            $data->put('thumb', $thumb);
-            return $data;
+        return $this->getCartItems()->map(function (CartItem $item) {
+            return $this->getItemTransformed($item);
         });
+    }
+
+    public function getItemTransformed(CartItem $item): array
+    {
+        $thumb = $item->model->thumb ? config('filesystems.disks.s3.url') . '/' . $item->model->thumb : null;
+
+        $data = collect($item);
+        $data->put('thumb', $thumb);
+        return $data->toArray();
     }
 }

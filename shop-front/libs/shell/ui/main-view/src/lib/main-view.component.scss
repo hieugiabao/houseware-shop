@@ -4,6 +4,7 @@
 
 .main-view {
   scroll-behavior: smooth;
-  margin-top: 56px;
+  margin-top: 110px;
+  padding: 0 32px;
   @apply flex flex-col flex-1 overflow-auto;
 }
