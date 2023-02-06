@@ -87,6 +87,7 @@ export interface CartItem {
   isSaved: boolean;
   thumb: string;
   subtotal: number;
+  maxQuantity: number;
   options: any[];
 
   [key: string]: unknown;

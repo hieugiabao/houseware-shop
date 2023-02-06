@@ -58,8 +58,12 @@ class CartController extends Controller
 
   public function addToCart(AddToCartRequest $request)
   {
+    $options = [];
     $product = $this->productRepo->findProductById($request->input('product'));
-
+    if ($product->sale_price > 0) {
+      $options['sale_price'] = $product->sale_price;
+      $options['sale_percentage'] = $product->sale_percentage;
+    }
     if ($product->attributes()->count() > 0) {
       $productAttr = $product->attributes()->where('default', 1)->first();
 
@@ -72,7 +76,6 @@ class CartController extends Controller
       }
     }
 
-    $options = [];
     if ($request->has('productAttribute')) {
 
       $attr = $this->productAttributeRepo->findProductAttributeById($request->input('productAttribute'));

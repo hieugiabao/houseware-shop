@@ -184,6 +184,7 @@ class CartRepository extends BaseRepository implements CartRepositoryInterface
 
         $data = collect($item);
         $data->put('thumb', $thumb);
+        $data->put('max_quantity', $item->model->quantity);
         return $data->toArray();
     }
 }
