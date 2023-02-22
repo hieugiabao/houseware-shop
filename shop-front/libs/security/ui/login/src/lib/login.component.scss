@@ -1,0 +1,12 @@
+:host ::ng-deep {
+  input {
+    border-width: 1px;
+  }
+
+  .p-password {
+    input {
+      width: 100% !important;
+      padding-left: 40px;
+    }
+  }
+}

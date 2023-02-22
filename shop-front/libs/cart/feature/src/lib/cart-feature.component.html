@@ -1,0 +1,31 @@
+<section class="mt-10 mx-32">
+  <h2 class="text-xl font-bold mb-8">Items in cart</h2>
+  <ng-container *ngIf="cart$ | async as cart">
+    <div
+      class="flex flex-row w-full mb-4 border-b-[1px] border-b-gray-400"
+      *ngIf="cart.cartItems.length !== 0; else emptyCart"
+    >
+      <div class="basis-9/12 grow-0 shrink-0">Product</div>
+      <div class="basis-2/12 grow-0 shrink-2 text-center">Quantity</div>
+      <div class="basis-1/12 grow shrink-1 text-right">Price</div>
+    </div>
+    <div *ngFor="let item of cart.cartItems">
+      <shop-cart-item [item]="item"></shop-cart-item>
+    </div>
+    <div *ngIf="cart.cartItems.length !== 0">
+      <shop-cart-total
+        [subtotal]="cart.subTotal"
+        [total]="cart.total"
+        [tax]="cart.tax"
+      ></shop-cart-total>
+    </div>
+    <ng-template #emptyCart>
+      <div class="text-center mb-4">Your cart is empty</div>
+      <div class="text-center my-32">
+        <button pButton routerLink="/" class="p-button-secondary">
+          Shop now
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
+</section>

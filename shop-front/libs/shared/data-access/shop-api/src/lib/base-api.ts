@@ -2,13 +2,21 @@
 import { HttpResponse, HttpResponseBase } from '@angular/common/http';
 import { ApiErrorDto, ApiException } from '@shop/shared/data-access/models';
 import { StringUtil } from '@shop/shared/utilities/string';
-import { EMPTY, mergeMap, Observable, of, throwError } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  mergeMap,
+  Observable,
+  of,
+  pipe,
+  throwError,
+} from 'rxjs';
 
 export abstract class BaseApiService {
   protected jsonParseReviver: ((key: string, value: any) => any) | undefined =
     undefined;
 
-  protected process<TData>(
+  private process<TData>(
     response: HttpResponseBase,
     expectedStatus = 0
   ): Observable<TData> | Observable<never> {
@@ -135,6 +143,25 @@ export abstract class BaseApiService {
           );
         })
       );
+    } else if (status === 422) {
+      return this.blobToText(responseBlob).pipe(
+        mergeMap((_responseText: string) => {
+          let result422: any = null;
+          result422 =
+            _responseText === ''
+              ? null
+              : (StringUtil.convertKeysFromSnakeCaseToCamelCase(
+                  JSON.parse(_responseText, this.jsonParseReviver)
+                ) as ApiErrorDto);
+          return this.throwException(
+            'Unprocessable Entity',
+            status,
+            _responseText,
+            _headers,
+            result422
+          );
+        })
+      );
     } else if (status !== 200 && status !== 204) {
       return this.blobToText(responseBlob).pipe(
         mergeMap((_responseText: string) => {
@@ -167,7 +194,7 @@ export abstract class BaseApiService {
     });
   }
 
-  protected throwException(
+  private throwException(
     message: string,
     status: number,
     response: string,
@@ -180,5 +207,24 @@ export abstract class BaseApiService {
       return throwError(
         () => new ApiException(message, status, response, headers, null)
       );
+  }
+
+  protected handleResponse<T>(statusCode: number) {
+    return pipe(
+      mergeMap((response: HttpResponse<Blob>) =>
+        this.process<T>(response, statusCode)
+      ),
+      catchError((response) => {
+        if (response instanceof HttpResponseBase) {
+          try {
+            return this.process<T>(response);
+          } catch (e) {
+            return throwError(() => e);
+          }
+        } else {
+          return throwError(() => response);
+        }
+      })
+    );
   }
 }

@@ -12,6 +12,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
   public function listProducts(string $order = 'id', string $sort = 'desc', array $columns = ['*']): Collection;
 
+  public function bestSellerProducts(): Collection;
+
   public function createProduct(array $data): Product;
 
   public function updateProduct(array $data): Product;
@@ -31,6 +33,10 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
   public function syncCategories(array $params);
 
   public function listProductAttributes(): Collection;
+
+  public function findProductImages(): Collection;
+
+  public function saveProductImages(Collection $collection);
 
   public function saveProductAttributes(ProductAttribute $productAttribute): ProductAttribute;
 

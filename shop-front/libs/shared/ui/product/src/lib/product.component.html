@@ -1,0 +1,43 @@
+<div class="flex flex-col items-stretch h-full">
+  <div class="flex items-center justify-between flex-none">
+    <div *ngIf="categories" class="flex items-center">
+      <i class="pi pi-tag mr-2"></i>
+      <span class="font-semibold">{{ categories.join(',') }}</span>
+    </div>
+    <span
+      class="rounded-md px-[3px] py-[6px] uppercase font-bold text-xs tracking-wide leading-normal"
+      [class.status-instock]="quantity > 2"
+      [class.status-lowstock]="quantity > 0 && quantity <= 2"
+      [class.status-outostock]="quantity <= 0"
+      >{{
+        quantity > 2 ? 'instock' : quantity <= 0 ? 'outostock' : 'lowstock'
+      }}</span
+    >
+  </div>
+  <div class="product-cover my-6 flex justify-center">
+    <shop-product-cover
+      class="inline-block !w-3/4 !pb-[75%]"
+      [imageUrl]="imageUrl"
+      [rounded]="roundedImage"
+    ></shop-product-cover>
+  </div>
+  <div class="product-description grow text-center mb-6">
+    <a [routerLink]="link"
+      ><span class="text-xl font-bold">{{
+        title.slice(0, 14) + '...'
+      }}</span></a
+    >
+  </div>
+  <div class="flex items-center justify-between flex-none">
+    <span class="text-xl font-semibold">{{ price | currency }}</span>
+    <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-shopping-cart"
+      class="p-element"
+      [disabled]="quantity <= 0"
+      (click)="addToCart.emit(id)"
+    ></button>
+  </div>
+</div>

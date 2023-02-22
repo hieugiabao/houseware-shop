@@ -1,0 +1,229 @@
+<p-toast position="bottom-right"></p-toast>
+<div class="profile">
+  <section class="section">
+    <h1>Profile</h1>
+  </section>
+  <section class="section">
+    <div class="section__top">
+      <h4 class="section__top__title">Personal details</h4>
+      <button
+        class="section__top__btn"
+        [className]="!showFormPersonalDetails ? '' : 'hidden'"
+        (click)="toggleFormPersonalDetails()"
+      >
+        Edit
+      </button>
+      <button
+        class="section__top__btn"
+        [className]="showFormPersonalDetails ? '' : 'hidden'"
+        (click)="toggleFormPersonalDetails()"
+      >
+        Cancel
+      </button>
+    </div>
+    <div class="section__content">
+      <form [formGroup]="formPersonalDetails" class="form">
+        <div [className]="!showFormPersonalDetails ? '' : 'hidden'">
+          <p>{{ userData?.name }}</p>
+          <p>{{ userData?.email }}</p>
+        </div>
+        <div
+          class="show_form"
+          [className]="showFormPersonalDetails ? '' : 'hidden'"
+        >
+          <div class="form__input">
+            <label for="name">Name</label>
+            <input
+              type="text"
+              id="name"
+              formControlName="name"
+              pInputText
+              [value]="userData?.name"
+            />
+          </div>
+          <div class="form__input">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              formControlName="email"
+              [value]="userData?.email"
+              pInputText
+            />
+          </div>
+
+          <button
+            pButton
+            type="button"
+            label="Save"
+            class="p-button-secondary form__btn"
+            [disabled]="
+              !formPersonalDetails.dirty || formPersonalDetails.invalid
+            "
+            (click)="submitFormPersonalDetails()"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <section class="section">
+    <div class="section__top">
+      <h4 class="section__top__title">Password</h4>
+      <button
+        class="section__top__btn"
+        [className]="!showFormPassword ? '' : 'hidden'"
+        (click)="toggleFormPassword()"
+      >
+        Change password
+      </button>
+      <button
+        class="section__top__btn"
+        [className]="showFormPassword ? '' : 'hidden'"
+        (click)="toggleFormPassword()"
+      >
+        Cancel
+      </button>
+    </div>
+    <div class="section__content">
+      <form [formGroup]="formPassword" class="form">
+        <div [className]="!showFormPassword ? '' : 'hidden'">
+          <p>************</p>
+        </div>
+        <div class="show_form" [className]="showFormPassword ? '' : 'hidden'">
+          <div class="form__input">
+            <label for="currentPassword">Current password</label>
+            <p-password
+              type="password"
+              id="currentPassword"
+              formControlName="currentPassword"
+              [toggleMask]="true"
+              [feedback]="false"
+            ></p-password>
+          </div>
+          <div class="form__input">
+            <label for="password">New password</label>
+            <p-password
+              type="password"
+              id="password"
+              formControlName="password"
+              [toggleMask]="true"
+            ></p-password>
+            <small
+              class="p-invalid"
+              *ngIf="
+            formPassword.get('password')?.touched && !!formPassword.get('password')?.errors?.['minlength']
+          "
+            >
+              Password must be at least 8 characters
+            </small>
+          </div>
+          <div class="form__input">
+            <label for="telephone" class="block">Confirm password</label>
+            <p-password
+              type="password"
+              id="passwordConfirmation"
+              formControlName="passwordConfirmation"
+              [toggleMask]="true"
+              [feedback]="false"
+            ></p-password>
+            <small
+              class="p-invalid"
+              *ngIf="
+              formPassword.get('passwordConfirmation')?.touched && !formPassword.get('passwordConfirmation')?.errors && !!formPassword.errors?.['notSame']
+        "
+            >
+              Confirm password not match with password
+            </small>
+          </div>
+          <button
+            pButton
+            type="button"
+            label="Save"
+            class="p-button-secondary form__btn"
+            [disabled]="formPassword.invalid"
+            (click)="submitFormPassword()"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- <section class="section">
+    <shop-profile-ui-address></shop-profile-ui-address>
+  </section> -->
+  <section class="section">
+    <div class="section__top">
+      <h4 class="section__top__title">Address</h4>
+      <button
+        class="section__top__btn"
+        [className]="!showFormAddress ? '' : 'hidden'"
+        (click)="toggleFormAddress()"
+      >
+        Edit
+      </button>
+      <button
+        class="section__top__btn"
+        [className]="showFormAddress ? '' : 'hidden'"
+        (click)="toggleFormAddress()"
+      >
+        Cancel
+      </button>
+    </div>
+    <div class="section__content">
+      <form [formGroup]="formAddress" class="form">
+        <div [className]="!showFormAddress ? '' : 'hidden'">
+          <p>{{ address?.alias + ', ' + address?.address_1 }}</p>
+        </div>
+        <div class="show_form" [className]="showFormAddress ? '' : 'hidden'">
+          <div class="form__input">
+            <label for="alias">Address name</label>
+            <input type="text" id="alias" formControlName="alias" pInputText />
+          </div>
+          <div class="form__input">
+            <label for="address_1">Address</label>
+            <input
+              type="text"
+              id="address_1"
+              formControlName="address_1"
+              pInputText
+            />
+          </div>
+          <div class="form__input">
+            <label for="address_2">Addition information</label>
+            <input
+              type="text"
+              id="address_2"
+              formControlName="address_2"
+              pInputText
+            />
+          </div>
+          <div class="form__input">
+            <label for="provinceId">Province</label>
+            <p-dropdown
+              [options]="provinces"
+              formControlName="provinceId"
+              optionLabel="name"
+              optionValue="id"
+            ></p-dropdown>
+          </div>
+
+          <div class="form__input">
+            <label for="city">City</label>
+            <input type="text" id="city" formControlName="city" pInputText />
+          </div>
+          <div class="form__input">
+            <label for="zip">zip</label>
+            <input type="text" id="zip" formControlName="zip" pInputText />
+          </div>
+          <button
+            pButton
+            type="button"
+            label="Save"
+            class="p-button-secondary form__btn"
+            [disabled]="!formAddress.dirty || formAddress.invalid"
+            (click)="submitFormAddress()"
+          ></button>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>

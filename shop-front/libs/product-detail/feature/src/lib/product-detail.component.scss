@@ -1,0 +1,16 @@
+:host ::ng-deep {
+  .product-detail {
+    display: flex;
+    flex-direction: column;
+    .p-breadcrumb {
+      border: none;
+    }
+    .product__content {
+      display: flex;
+      flex-direction: row;
+      &__img {
+        margin-top: 16px;
+      }
+    }
+  }
+}

@@ -27,7 +27,12 @@ import {
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  private allowed = ['/auth/refresh', '/assets', '/admin/auth/refresh'];
+  private allowed = [
+    '/auth/refresh',
+    '/assets',
+    '/admin/auth/refresh',
+    'auth/login',
+  ];
 
   constructor(
     private readonly authStateService: AuthStateService,
@@ -38,6 +43,7 @@ export class AuthInterceptor implements HttpInterceptor {
   private static addToken(req: HttpRequest<unknown>, token: string) {
     return req.clone({
       headers: req.headers.set('Authorization', `Bearer ${token}`),
+      withCredentials: true,
     });
   }
 
@@ -88,7 +94,6 @@ export class AuthInterceptor implements HttpInterceptor {
             retry({
               count: 1,
               delay: (err: ApiException) => {
-                console.log('retrying');
                 if (err.status === 401 && !hasRetried) {
                   hasRetried = true;
                   return this.refreshToClonedRequest(req, next) as Observable<

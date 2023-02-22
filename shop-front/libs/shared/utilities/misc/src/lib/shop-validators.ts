@@ -8,9 +8,15 @@ export class ShopValidators {
     if (control?.value === null) {
       return null;
     }
+    if (control.value === '') return null;
 
     return EMAIL_REGEX_WITH_DOMAIN.test(control.value)
       ? null
       : { isEmail: true };
+  }
+  static checkPasswords(group: AbstractControl): ValidationErrors | null {
+    let pass = group.get('password')?.value;
+    let confirmPass = group.get('passwordConfirmation')?.value;
+    return pass === confirmPass ? null : { notSame: true };
   }
 }

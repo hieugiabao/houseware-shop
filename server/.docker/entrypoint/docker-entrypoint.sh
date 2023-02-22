@@ -11,6 +11,10 @@ echo "** Container PHP timezone :$(php -r "echo ini_get('date.timezone');")"
 echo "** Container user     :$(id)"
 echo "**"
 
+while ! nc -z mysql-db 3306; do
+  echo "Waiting for MySQL to start..."
+  sleep 3
+done
 if [ -d "/var/www" ];
 then
   pushd /var/www

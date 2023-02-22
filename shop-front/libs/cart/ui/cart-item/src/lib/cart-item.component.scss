@@ -1,0 +1,21 @@
+:host ::ng-deep {
+  .p-inputnumber.p-inputnumber-buttons-horizontal {
+    height: 35px;
+
+    input.p-inputtext {
+      width: 45px;
+      text-align: center;
+    }
+
+    .p-button.p-button-icon-only {
+      width: 35px;
+    }
+  }
+
+  .p-confirm-popup-footer {
+
+    button.p-confirm-popup-accept.p-button {
+      background: #64748B !important;
+    }
+  }
+}

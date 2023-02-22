@@ -3,8 +3,9 @@
 namespace App\Shop\Products\Repositories;
 
 use App\Shop\AttributeValues\AttributeValue;
-use App\Shop\AttributeValues\Repositories\AttributeValueRepositoryInterface;
+use App\Shop\Base\ApiError;
 use App\Shop\ProductAttributes\ProductAttribute;
+use App\Shop\ProductImages\ProductImage;
 use App\Shop\Products\Exceptions\ProductCreateErrorException;
 use App\Shop\Products\Exceptions\ProductNotFoundException;
 use App\Shop\Products\Exceptions\ProductUpdateErrorException;
@@ -16,6 +17,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Jsdecena\Baserepo\BaseRepository;
 
@@ -29,21 +31,14 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   protected $model;
 
   /**
-   * @var AttributeValueRepositoryInterface
-   */
-  private $attributeValueRepository;
-
-  /**
    * Constructor.
    *
    * @param Product $product
-   * @param AttributeValueRepositoryInterface $attributeValueRepository
    */
-  public function __construct(Product $product, AttributeValueRepositoryInterface $attributeValueRepository)
+  public function __construct(Product $product)
   {
     parent::__construct($product);
     $this->model = $product;
-    $this->attributeValueRepository = $attributeValueRepository;
   }
 
   /**
@@ -59,6 +54,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     return $this->all($columns, $order, $sort);
   }
 
+  public function bestSellerProducts(): Collection
+  {
+    $products = Product::where('sale_percentage', '>', 0)->orderBy('sale_percentage', 'desc')->limit(50)->get();
+    if (count($products) < 0) {
+      $products = $this->listProducts('updated_at', 'desc', ['*']);
+    } else {
+      $more_products = $this->listProducts('updated_at', 'desc', ['*']);
+      $products = $products->merge($more_products);
+    }
+
+    return $products;
+  }
+
+
   /**
    * Create the product
    *
@@ -73,10 +82,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
       $collection = collect($data);
       $slug = (isset($data['name'])) ? Str::slug($data['name']) : '';
 
-      $thumb = (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) ?
-        $this->uploadOne($data['thumb'], 'products') : '';
-
-      $merge = $collection->merge(compact('slug', 'thumb'));
+      $merge = $collection->merge(compact('slug'));
 
       $product = new Product($merge->all());
 
@@ -106,51 +112,21 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     try {
       $product = $this->findProductById($this->model->id);
-      $productRepo = new ProductRepository($product, $this->attributeValueRepository);
-
-      if (isset($data['attributeValue'])) {
-        $fields = collect($data)->only(['productAttributeQuantity', 'productAttributePrice', 'default', 'attributeValue']);
-
-        $quantity = $fields->get('productAttributeQuantity');
-        $price = $fields->get('productAttributePrice');
-        $default = $fields->get('default');
-
-        if (!$quantity) {
-          throw new ProductUpdateErrorException('The quantity field is required', 400);
-        }
-
-        $attributeValues = $fields->get('attributeValue');
-        $hasDefault = $productRepo->listProductAttributes()->where('default', 1)->count();
-
-        if ($default == 1 && $hasDefault > 0) {
-          $default = 0;
-        }
-
-        $productAttribute = $productRepo->saveProductAttributes(
-          new ProductAttribute(compact('quantity', 'price', 'default'))
-        );
-
-        collect($attributeValues)->each(function ($attributeValueId) use ($productRepo, $productAttribute) {
-          $attribute = $this->attributeValueRepository->find($attributeValueId);
-          return $productRepo->saveCombination($productAttribute, $attribute);
-        });
-
-        return $product;
-      }
+      $productRepo = new ProductRepository($product);
 
       $collection = collect($data)->except(
         '_token',
         'categories',
         '_method',
         'default',
-        'productAttributeQuantity',
-        'productAttributePrice',
-        'attributeValue'
       );
       $slug = Str::slug($collection->get('name'));
 
       if (isset($data['thumb']) && ($data['thumb'] instanceof UploadedFile)) {
-        $thumb = $this->uploadOne($data['thumb'], 'products');
+        if ($product->thumb != null) {
+          $this->deletefile($product->thumb);
+        }
+        $thumb = $this->uploadOne($data['thumb'], 'products/thumbnails');
         $merge = $collection->merge(compact('thumb', 'slug'));
       } else {
         $merge = $collection->merge(compact('slug'));
@@ -160,6 +136,11 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
         $this->syncCategories($data['categories']);
       } else {
         $this->detachCategories();
+      }
+
+      if (isset($data['sale_price']) && $data['sale_price'] > 0) {
+        $sale_percentage = round((($product->price - $data['sale_price']) / $product->price) * 100);
+        $merge = $merge->merge(compact('sale_percentage'));
       }
 
       $product->update($merge->all());
@@ -260,18 +241,6 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   }
 
   /**
-   * Associate the product attribute to the product
-   *
-   * @param ProductAttribute $productAttribute
-   * @return ProductAttribute
-   */
-  public function saveProductAttributes(ProductAttribute $productAttribute): ProductAttribute
-  {
-    $this->model->attributes()->save($productAttribute);
-    return $productAttribute;
-  }
-
-  /**
    * List all the product attributes associated with the product
    *
    * @return Collection
@@ -279,6 +248,31 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
   public function listProductAttributes(): Collection
   {
     return $this->model->attributes()->get();
+  }
+
+  /**
+   * @return mixed
+   */
+  public function findProductImages(): Collection
+  {
+    return $this->model->images()->get();
+  }
+
+  /**
+   * @param Collection $collection
+   *
+   * @return void
+   */
+  public function saveProductImages(Collection $collection)
+  {
+    $collection->each(function (UploadedFile $file) {
+      $filename = $this->uploadOne($file, 'products/' . $this->model->id);
+      $productImage = new ProductImage([
+        'product_id' => $this->model->id,
+        'src' => $filename
+      ]);
+      $this->model->images()->save($productImage);
+    });
   }
 
   /**
@@ -332,5 +326,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     })->transform(function (AttributeValue $value) {
       return $value->value;
     });
+  }
+
+  /**
+   * Associate the product attribute to the product
+   *
+   * @param ProductAttribute $productAttribute
+   * @return ProductAttribute
+   */
+  public function saveProductAttributes(ProductAttribute $productAttribute): ProductAttribute
+  {
+    $this->model->attributes()->save($productAttribute);
+    return $productAttribute;
   }
 }

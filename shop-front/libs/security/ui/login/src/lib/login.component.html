@@ -1,64 +1,113 @@
-<h1 class="text-3xl">Login works</h1>
-<section class="flex flex-col space-y-4">
-  <h5>Sign in</h5>
-  <span
-    *ngIf="loginResponse?.status === 'failure'"
-    class="text-red-500 p-invalid"
-  >
-    <small>{{ loginResponse?.error }}</small>
-  </span>
-  <form
-    [formGroup]="form"
-    class="flex flex-col space-y-4"
-    (ngSubmit)="submit()"
-  >
-    <label for="email" class="flex flex-col">
-      <input
-        [class.p-invalid]="
-          form.get('email')?.touched && !!form.get('email')?.errors
-        "
-        class="w-8/12"
-        type="text"
-        pInputText
-        autocomplete="off"
-        id="email"
-        placeholder="Enter email"
-        formControlName="email"
-      />
-      <small
-        class="p-invalid"
-        *ngIf="form.get('email')?.touched && !!form.get('email')?.errors"
-        >A valid email</small
+<div
+  class="w-[600px] min-h-[450px] bg-slate-50 rounded-sm p-8 bg-clip-border shadow-lg max-sm:max-w-[375px]"
+>
+  <section class="flex justify-center"><shop-logo></shop-logo></section>
+  <section class="flex flex-col space-y-4 items-center shrink-1">
+    <h4 class="text-4xl w-full text-center my-8">Welcome back</h4>
+    <p class="text-gray-600 text-sm w-4/5 font-medium">
+      Please enter your details
+    </p>
+    <ng-container *ngIf="loginResponse">
+      <span
+        *ngIf="loginResponse.status === 'failure'"
+        class="text-red-500 p-invalid w-4/5"
       >
-    </label>
+        <small>{{ loginResponse.error }}</small>
+      </span>
+    </ng-container>
+    <form
+      [formGroup]="form"
+      class="flex flex-col space-y-4 w-4/5"
+      (ngSubmit)="submit()"
+    >
+      <label for="email" class="flex flex-col">
+        <span class="p-input-icon-left">
+          <i class="pi pi-envelope"></i>
+          <input
+            [class.p-invalid]="
+              form.get('email')?.touched && !!form.get('email')?.errors
+            "
+            class="w-full"
+            type="text"
+            pInputText
+            autocomplete="off"
+            id="email"
+            placeholder="Enter email"
+            formControlName="email"
+          />
+        </span>
+        <small
+          class="p-invalid"
+          *ngIf="form.get('email')?.touched && !!form.get('email')?.errors?.['isEmail']"
+          >Please enter a valid email</small
+        >
+        <small
+          class="p-invalid"
+          *ngIf="form.get('email')?.touched && !!form.get('email')?.errors?.['required']"
+          >Email is required</small
+        >
+      </label>
 
-    <label for="password" class="flex flex-col">
-      <input
-        type="password"
-        pInputText
-        id="password"
-        [class.p-invalid]="
-          form.get('password')?.touched && !!form.get('password')?.errors
-        "
-        autocomplete
-        class="w-8/12"
-        placeholder="Enter password"
-        formControlName="password"
-      />
-      <small
-        class="p-invalid"
-        *ngIf="form.get('password')?.touched && !!form.get('password')?.errors"
+      <label for="password" class="flex flex-col">
+        <span class="relative">
+          <span
+            class="absolute text-gray-500 left-0 top-0 z-50 h-full flex justify-center items-center w-10"
+            ><i class="pi pi-lock"></i
+          ></span>
+          <p-password
+            [toggleMask]="true"
+            [class.p-invalid]="
+              form.get('password')?.touched && !!form.get('password')?.errors
+            "
+            autocomplete
+            styleClass="w-full"
+            placeholder="Enter password"
+            formControlName="password"
+            [feedback]="false"
+          ></p-password>
+        </span>
+        <small
+          class="p-invalid"
+          *ngIf="
+            form.get('password')?.touched && !!form.get('password')?.errors
+          "
+        >
+          Password is required
+        </small>
+      </label>
+
+      <span
+        class="w-full flex flex-row justify-between text-sm max-sm:flex-col"
       >
-        Password is required
-      </small>
-    </label>
+        <!-- <label
+          for="remember"
+          class="flex flex-row justify-center max-sm:block max-sm:mb-1"
+        >
+          <p-checkbox
+            name="remember"
+            value="remember"
+            class="p-element ng-touched ng-valid ng-dirty"
+            formControlName="remember"
+          >
+          </p-checkbox>
+          <span class="ml-2 font-semibold">Remember me</span>
+        </label> -->
 
-    <button
-      pButton
-      type="submit"
-      [disabled]="form.invalid || loginResponse?.status === 'loading'"
-      [label]="loginResponse?.status === 'loading' ? 'Signing in' : 'Sign in'"
-      class="w-8/12"
-    ></button>
-  </form>
-</section>
+        <a href="#" class="underline text-blue-500 hover:text-blue-700"
+          >I forgot my password?</a
+        >
+      </span>
+      <button
+        pButton
+        type="submit"
+        [disabled]="form.invalid || loginResponse?.status === 'loading'"
+        [label]="loginResponse?.status === 'loading' ? 'Signing in' : 'Sign in'"
+        class="w-full"
+      ></button>
+    </form>
+    <p class="text-sm w-4/5">
+      <span>Don't have an account?&nbsp;</span>
+      <a routerLink="/register" class="text-blue-600">Register</a>
+    </p>
+  </section>
+</div>

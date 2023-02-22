@@ -181,7 +181,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findProducts(): Collection
   {
-    return $this->model->products;
+    return $this->model->products()->get();
   }
 
   /**
@@ -199,22 +199,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
   public function detachProducts()
   {
     $this->model->products()->detach();
-  }
-
-  /**
-   * @param array $file
-   * @param null $disk
-   * @return bool
-   * @throws CategoryNotFoundException
-   */
-  public function deleteFile(array $file, $disk = null): bool
-  {
-    $category = $this->findCategoryById($file['category']);
-
-    // Remove the physical uploaded file
-    unlink(storage_path("app/public/$category->thumb"));
-
-    return $this->update(['thumb' => null]);
   }
 
   /**
@@ -239,7 +223,7 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findParentCategory()
   {
-    return $this->model->parent;
+    return $this->model->parent()->get();
   }
 
   /**
@@ -247,6 +231,6 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
    */
   public function findChildren()
   {
-    return $this->model->children;
+    return $this->model->children()->get();
   }
 }

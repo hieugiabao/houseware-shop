@@ -2,6 +2,9 @@
 
 namespace App\Shop\Customers;
 
+use App\Shop\Addresses\Address;
+use App\Shop\Carts\Cart;
+use App\Shop\Orders\Order;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -78,5 +81,21 @@ class Customer extends Authenticatable implements JWTSubject
   public function getJWTCustomClaims()
   {
     return [];
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function addresses()
+  {
+    return $this->hasMany(Address::class)->whereStatus(true);
+  }
+
+  /**
+   * @return \Illuminate\Database\Eloquent\Relations\HasMany
+   */
+  public function orders()
+  {
+    return $this->hasMany(Order::class);
   }
 }

@@ -23,3 +23,5 @@ services:
       - COMPOSER_INSTALL=DISABLE
       - NPM_INSTALL=DISABLE
       - DB_SEED=DISABLE
+    links:
+      - mysql-db

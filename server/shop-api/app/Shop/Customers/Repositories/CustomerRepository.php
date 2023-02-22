@@ -2,13 +2,16 @@
 
 namespace App\Shop\Customers\Repositories;
 
+use App\Shop\Addresses\Address;
 use App\Shop\Customers\Customer;
+use App\Shop\Customers\Exceptions\ChangePasswordErrorException;
 use App\Shop\Customers\Exceptions\CreateCustomerInvalidArgumentsException;
 use App\Shop\Customers\Exceptions\CustomerNotFoundException;
 use App\Shop\Customers\Exceptions\UpdateCustomerInvalidArgumentsException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
 use Jsdecena\Baserepo\BaseRepository;
 
 class CustomerRepository extends BaseRepository implements CustomerRepositoryInterface
@@ -17,7 +20,7 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
   /**
    * @var Customer $model
    */
-  protected $model;
+  public $model;
 
   /**
    * Constructor
@@ -125,5 +128,46 @@ class CustomerRepository extends BaseRepository implements CustomerRepositoryInt
       return $this->all();
     }
     return $this->model->searchCustomer($query)->get();
+  }
+
+  /**
+   * @param Address $address
+   * @return Address
+   */
+  public function attachAddress(Address $address): Address
+  {
+    $this->model->addresses()->save($address);
+    return $address;
+  }
+
+  /**
+   * Find the address attached to the customer
+   *
+   * @return mixed
+   */
+  public function findAddresses(): Collection
+  {
+    return $this->model->addresses;
+  }
+
+  /**
+   * @param array $columns
+   * @param string $orderBy
+   *
+   * @return Collection
+   */
+  public function findOrders($columns = ['*'], string $orderBy = 'id'): Collection
+  {
+    return $this->model->orders()->get($columns)->sortByDesc($orderBy);
+  }
+
+  public function changePassword(array $params): bool
+  {
+    // check old password
+    if (!Hash::check($params['current_password'], $this->model->password)) {
+      throw new ChangePasswordErrorException('Old password is incorrect');
+    }
+    $this->model->password = bcrypt($params['password']);
+    return $this->model->save();
   }
 }

@@ -18,6 +18,9 @@ import {
   of,
   catchError,
   throwError,
+  forkJoin,
+  map,
+  withLatestFrom,
 } from 'rxjs';
 import { AuthStateService } from '../state/auth-state.service';
 import { LocalStorageService } from './local-storage.service';
@@ -36,19 +39,47 @@ export class AuthService {
 
   private afterRequestToken = () => {
     return pipe(
-      tap<TokenResultResponse>(({ refreshToken, expiresIn }) => {
-        this.localStorageService.set('rtok', refreshToken || '');
-        this.setupRefreshTimer(expiresIn);
-      }),
-      switchMap((tokenRequest) => {
+      tap<[TokenResultResponse, boolean]>(
+        ([{ refreshToken, expiresIn }, rememberMe]) => {
+          if (rememberMe) {
+            this.localStorageService.set('rtok', refreshToken || '');
+            this.setupRefreshTimer(
+              LuxonUtil.fromDateToJSDate(
+                new Date(Date.now() + expiresIn * 1000)
+              )
+            );
+          }
+        }
+      ),
+      withLatestFrom(this.authStateService.currentUser$),
+      switchMap(([[tokenRequest], currentUser]) => {
         this.authStateService.set({
           accessToken: tokenRequest.accessToken,
           tokenType: tokenRequest.tokenType,
-          expiresIn: LuxonUtil.fromDateToJSDate(tokenRequest.expiresIn),
-          user: tokenRequest.user,
+          expiresIn: LuxonUtil.fromDateToJSDate(
+            new Date(Date.now() + tokenRequest.expiresIn * 1000)
+          ),
+          user: currentUser,
         });
 
-        return of(tokenRequest);
+        if (!currentUser) {
+          return this.customerAuthApiService
+            .me()
+            .pipe(switchMap((user) => forkJoin([of(tokenRequest), of(user)])));
+        }
+
+        return forkJoin([of(tokenRequest), of(currentUser)]);
+      }),
+      map(([tokenRequest, user]) => {
+        this.authStateService.set({
+          accessToken: tokenRequest.accessToken,
+          tokenType: tokenRequest.tokenType,
+          expiresIn: LuxonUtil.fromDateToJSDate(
+            new Date(Date.now() + tokenRequest.expiresIn * 1000)
+          ),
+          user,
+        });
+        return tokenRequest;
       })
     );
   };
@@ -69,32 +100,48 @@ export class AuthService {
     const token = this.localStorageService.get('rtok');
     if (!token) {
       this.authStateService.reset();
-      this.redirectService.redirectToLogin();
       return EMPTY;
     }
 
-    return this.customerAuthApiService.refresh({ token }).pipe(
-      catchError((err: ApiErrorDto) => {
-        if (err.statusCode === 401) {
-          this.redirectService.redirectToLogin();
-        }
+    return this.customerAuthApiService
+      .refresh({ token })
+      .pipe(
+        catchError((err: ApiErrorDto) => {
+          if (err.statusCode === 401) {
+            this.localStorageService.remove('rtok');
+            this.redirectService.redirectToLogin();
+          }
 
-        this.authStateService.reset();
-        return throwError(() => err);
-      }),
-      this.afterRequestToken()
-    );
+          this.authStateService.reset();
+          return throwError(() => err);
+        }),
+        switchMap((tokenRequest) => {
+          return forkJoin([of(tokenRequest), of(true)]);
+        })
+      )
+      .pipe(this.afterRequestToken());
+  }
+
+  retrieveTokenOnPageLoad(): void {
+    this.refreshToken().pipe().subscribe();
   }
 
   login(
     email: string,
-    password: string
+    password: string,
+    rememberMe = true
   ): Observable<ApiResponse<TokenResultResponse>> {
     return handleApiResponse<TokenResultResponse>(
       this.customerAuthApiService
         .login({ email, password })
+        .pipe(
+          switchMap((tokenRequest) =>
+            forkJoin([of(tokenRequest), of(rememberMe)])
+          )
+        )
         .pipe(this.afterRequestToken()),
       null,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (err: any) => {
         return err.message;
       }

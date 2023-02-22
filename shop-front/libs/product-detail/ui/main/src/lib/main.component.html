@@ -1,0 +1,59 @@
+<div class="main">
+  <!-- name -->
+  <span>
+    <h1 class="mb-6">{{ product.name }}</h1>
+    <div class="flex gap-2">
+      <h1 [class.old-price]="product.salePrice">
+        {{ product.price | currency }}
+      </h1>
+      <h1 *ngIf="product.salePrice">{{ product.salePrice | currency }}</h1>
+      <span *ngIf="product.salePrice" class="text-xs"
+        >-{{ product.salePercentage | number : '2.0-0' }}%</span
+      >
+      <span
+        *ngIf="product.quantity <= 0"
+        class="ml-10 text-red-500 font-semibold bg-slate-400 rounded-md px-4 py-2"
+        >Out stock</span
+      >
+    </div>
+  </span>
+  <div class="flex flex-col gap-4">
+    <ng-container *ngFor="let attribute of attributes">
+      <div class="attribute">
+        <span>{{ attribute.name }}</span>
+        <p-selectButton
+          [options]="attribute.values"
+          (onChange)="changeAttribute($event, attribute)"
+        >
+          <ng-template let-item>
+            <span>{{ item.value }}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
+    </ng-container>
+  </div>
+  <div class="flex flex-col gap-2">
+    <span class="text-gray-600 text-sm"
+      >{{
+        product.quantity + (product.quantity > 1 ? ' products' : ' product')
+      }}
+      remain</span
+    >
+    <div class="add">
+      <button
+        class="add_btn"
+        [disabled]="product.quantity <= 0 || loading"
+        (click)="addToCart()"
+      >
+        <span>Add to cart</span>
+      </button>
+      <button class="heart_btn" title="Not implement">
+        <i class="pi pi-heart"></i>
+      </button>
+    </div>
+  </div>
+  <section class="mb-20">
+    <h2 class="text-2xl font-semibold mb-4">Description</h2>
+    <p [innerHTML]="product.description"></p>
+  </section>
+</div>
